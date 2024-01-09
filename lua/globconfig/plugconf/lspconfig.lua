@@ -25,13 +25,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 
+lspconfig.html.setup {
+    capabilities = capabilities,
+    filetypes = { "html" }
+}
 lspconfig.pylsp.setup {
     capabilities = capabilities,
     filetypes = { "python" }
 }
 lspconfig.clangd.setup {
     capabilities = capabilities,
-    filetypes = { "c", "cpp" }
+    filetypes = { "c", "h" }
 }
 lspconfig.gopls.setup {
     capabilities = capabilities,

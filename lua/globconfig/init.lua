@@ -2,7 +2,7 @@
 vim.opt.backup = false                          -- creates a backup file
 vim.opt.clipboard = "unnamedplus"               -- allows neovim to access the system clipboard
 vim.opt.fileencoding = "utf-8"                  -- the encoding written to a file
-vim.opt.ignorecase = true                       -- ignore case in search patterns
+vim.opt.ignorecase = false                       -- ignore case in search patterns
 vim.opt.smartindent = true                      -- make indenting smarter again
 vim.opt.swapfile = false                        -- creates a swapfile
 vim.opt.undofile = true                         -- enable persistent undo
@@ -19,6 +19,14 @@ vim.opt.hlsearch = false -- not keep shit highlighted
 vim.opt.incsearch = true -- see how shit moves
 vim.opt.path= vim.opt.path + "**"
 vim.opt.wildmenu = true
+vim.opt.mouse = ""
+
+vim.opt.laststatus = 2
+vim.opt.autoread = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.shiftround = true
+vim.opt.expandtab = true
 
 
 

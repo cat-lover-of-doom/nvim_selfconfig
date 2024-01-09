@@ -20,4 +20,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 -- build
     vim.keymap.set('n', '<space>b', ":!make<CR>")
+-- telescope
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
+vim.keymap.set('n', '/', require('telescope.builtin').live_grep, {})
 

@@ -19,8 +19,11 @@ require("lazy").setup({
         opts = {modes = { search = {enabled = false}, char = {enabled = true, autohide = true, jump_labels = true,}}}
     },
     "mbbill/undotree",
-
     { 
+    {
+    'nvim-telescope/telescope.nvim', tag = '0.1.4',
+      dependencies = { 'nvim-lua/plenary.nvim' }
+    },
     "catppuccin/nvim", name = "catppuccin", priority = 1000 
     },
     {
