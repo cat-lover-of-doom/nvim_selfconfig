@@ -23,16 +23,55 @@ vim.opt.mouse = ""
 
 vim.opt.laststatus = 2
 vim.opt.autoread = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 
+--vimux
+vim.g.netrw_list_hide='\\(^\\|\\s\\s\\)\\zs\\.\\S\\+'
+vim.g.VimuxOrientation= "h"
+vim.g.VimuxHeight = "40"
+vim.g.VimuxCloseOnExit= 1
 
+-- Function to set tab width based on file type
+
+local function set_tab_width()
+    local filetype = vim.bo.filetype
+    if filetype == 'c' then
+        vim.bo.tabstop = 2
+        vim.bo.shiftwidth = 2
+    else
+        vim.bo.tabstop = 4
+        vim.bo.shiftwidth = 4
+    end
+end
+
+-- Create an autocommand to run the function when entering a buffer
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = set_tab_width,
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        if vim.fn.expand("%") == "" then
+            vim.cmd(":Ex")
+        end
+    end
+})
+
+--netrw lines
+vim.g.netrw_bufsettings = 'noma nomod nu rnu nobl nowrap ro'
+
+-- italics and shit
+vim.opt.termguicolors = true
+
+-- c header
+-- vim.g.c_syntax_for_h = 1
 
 require("globconfig.plugins")
 require("globconfig.mappings")
 require("globconfig.plugconf.lspconfig")
 require("globconfig.plugconf.catpuccin")
-
-
+require("globconfig.scripts.block_repeats")
+require("globconfig.scripts.testmaker")
+require("globconfig.scripts.b")
