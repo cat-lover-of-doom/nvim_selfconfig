@@ -65,6 +65,14 @@ vim.g.netrw_bufsettings = 'noma nomod nu rnu nobl nowrap ro'
 -- italics and shit
 vim.opt.termguicolors = true
 
+
+vim.diagnostic.config({
+  virtual_text = true,   -- inline errors
+  signs = true,          -- gutter signs
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
 -- c header
 -- vim.g.c_syntax_for_h = 1
 
