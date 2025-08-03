@@ -30,3 +30,7 @@ vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {})
 vim.api.nvim_set_keymap('n', '<leader><S-b>', ':lua WriteCommand()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>b', ':lua ExecCommand()<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', ' ', "")
+
+
+vim.keymap.set('n', 'E', '$')
+vim.keymap.set('n', 'B', '0')

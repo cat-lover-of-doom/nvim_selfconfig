@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 lspconfig.eslint.setup {
     capabilities = capabilities,
-    filetypes = { "javascript", "typescript" }
+    filetypes = { "javascript" }
 }
 lspconfig.html.setup {
     capabilities = capabilities,
