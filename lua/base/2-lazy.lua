@@ -92,7 +92,6 @@ local function setup_lazy(lazy_dir)
           "tohtml",
           "gzip",
           "zipPlugin",
-          "netrwPlugin",
           "tarPlugin",
         },
       },

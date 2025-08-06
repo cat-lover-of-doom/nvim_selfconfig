@@ -4,7 +4,7 @@
 -- ----------------------------------------
 
 -- Theme
-vim.g.default_colorscheme = "eldritch"
+vim.g.default_colorscheme = "catppuccin"
 
 -- Options --------------------------------------------------------------------
 vim.opt.breakindent = true -- Wrap indent to match  line start.
@@ -28,7 +28,7 @@ vim.opt.linebreak = true -- Wrap lines at 'breakat'.
 vim.opt.number = true -- Show numberline.
 vim.opt.preserveindent = true -- Preserve indent structure as much as possible.
 vim.opt.pumheight = 10 -- Height of the pop up menu.
-vim.opt.relativenumber = false -- Show relative numberline.
+vim.opt.relativenumber = true -- Show relative numberline.
 vim.opt.shiftwidth = 2 -- Number of space inserted for indentation.
 vim.opt.showmode = false -- Disable showing modes in command line.
 vim.opt.showtabline = 2 -- always display tabline.
@@ -47,7 +47,7 @@ vim.opt.writebackup = false -- Disable making a backup before overwriting a file
 vim.opt.shada = "!,'1000,<50,s10,h" -- Remember the last 1000 opened files
 vim.opt.history = 1000 -- Number of commands to remember in a history table (per buffer).
 vim.opt.swapfile = false -- Ask what state to recover when opening a file that was not saved.
-vim.opt.wrap = true -- Disable wrapping of lines longer than the width of window.
+vim.opt.wrap = false -- Disable wrapping of lines longer than the width of window.
 vim.opt.colorcolumn = "80" -- PEP8 like character limit vertical bar.
 vim.opt.mousescroll = "ver:1,hor:0" -- Disables hozirontal scroll in neovim.
 vim.opt.guicursor = "n:blinkon200,i-ci-ve:ver25" -- Enable cursor blink.
@@ -60,9 +60,6 @@ vim.opt.viewoptions:remove "curdir" -- Disable saving current directory with vie
 vim.opt.shortmess:append { s = true, I = true } -- Disable startup message.
 vim.opt.backspace:append { "nostop" } -- Don't stop backspace at insert.
 vim.opt.diffopt:append { "algorithm:histogram", "linematch:60" } -- Enable linematch diff algorithm
-
-local is_android = vim.fn.isdirectory('/data') == 1
-if is_android then vim.opt.mouse = "v" else vim.opt.mouse = "a" end -- Enable scroll for android
 
 -- Globals --------------------------------------------------------------------
 vim.g.mapleader = " " -- Set leader key.

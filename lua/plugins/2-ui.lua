@@ -52,7 +52,9 @@ return {
       plugins = { ["dashboard-nvim"] = true },
     },
   },
-
+  {
+    "catppuccin/nvim", name = "catppuccin", priority = 1000
+  },
   --  morta [theme]
   --  https://github.com/ssstba/morta.nvim
    {
