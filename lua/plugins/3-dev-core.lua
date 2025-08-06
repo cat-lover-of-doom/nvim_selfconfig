@@ -352,7 +352,6 @@ return {
         { path = "mini.indentscope", mods = { "mini.indentscope" } },
         { path = "heirline-components.nvim", mods = { "heirline-components" } },
         { path = "telescope.nvim", mods = { "telescope" } },
-        { path = "telescope-undo.nvim", mods = { "telescope", "telescope-undo" } },
         { path = "telescope-fzf-native.nvim", mods = { "telescope", "fzf_lib"  } },
         { path = "dressing.nvim", mods = { "dressing" } },
         { path = "noice.nvim", mods = { "noice", "telescope" } },
@@ -399,7 +398,6 @@ return {
         { path = "neural", mods = { "neural" } },
         { path = "copilot", mods = { "copilot" } },
         { path = "guess-indent.nvim", mods = { "guess-indent" } },
-        { path = "compiler.nvim", mods = { "compiler" } },
         { path = "overseer.nvim", mods = { "overseer", "lualine", "neotest", "resession", "cmp_overseer" } },
         { path = "nvim-dap", mods = { "dap" } },
         { path = "nvim-nio", mods = { "nio" } },
@@ -553,7 +551,7 @@ return {
           ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
           ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
           ["<C-y>"] = cmp.config.disable,
-          ["<C-e>"] = cmp.mapping {
+          ["<C-s>"] = cmp.mapping {
             i = cmp.mapping.abort(),
             c = cmp.mapping.close(),
           },

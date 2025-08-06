@@ -35,9 +35,6 @@ return {
   ArrowRight = ">",
 
   -- Heirline components - Winbar components
-  CompilerPlay = "[PLAY]",
-  CompilerStop = "[STOP]",
-  CompilerRedo = "[REDO]",
   NeoTree = "[TREE]",
   Aerial = "[AERIAL]",
   ZenMode = "[ZEN]",

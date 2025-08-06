@@ -373,31 +373,6 @@ return {
           lib.component.fill { hl = { bg = "tabline_bg" } },
           lib.component.tabline_tabpages()
         },
-        winbar = { -- UI breadcrumbs bar
-          init = function(self) self.bufnr = vim.api.nvim_get_current_buf() end,
-          fallthrough = false,
-          -- Winbar for terminal, neotree, and aerial.
-          {
-            condition = function() return not lib.condition.is_active() end,
-            {
-              lib.component.neotree(),
-              lib.component.compiler_play(),
-              lib.component.fill(),
-              lib.component.compiler_redo(),
-              lib.component.aerial(),
-            },
-          },
-          -- Regular winbar
-          {
-            lib.component.neotree(),
-            lib.component.compiler_play(),
-            lib.component.fill(),
-            lib.component.breadcrumbs(),
-            lib.component.fill(),
-            lib.component.compiler_redo(),
-            lib.component.aerial(),
-          }
-        },
         statuscolumn = { -- UI left column
           init = function(self) self.bufnr = vim.api.nvim_get_current_buf() end,
           lib.component.foldcolumn(),
@@ -443,10 +418,6 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       {
-        "debugloop/telescope-undo.nvim",
-        cmd = "Telescope",
-      },
-      {
         "nvim-telescope/telescope-fzf-native.nvim",
         enabled = vim.fn.executable("make") == 1,
         build = "make",
@@ -486,25 +457,6 @@ return {
           },
           mappings = mappings,
         },
-        extensions = {
-          undo = {
-            use_delta = true,
-            side_by_side = true,
-            vim_diff_opts = { ctxlen = 0 },
-            entry_format = "󰣜 #$ID, $STAT, $TIME",
-            layout_strategy = "horizontal",
-            layout_config = {
-              preview_width = 0.65,
-            },
-            mappings = {
-              i = {
-                ["<cr>"] = require("telescope-undo.actions").yank_additions,
-                ["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
-                ["<C-cr>"] = require("telescope-undo.actions").restore,
-              },
-            },
-          },
-        },
       }
     end,
     config = function(_, opts)
@@ -514,7 +466,6 @@ return {
       -- If you delete a plugin, you can also delete its Telescope extension.
       if utils.is_available("nvim-notify") then telescope.load_extension("notify") end
       if utils.is_available("telescope-fzf-native.nvim") then telescope.load_extension("fzf") end
-      if utils.is_available("telescope-undo.nvim") then telescope.load_extension("undo") end
       if utils.is_available("project.nvim") then telescope.load_extension("projects") end
       if utils.is_available("LuaSnip") then telescope.load_extension("luasnip") end
       if utils.is_available("aerial.nvim") then telescope.load_extension("aerial") end

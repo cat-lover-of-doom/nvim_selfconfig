@@ -989,43 +989,8 @@ if is_available("telescope.nvim") then
     }
   end
 
-  -- extra - undotree
-  if is_available("telescope-undo.nvim") then
-    maps.n["<leader>fu"] = {
-      function() require("telescope").extensions.undo.undo() end,
-      desc = "Find in undo tree",
-    }
-  end
-
-  -- extra - compiler
-  if is_available("compiler.nvim") and is_available("overseer.nvim") then
-    maps.n["<leader>m"] = icons.c
-    maps.n["<leader>mm"] = {
-      function() vim.cmd("CompilerOpen") end,
-      desc = "Open compiler",
-    }
-    maps.n["<leader>mr"] = {
-      function() vim.cmd("CompilerRedo") end,
-      desc = "Compiler redo",
-    }
-    maps.n["<leader>mt"] = {
-      function() vim.cmd("CompilerToggleResults") end,
-      desc = "compiler results",
-    }
-    maps.n["<F6>"] = {
-      function() vim.cmd("CompilerOpen") end,
-      desc = "Open compiler",
-    }
-    maps.n["<S-F6>"] = {
-      function() vim.cmd("CompilerRedo") end,
-      desc = "Compiler redo",
-    }
-    maps.n["<S-F7>"] = {
-      function() vim.cmd("CompilerToggleResults") end,
-      desc = "compiler resume",
-    }
-  end
 end
+
 
 -- toggleterm.nvim ----------------------------------------------------------
 if is_available("toggleterm.nvim") then
@@ -1282,14 +1247,6 @@ if is_available("markdown-preview.nvim") or is_available("markmap.nvim") or is_a
       desc = "Open documentation",
     }
   end
-end
-
--- [neural] -----------------------------------------------------------------
-if is_available("neural") or is_available("copilot") then
-  maps.n["<leader>a"] = {
-    function() require("neural").prompt() end,
-    desc = "Ask chatgpt",
-  }
 end
 
 -- hop.nvim ----------------------------------------------------------------
