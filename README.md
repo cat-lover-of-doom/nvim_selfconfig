@@ -6,3 +6,6 @@
 - setup documentation
 - setup lspconfig
 - remove neovim coverage
+- add neovim undotree
+- import custom scripts
+- arbitrary use of user defined command

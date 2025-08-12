@@ -70,19 +70,6 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = "o"
--- redefinitions of "]b" and "[b"
-maps.n["<S-l>"] = {
-    function()
-        require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
-    end,
-    desc = "Next buffer",
-}
-maps.n["<S-h>"] = {
-    function()
-        require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
-    end,
-    desc = "Previous buffer",
-}
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
