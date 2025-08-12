@@ -68,6 +68,22 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 --
 -- -------------------------------------------------------------------------
 
+-- MY OWN SHIT -------------------------------------------------------------
+maps.n["+"] = "o"
+-- redefinitions of "]b" and "[b"
+maps.n["<S-l>"] = {
+  function()
+    require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
+  end,
+  desc = "Next buffer",
+}
+maps.n["<S-h>"] = {
+  function()
+    require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
+  end,
+  desc = "Previous buffer",
+}
+
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
   f = { desc = get_icon("Find", true) .. " Find" },
@@ -90,32 +106,10 @@ maps.n["j"] =
 { "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor down" }
 maps.n["k"] =
 { "v:count == 0 ? 'gk' : 'k'", expr = true, desc = "Move cursor up" }
-maps.n["<leader>w"] = { "<cmd>w<cr>", desc = "Save" }
-maps.n["<leader>W"] =
-{ function() vim.cmd("SudaWrite") end, desc = "Save as sudo" }
-maps.n["<leader>n"] = { "<cmd>enew<cr>", desc = "New file" }
-maps.n["<Leader>/"] = { "gcc", remap = true, desc = "Toggle comment line" }
-maps.x["<Leader>/"] = { "gc", remap = true, desc = "Toggle comment" }
 maps.n["gx"] =
 { utils.open_with_program, desc = "Open the file under cursor with a program" }
-maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
-maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical Split" }
-maps.n["\\"] = { "<cmd>split<cr>", desc = "Horizontal Split" }
-maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete." }
 maps.n["0"] =
 { "^", desc = "Go to the fist character of the line (aliases 0 to ^)" }
-maps.n["<leader>q"] = { "<cmd>confirm q<cr>", desc = "Quit" }
-maps.n["<leader>q"] = {
-  function()
-    -- Ask user for confirmation
-    local choice = vim.fn.confirm("Do you really want to exit nvim?", "&Yes\n&No", 2)
-    if choice == 1 then
-      -- If user confirms, but there are still files to be saved: Ask
-      vim.cmd('confirm quit')
-    end
-  end,
-  desc = "Quit",
-}
 maps.n["<Tab>"] = {
   "<Tab>",
   noremap = true,
@@ -186,7 +180,7 @@ maps.n["<ESC>"] = {
       vim.cmd("nohlsearch")
     else
       vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes("<ESC>", true, true, true),
+    vim.api.nvim_replace_termcodes("<ESC>", true, true, true),
         "n",
         true
       )
@@ -290,11 +284,7 @@ maps.n["<leader>bw"] = {     -- Closes the window
   end,
   desc = "Close window",
 }
--- Close buffer keeping the window → Without confirmation.
--- maps.n["<leader>X"] = {
---   function() require("heirline-components.buffer").close(0, true) end,
---   desc = "Force close buffer",
---
+
 maps.n["<leader>ba"] = {
   function() vim.cmd("wa") end,
   desc = "Write all changed buffers",
@@ -397,24 +387,6 @@ maps.n["<leader>b|"] = {
   desc = "Vertical split buffer from tabline",
 }
 
--- quick buffer switching
-maps.n["<C-k>"] = {
-  function()
-    require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
-  end,
-  desc = "Next buffer",
-}
-maps.n["<C-j>"] = {
-  function()
-    require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
-  end,
-  desc = "Previous buffer",
-}
-
--- tabs
-maps.n["]t"] = { function() vim.cmd.tabnext() end, desc = "Next tab" }
-maps.n["[t"] = { function() vim.cmd.tabprevious() end, desc = "Previous tab" }
-
 -- zen mode
 if is_available("zen-mode.nvim") then
   maps.n["<leader>uz"] =
@@ -455,37 +427,6 @@ end
 if is_available("mini.animate") then
   maps.n["<leader>uA"] = { ui.toggle_animations, desc = "Animations" }
 end
-
--- shifted movement keys ----------------------------------------------------
-maps.n["<S-Down>"] = {
-  function() vim.api.nvim_feedkeys("7j", "n", true) end,
-  desc = "Fast move down",
-}
-maps.n["<S-Up>"] = {
-  function() vim.api.nvim_feedkeys("7k", "n", true) end,
-  desc = "Fast move up",
-}
-maps.n["<S-PageDown>"] = {
-  function()
-    local current_line = vim.fn.line "."
-    local total_lines = vim.fn.line "$"
-    local target_line = current_line + 1 + math.floor(total_lines * 0.20)
-    if target_line > total_lines then target_line = total_lines end
-    vim.api.nvim_win_set_cursor(0, { target_line, 0 })
-    vim.cmd("normal! zz")
-  end,
-  desc = "Page down exactly a 20% of the total size of the buffer",
-}
-maps.n["<S-PageUp>"] = {
-  function()
-    local current_line = vim.fn.line "."
-    local target_line = current_line - 1 - math.floor(vim.fn.line "$" * 0.20)
-    if target_line < 1 then target_line = 1 end
-    vim.api.nvim_win_set_cursor(0, { target_line, 0 })
-    vim.cmd("normal! zz")
-  end,
-  desc = "Page up exactly 20% of the total size of the buffer",
-}
 
 -- cmdline autocompletion ---------------------------------------------------
 maps.c["<Up>"] = {
@@ -617,19 +558,6 @@ if is_available("vim-fugitive") then
   }
 end
 -- git client
-if vim.fn.executable "lazygit" == 1 then -- if lazygit exists, show it
-  maps.n["<leader>gg"] = {
-    function()
-      local git_dir = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
-      if git_dir ~= "" then
-        vim.cmd("TermExec cmd='lazygit && exit'")
-      else
-        utils.notify("Not a git repository", vim.log.levels.WARN)
-      end
-    end,
-    desc = "ToggleTerm lazygit",
-  }
-end
 if vim.fn.executable "gitui" == 1 then -- if gitui exists, show it
   maps.n["<leader>gg"] = {
     function()
@@ -651,7 +579,7 @@ end
 -- file browsers ------------------------------------
 -- yazi
 if is_available("yazi.nvim") and vim.fn.executable("yazi") == 1 then
-  maps.n["<leader>r"] = {
+  maps.n["<leader>s"] = {
     -- TODO: use 'Yazi toggle' instead once yazi v0.4.0 is released.
     "<cmd>Yazi<CR>",
     desc = "File browser",
@@ -760,42 +688,6 @@ if is_available("aerial.nvim") then
   { function() require("aerial").toggle() end, desc = "Aerial" }
 end
 
--- letee-calltree.nvimm ------------------------------------------------------------
-if is_available("litee-calltree.nvim") then
-  -- For every buffer, look for the one with filetype "calltree" and focus it.
-  local calltree_delay = 1500 -- first run? wait a bit longer.
-  local function focus_calltree()
-    -- Note: No go to the previous cursor position, press ctrl+i / ctrl+o
-    vim.defer_fn(function()
-      for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
-        local ft = vim.api.nvim_get_option_value('filetype', { buf = buf })
-
-        if ft == "calltree" then
-          vim.api.nvim_set_current_win(win)
-          return true
-        end
-      end
-    end, calltree_delay)
-    calltree_delay = 100
-  end
-  maps.n["gj"] = {
-    function()
-      vim.lsp.buf.incoming_calls()
-      focus_calltree()
-    end,
-    desc = "Call tree (incoming)"
-  }
-  maps.n["gJ"] =
-  {
-    function()
-      vim.lsp.buf.outgoing_calls()
-      focus_calltree()
-    end,
-    desc = "Call tree (outgoing)"
-  }
-end
-
 -- telescope.nvim [find] ----------------------------------------------------
 if is_available("telescope.nvim") then
   maps.n["<leader>f"] = icons.f
@@ -853,17 +745,16 @@ if is_available("telescope.nvim") then
     function() require("telescope.builtin").commands() end,
     desc = "Find commands",
   }
-  -- Let's disable this. It is way too imprecise. Use rnvimr instead.
-  -- maps.n["<leader>ff"] = {
-  --   function()
-  --     require("telescope.builtin").find_files { hidden = true, no_ignore = true }
-  --   end,
-  --   desc = "Find all files",
-  -- }
-  -- maps.n["<leader>fF"] = {
-  --   function() require("telescope.builtin").find_files() end,
-  --   desc = "Find files (no hidden)",
-  -- }
+  maps.n["<leader>ff"] = {
+    function()
+      require("telescope.builtin").find_files { hidden = true, no_ignore = true }
+    end,
+    desc = "Find all files",
+  }
+  maps.n["<leader>fF"] = {
+    function() require("telescope.builtin").find_files() end,
+    desc = "Find files (no hidden)",
+  }
   maps.n["<leader>fh"] = {
     function() require("telescope.builtin").help_tags() end,
     desc = "Find help",
@@ -903,7 +794,7 @@ if is_available("telescope.nvim") then
     end,
     desc = "Find themes",
   }
-  maps.n["<leader>ff"] = {
+  maps.n["<leader>fg"] = {
     function()
       require("telescope.builtin").live_grep({
         additional_args = function(args)
@@ -914,7 +805,7 @@ if is_available("telescope.nvim") then
     end,
     desc = "Find words in project",
   }
-  maps.n["<leader>fF"] = {
+  maps.n["<leader>fG"] = {
     function() require("telescope.builtin").live_grep() end,
     desc = "Find words in project (no hidden)",
   }
@@ -1005,10 +896,6 @@ if is_available("toggleterm.nvim") then
     "<cmd>ToggleTerm size=80 direction=vertical<cr>",
     desc = "Toggleterm vertical split",
   }
-  maps.n["<F7>"] = { "<cmd>ToggleTerm<cr>", desc = "terminal" }
-  maps.t["<F7>"] = maps.n["<F7>"]
-  maps.n["<C-'>"] = maps.n["<F7>"] -- requires terminal that supports binding <C-'>
-  maps.t["<C-'>"] = maps.n["<F7>"] -- requires terminal that supports binding <C-'>
 end
 
 -- extra - improved terminal navigation
