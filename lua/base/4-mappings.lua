@@ -69,7 +69,7 @@ local maps = require("base.utils").get_mappings_template()
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = {"o", desc = "Insert a blank line"}
-maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser"}
+maps.n["<leader>s"] = { "<CMD>Oil<CR><CMD>Neotree action=show<CR>", desc = "File browser"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
@@ -306,8 +306,7 @@ maps.n["<leader>bc"] = {
     function() require("heirline-components.buffer").close_all(true) end,
     desc = "Close all buffers except current",
 }
-maps.n["<leader>bC"] = {
-    function() require("heirline-components.buffer").close_all() end,
+maps.n["<leader>bo"] = { "<CMD>only<CR>",
     desc = "Close all buffers",
 }
 maps.n["<leader>bb"] = {
