@@ -1025,37 +1025,6 @@ if is_available("nvim-ufo") then
     }
 end
 
--- code docmentation [docs] -------------------------------------------------
-
-if is_available("markdown-preview.nvim") or is_available("markmap.nvim") or is_available("dooku.nvim") then
-    maps.n["<leader>D"] = icons.dc
-
-    -- Markdown preview
-    if is_available("markdown-preview.nvim") then
-        maps.n["<leader>Dp"] = {
-            function() vim.cmd("silent! MarkdownPreview") end,
-            desc = "Markdown preview",
-        }
-    end
-
-    -- Markdown Mindmap
-    if is_available("markmap.nvim") then
-        maps.n["<leader>Dm"] = {
-            function()
-                vim.cmd("MarkmapOpen")
-            end,
-            desc = "Markmap",
-        }
-    end
-
-    if is_available("dooku.nvim") then
-        maps.n["<leader>Dd"] = {
-            function() vim.cmd(":DookuGenerate") end,
-            desc = "Open documentation",
-        }
-    end
-end
-
 -- hop.nvim ----------------------------------------------------------------
 if is_available("hop.nvim") then
     -- Note that Even though we are using ENTER for hop, you can still select items

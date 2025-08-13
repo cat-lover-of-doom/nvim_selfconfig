@@ -13,11 +13,6 @@
 --       ## ANALYZER
 --       -> aerial.nvim                    [symbols tree]
 
---       ## CODE DOCUMENTATION
---       -> dooku.nvim                     [html doc generator]
---       -> markdown-preview.nvim          [markdown previewer]
---       -> markmap.nvim                   [markdown mindmap]
-
 --       ## DEBUGGER
 --       -> nvim-dap                       [debugger]
 
@@ -197,54 +192,6 @@ return {
                 end,
             })
         end
-    },
-
-    --  CODE DOCUMENTATION ------------------------------------------------------
-    --  dooku.nvim [html doc generator]
-    --  https://github.com/zeioth/dooku.nvim
-    {
-        "zeioth/dooku.nvim",
-        cmd = {
-            "DookuGenerate",
-            "DookuOpen",
-            "DookuAutoSetup"
-        },
-        opts = {},
-    },
-
-    --  [markdown previewer]
-    --  https://github.com/iamcco/markdown-preview.nvim
-    --  Note: If you change the build command, wipe ~/.local/data/nvim/lazy
-    {
-        "iamcco/markdown-preview.nvim",
-        build = function(plugin)
-            -- guard clauses
-            local yarn = (vim.fn.executable("yarn") and "yarn")
-                or (vim.fn.executable("npx") and "npx -y yarn")
-                or nil
-            if not yarn then error("Missing `yarn` or `npx` in the PATH") end
-
-            -- run cmd
-            local cd_cmd = "!cd " .. plugin.dir .. " && cd app"
-            local yarn_install_cmd = "COREPACK_ENABLE_AUTO_PIN=0 " .. yarn .. " install --frozen-lockfile"
-            vim.cmd(cd_cmd .. " && " .. yarn_install_cmd)
-        end,
-        init = function()
-            local plugin = require("lazy.core.config").spec.plugins["markdown-preview.nvim"]
-            vim.g.mkdp_filetypes = require("lazy.core.plugin").values(plugin, "ft", true)
-        end,
-        ft = { "markdown", "markdown.mdx" },
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    },
-
-    --  [markdown markmap]
-    --  https://github.com/zeioth/markmap.nvim
-    --  Important: Make sure you have yarn in your PATH before running markmap.
-    {
-        "zeioth/markmap.nvim",
-        build = "yarn global add markmap-cli",
-        cmd = { "MarkmapOpen", "MarkmapSave", "MarkmapWatch", "MarkmapWatchStop" },
-        config = function(_, opts) require("markmap").setup(opts) end,
     },
 
     --  DEBUGGER ----------------------------------------------------------------
