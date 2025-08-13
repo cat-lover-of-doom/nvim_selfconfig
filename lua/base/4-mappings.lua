@@ -60,7 +60,6 @@ local get_icon = utils.get_icon
 local is_available = utils.is_available
 local ui = require("base.utils.ui")
 local maps = require("base.utils").get_mappings_template()
-local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- -------------------------------------------------------------------------
 --
@@ -69,8 +68,8 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 -- -------------------------------------------------------------------------
 
 -- MY OWN SHIT -------------------------------------------------------------
-maps.n["+"] = "o"
-maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser", }
+maps.n["+"] = {"o", desc = "Insert a blank line"}
+maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
@@ -697,27 +696,9 @@ if is_available("telescope.nvim") then
         function() require("telescope.builtin").marks() end,
         desc = "Find marks",
     }
-    maps.n["<leader>fa"] = {
-        function()
-            local cwd = vim.fn.stdpath "config" .. "/.."
-            local search_dirs = { vim.fn.stdpath "config" }
-            if #search_dirs == 1 then cwd = search_dirs[1] end -- if only one directory, focus cwd
-            require("telescope.builtin").find_files {
-                prompt_title = "Config Files",
-                search_dirs = search_dirs,
-                cwd = cwd,
-                follow = true,
-            } -- call telescope
-        end,
-        desc = "Find nvim config files",
-    }
     maps.n["<leader>fB"] = {
         function() require("telescope.builtin").buffers() end,
         desc = "Find buffers",
-    }
-    maps.n["<leader>fw"] = {
-        function() require("telescope.builtin").grep_string() end,
-        desc = "Find word under cursor in project",
     }
     maps.n["<leader>fC"] = {
         function() require("telescope.builtin").commands() end,
@@ -737,13 +718,9 @@ if is_available("telescope.nvim") then
         function() require("telescope.builtin").help_tags() end,
         desc = "Find help",
     }
-    maps.n["<leader>fk"] = {
+    maps.n["<leader>fm"] = {
         function() require("telescope.builtin").keymaps() end,
         desc = "Find keymaps",
-    }
-    maps.n["<leader>fm"] = {
-        function() require("telescope.builtin").man_pages() end,
-        desc = "Find man",
     }
     if is_available("nvim-notify") then
         maps.n["<leader>fn"] = {
@@ -1095,11 +1072,7 @@ if is_available("markdown-preview.nvim") or is_available("markmap.nvim") or is_a
     if is_available("markmap.nvim") then
         maps.n["<leader>Dm"] = {
             function()
-                if is_android then
-                    vim.cmd("MarkmapWatch")
-                else
-                    vim.cmd("MarkmapOpen")
-                end
+                vim.cmd("MarkmapOpen")
             end,
             desc = "Markmap",
         }

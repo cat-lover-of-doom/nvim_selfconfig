@@ -23,7 +23,7 @@
 --       -> which-key                   [on-screen keybinding]
 
 local utils = require("base.utils")
-local is_windows = vim.fn.has('win32') == 1         -- true if on windows
+local is_windows = vim.fn.has('win32') == 1 -- true if on windows
 
 return {
 
@@ -168,7 +168,6 @@ return {
         "rcarriga/nvim-notify",
         event = "User BaseDefered",
         opts = function()
-
             return {
                 timeout = 2500,
                 fps = 60,
@@ -602,7 +601,7 @@ return {
 
         opts_extend = { "disable.ft", "disable.bt" },
         opts = {
-            preset = "classic", -- "classic", "modern", or "helix"
+            preset = "modern", -- "classic", "modern", or "helix"
             icons = {
                 group = (vim.g.fallback_icons_enabled and "+") or "",
                 rules = false,

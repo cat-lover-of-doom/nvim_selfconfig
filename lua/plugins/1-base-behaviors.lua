@@ -48,39 +48,51 @@ return {
                     win_options = {
                         wrap = true,
                         signcolumn = "yes",
-                    },
-                    keymaps = {
-                        ["g?"] = { "actions.show_help", mode = "n" },
-                        ["<CR>"] = "actions.select",
-                        ["|"] = { "actions.select", opts = { vertical = true } },
-                        ["<C-p>"] = "actions.preview",
-                        ["<C-c>"] = { "actions.close", mode = "n" },
-                        ["<C-l>"] = "actions.refresh",
-                        ["-"] = { "actions.parent", mode = "n" },
-                        ["_"] = { "actions.open_cwd", mode = "n" },
-                        ["`"] = { "actions.cd", mode = "n" },
-                        ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
-                        ["gs"] = { "actions.change_sort", mode = "n" },
-                        ["gx"] = "actions.open_external",
-                        ["g."] = { "actions.toggle_hidden", mode = "n" },
-                        ["g\\"] = { "actions.toggle_trash", mode = "n" },
-                    },
-                    -- Set to false to disable all of the above keymaps
-                    use_default_keymaps = false,
+                    }
                 },
+                keymaps = {
+                    ["g?"] = { "actions.show_help", mode = "n" },
+                    ["<CR>"] = "actions.select",
+                    ["|"] = { "actions.select", opts = { vertical = true } },
+                    ["<C-p>"] = "actions.preview",
+                    ["<C-c>"] = { "actions.close", mode = "n" },
+                    ["<C-l>"] = "actions.refresh",
+                    ["-"] = { "actions.parent", mode = "n" },
+                    ["_"] = { "actions.open_cwd", mode = "n" },
+                    ["`"] = { "actions.cd", mode = "n" },
+                    ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+                    ["gs"] = { "actions.change_sort", mode = "n" },
+                    ["gx"] = "actions.open_external",
+                    ["g."] = { "actions.toggle_hidden", mode = "n" },
+                    ["g\\"] = { "actions.toggle_trash", mode = "n" },
+                },
+                -- Set to false to disable all of the above keymaps
+                use_default_keymaps = false,
             })
         end
+    },
+    {
+        "JezerM/oil-lsp-diagnostics.nvim",
+        dependencies = { "stevearc/oil.nvim" },
+        opts = {},
+        lazy = false,
+    },
+    {
+        "benomahony/oil-git.nvim",
+        dependencies = { "stevearc/oil.nvim" },
+        lazy = false,
+        -- No opts or config needed! Works automatically
     },
     {
         "chrishrb/gx.nvim",
         keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
         cmd = { "Browse" },
         init = function()
-            vim.g.netrw_nogx = 1                -- disable netrw gx
+            vim.g.netrw_nogx = 1                    -- disable netrw gx
         end,
         dependencies = { "nvim-lua/plenary.nvim" }, -- Required for Neovim < 0.10.0
-        config = true,                          -- default settings
-        submodules = false,                     -- not needed, submodules are required only for tests
+        config = true,                              -- default settings
+        submodules = false,                         -- not needed, submodules are required only for tests
     },
 
     -- project.nvim [project search + auto cd]
