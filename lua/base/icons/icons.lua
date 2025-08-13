@@ -118,7 +118,7 @@ return {
     -- Alpha
     GreeterNew = "",
     GreeterRecent = "",
-    GreeterNetrw = "",
+    GreeterOil = "",
     GreeterSessions = "",
     GreeterProjects = "",
     GreeterPlug = "",

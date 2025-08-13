@@ -70,7 +70,7 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = "o"
-maps.n["<leader>s"] = { ":Ex<CR>", desc = "File browser", }
+maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser", }
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
