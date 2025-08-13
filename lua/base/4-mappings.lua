@@ -70,6 +70,7 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = "o"
+maps.n["<leader>s"] = { ":Ex<CR>", desc = "File browser", }
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
@@ -560,16 +561,6 @@ if vim.fn.executable "gitui" == 1 then -- if gitui exists, show it
             end
         end,
         desc = "ToggleTerm gitui",
-    }
-end
-
--- file browsers ------------------------------------
--- yazi
-if is_available("yazi.nvim") and vim.fn.executable("yazi") == 1 then
-    maps.n["<leader>s"] = {
-        -- TODO: use 'Yazi toggle' instead once yazi v0.4.0 is released.
-        "<cmd>Yazi<CR>",
-        desc = "File browser",
     }
 end
 
