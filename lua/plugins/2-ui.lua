@@ -24,7 +24,6 @@
 
 local utils = require("base.utils")
 local is_windows = vim.fn.has('win32') == 1         -- true if on windows
-local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 return {
 
@@ -80,64 +79,6 @@ return {
         opts = function()
             local dashboard = require("alpha.themes.dashboard")
 
-            -- Header
-            -- dashboard.section.header.val = {
-            --   "                                                                     ",
-            --   "       ████ ██████           █████      ██                     ",
-            --   "      ███████████             █████                             ",
-            --   "      █████████ ███████████████████ ███   ███████████   ",
-            --   "     █████████  ███    █████████████ █████ ██████████████   ",
-            --   "    █████████ ██████████ █████████ █████ █████ ████ █████   ",
-            --   "  ███████████ ███    ███ █████████ █████ █████ ████ █████  ",
-            --   " ██████  █████████████████████ ████ █████ █████ ████ ██████ ",
-            -- }
-            -- dashboard.section.header.val = {
-            --   '                                        ▟▙            ',
-            --   '                                        ▝▘            ',
-            --   '██▃▅▇█▆▖  ▗▟████▙▖   ▄████▄   ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
-            --   '██▛▔ ▝██  ██▄▄▄▄██  ██▛▔▔▜██  ▝██  ██▘  ██  ██▛▜██▛▜██',
-            --   '██    ██  ██▀▀▀▀▀▘  ██▖  ▗██   ▜█▙▟█▛   ██  ██  ██  ██',
-            --   '██    ██  ▜█▙▄▄▄▟▊  ▀██▙▟██▀   ▝████▘   ██  ██  ██  ██',
-            --   '▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
-            -- }
-            -- dashboard.section.header.val = {
-            --   '                    ▟▙            ',
-            --   '                    ▝▘            ',
-            --   '██▃▅▇█▆▖  ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
-            --   '██▛▔ ▝██  ▝██  ██▘  ██  ██▛▜██▛▜██',
-            --   '██    ██   ▜█▙▟█▛   ██  ██  ██  ██',
-            --   '██    ██   ▝████▘   ██  ██  ██  ██',
-            --   '▀▀    ▀▀     ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
-            -- }
-            -- Generated with https://www.fancytextpro.com/BigTextGenerator/Larry3D
-            -- dashboard.section.header.val = {
-            --   [[ __  __                  __  __                     ]],
-            --   [[/\ \/\ \                /\ \/\ \  __                ]],
-            --   [[\ \ `\\ \     __    ___ \ \ \ \ \/\_\    ___ ___    ]],
-            --   [[ \ \ , ` \  /'__`\ / __`\\ \ \ \ \/\ \ /' __` __`\  ]],
-            --   [[  \ \ \`\ \/\  __//\ \L\ \\ \ \_/ \ \ \/\ \/\ \/\ \ ]],
-            --   [[   \ \_\ \_\ \____\ \____/ \ `\___/\ \_\ \_\ \_\ \_\]],
-            --   [[    \/_/\/_/\/____/\/___/   `\/__/  \/_/\/_/\/_/\/_/]],
-            -- }
-            --  dashboard.section.header.val = {
-            --   '                                                     ',
-            --   '  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ',
-            --   '  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ',
-            --   '  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ',
-            --   '  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ',
-            --   '  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ',
-            --   '  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ',
-            --   '                                                     ',
-            -- }
-            -- dashboard.section.header.val = {
-            --   [[                __                ]],
-            --   [[  ___   __  __ /\_\    ___ ___    ]],
-            --   [[/' _ `\/\ \/\ \\/\ \ /' __` __`\  ]],
-            --   [[/\ \/\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-            --   [[\ \_\ \_\ \___/  \ \_\ \_\ \_\ \_\]],
-            --   [[ \/_/\/_/\/__/    \/_/\/_/\/_/\/_/]],
-            -- }
-
             dashboard.section.header.val = {
                 [[888b      88                                                           88]],
                 [[8888b     88                                                           88]],
@@ -171,8 +112,8 @@ return {
                     get_icon("GreeterRecent") .. "  Recent  ",
                     "<cmd>Telescope oldfiles<CR>"),
                 dashboard.button("s",
-                    get_icon("GreeterNetrw") .. "  Netrw",
-                    ":Ex<CR>"),
+                    get_icon("GreeterOil") .. "  Oil",
+                    "<cmd>Oil<CR>"),
                 dashboard.button("c",
                     get_icon("GreeterSessions") .. "  Sessions",
                     "<cmd>SessionManager! load_session<CR>"
@@ -227,12 +168,10 @@ return {
         "rcarriga/nvim-notify",
         event = "User BaseDefered",
         opts = function()
-            local fps
-            if is_android then fps = 30 else fps = 244 end
 
             return {
                 timeout = 2500,
-                fps = fps,
+                fps = 60,
                 max_height = function() return math.floor(vim.o.lines * 0.75) end,
                 max_width = function() return math.floor(vim.o.columns * 0.75) end,
                 on_open = function(win)
@@ -592,7 +531,7 @@ return {
     {
         "echasnovski/mini.animate",
         event = "User BaseFile",
-        enabled = not is_android,
+        enabled = true,
         opts = function()
             -- don't use animate when scrolling with the mouse
             local mouse_scrolled = false

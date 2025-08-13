@@ -24,9 +24,64 @@
 --       -> hot-reload.nvim        [config reload]
 --       -> distroupdate.nvim      [distro update]
 
-local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
-
 return {
+    {
+        'stevearc/oil.nvim',
+        ---@module 'oil'
+        opts = {},
+        -- Optional dependencies
+        dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+        -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+        lazy = false,
+        config = function()
+            require("oil").setup({
+                default_file_explorer = true,
+                delete_to_trash = true,
+                skip_confirm_for_simple_edits = true,
+                view_options = {
+                    -- Show files and directories that start with "."
+                    show_hidden = true,
+                    natural_order = true,
+                    is_always_hidden = function(name, bufnr)
+                        return name == ".." or name == ".git" or name == ".DS_Store"
+                    end,
+                    win_options = {
+                        wrap = true,
+                        signcolumn = "yes",
+                    },
+                    keymaps = {
+                        ["g?"] = { "actions.show_help", mode = "n" },
+                        ["<CR>"] = "actions.select",
+                        ["|"] = { "actions.select", opts = { vertical = true } },
+                        ["<C-p>"] = "actions.preview",
+                        ["<C-c>"] = { "actions.close", mode = "n" },
+                        ["<C-l>"] = "actions.refresh",
+                        ["-"] = { "actions.parent", mode = "n" },
+                        ["_"] = { "actions.open_cwd", mode = "n" },
+                        ["`"] = { "actions.cd", mode = "n" },
+                        ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+                        ["gs"] = { "actions.change_sort", mode = "n" },
+                        ["gx"] = "actions.open_external",
+                        ["g."] = { "actions.toggle_hidden", mode = "n" },
+                        ["g\\"] = { "actions.toggle_trash", mode = "n" },
+                    },
+                    -- Set to false to disable all of the above keymaps
+                    use_default_keymaps = false,
+                },
+            })
+        end
+    },
+    {
+        "chrishrb/gx.nvim",
+        keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+        cmd = { "Browse" },
+        init = function()
+            vim.g.netrw_nogx = 1                -- disable netrw gx
+        end,
+        dependencies = { "nvim-lua/plenary.nvim" }, -- Required for Neovim < 0.10.0
+        config = true,                          -- default settings
+        submodules = false,                     -- not needed, submodules are required only for tests
+    },
 
     -- project.nvim [project search + auto cd]
     -- https://github.com/ahmedkhalf/project.nvim
@@ -191,7 +246,7 @@ return {
                     cmd = "sed"
                 },
             },
-            is_insert_mode = true, -- start open panel on is_insert_mode
+            is_insert_mode = true,    -- start open panel on is_insert_mode
             is_block_ui_break = true, -- prevent the UI from breaking
             mapping = {
                 ["toggle_line"] = {
@@ -360,7 +415,7 @@ return {
                         if node.type == "directory" or node:has_children() then
                             if not node:is_expanded() then -- if unexpanded, expand
                                 state.commands.toggle_node(state)
-                            else             -- if expanded and has children, seleect the next child
+                            else                           -- if expanded and has children, seleect the next child
                                 require("neo-tree.ui.renderer").focus_node(
                                     state,
                                     node:get_child_ids()[1]
@@ -447,7 +502,10 @@ return {
                 event_handlers = {
                     {
                         event = "neo_tree_buffer_enter",
-                        handler = function(_) vim.opt_local.signcolumn = "auto" end,
+                        handler = function(_)
+                            vim.opt_local.signcolumn = "auto"
+                            vim.cmd [[setlocal relativenumber]]
+                        end,
                     },
                 },
             }
@@ -529,7 +587,7 @@ return {
         "andymass/vim-matchup",
         event = "User BaseFile",
         config = function()
-            vim.g.matchup_matchparen_deferred = 1 -- work async
+            vim.g.matchup_matchparen_deferred = 1   -- work async
             vim.g.matchup_matchparen_offscreen = {} -- disable status bar icon
         end,
     },
@@ -608,7 +666,7 @@ return {
             return {
                 -- Window mode
                 floating_window = is_enabled, -- Display it as floating window.
-                hi_parameter = "IncSearch", -- Color to highlight floating window.
+                hi_parameter = "IncSearch",   -- Color to highlight floating window.
                 handler_opts = round_borders, -- Window style
 
                 -- Hint mode
@@ -666,7 +724,7 @@ return {
                 },
                 reload_callback = function()
                     vim.cmd(":silent! colorscheme " .. vim.g.default_colorscheme) -- nvim     colorscheme reload command
-                    vim.cmd(":silent! doautocmd ColorScheme")           -- heirline colorscheme reload event
+                    vim.cmd(":silent! doautocmd ColorScheme")                     -- heirline colorscheme reload event
                 end
             }
         end

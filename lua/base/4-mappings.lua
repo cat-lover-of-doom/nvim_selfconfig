@@ -70,7 +70,7 @@ local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = "o"
-maps.n["<leader>s"] = { ":Ex<CR>", desc = "File browser", }
+maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser", }
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
@@ -1118,14 +1118,14 @@ if is_available("hop.nvim") then
     -- Note that Even though we are using ENTER for hop, you can still select items
     -- from special menus like 'quickfix', 'q?' and 'q:' with <C+ENTER>.
 
-    maps.n["<C-m>"] = { -- The terminal undersand C-m and ENTER as the same key.
+    maps.n[","] = { -- The terminal undersand C-m and ENTER as the same key.
         function()
             require("hop")
             vim.cmd("silent! HopWord")
         end,
         desc = "Hop to word",
     }
-    maps.x["<C-m>"] = { -- The terminal undersand C-m and ENTER as the same key.
+    maps.x[","] = { -- The terminal undersand C-m and ENTER as the same key.
         function()
             require("hop")
             vim.cmd("silent! HopWord")
