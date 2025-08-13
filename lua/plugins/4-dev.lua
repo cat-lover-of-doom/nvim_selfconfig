@@ -12,7 +12,6 @@
 
 --       ## ANALYZER
 --       -> aerial.nvim                    [symbols tree]
---       -> litee-calltree.nvim            [calltree]
 
 --       ## CODE DOCUMENTATION
 --       -> dooku.nvim                     [html doc generator]
@@ -24,7 +23,6 @@
 
 --       ## TESTING
 --       -> neotest.nvim                   [unit testing]
---       -> nvim-coverage                  [code coverage]
 
 --       ## LANGUAGE IMPROVEMENTS
 --       -> guttentags_plus                [auto generate C/C++ tags]
@@ -197,67 +195,6 @@ return {
                         require("aerial").tree_set_collapse_level(0, 0)
                     end
                 end,
-            })
-        end
-    },
-
-    -- Litee calltree [calltree]
-    -- https://github.com/ldelossa/litee.nvim
-    -- https://github.com/ldelossa/litee-calltree.nvim
-    -- press ? inside the panel to show help.
-    {
-        'ldelossa/litee.nvim',
-        event = "User BaseFile",
-        opts = {
-            notify = { enabled = false },
-            tree = {
-                icon_set = "default" -- "nerd", "codicons", "default", "simple"
-            },
-            panel = {
-                orientation = "bottom",
-                panel_size = 10,
-            },
-        },
-        config = function(_, opts)
-            require('litee.lib').setup(opts)
-        end
-    },
-    {
-        'ldelossa/litee-calltree.nvim',
-        dependencies = 'ldelossa/litee.nvim',
-        event = "User BaseFile",
-        opts = {
-            on_open = "panel", -- or popout
-            map_resize_keys = false,
-            keymaps = {
-                expand = "<CR>",
-                collapse = "c",
-                collapse_all = "C",
-                jump = "<C-CR>"
-            },
-        },
-        config = function(_, opts)
-            require('litee.calltree').setup(opts)
-
-            -- Highlight only while on calltree
-            vim.api.nvim_create_autocmd({ "WinEnter" }, {
-                desc = "Clear highlights when leaving calltree + UX improvements.",
-                callback = function()
-                    vim.defer_fn(function()
-                        if vim.bo.filetype == "calltree" then
-                            vim.wo.colorcolumn = "0"
-                            vim.wo.foldcolumn = "0"
-                            vim.cmd("silent! PinBuffer") -- stickybuf.nvim
-                            vim.cmd(
-                            "silent! hi LTSymbolJump ctermfg=015 ctermbg=110 cterm=italic,bold,underline guifg=#464646 guibg=#87afd7 gui=italic,bold")
-                            vim.cmd(
-                            "silent! hi LTSymbolJumpRefs ctermfg=015 ctermbg=110 cterm=italic,bold,underline guifg=#464646 guibg=#87afd7 gui=italic,bold")
-                        else
-                            vim.cmd("silent! highlight clear LTSymbolJump")
-                            vim.cmd("silent! highlight clear LTSymbolJumpRefs")
-                        end
-                    end, 100)
-                end
             })
         end
     },
@@ -745,37 +682,6 @@ return {
             }, neotest_ns)
             require("neotest").setup(opts)
         end,
-    },
-
-    --  Shows a float panel with the [code coverage]
-    --  https://github.com/andythigpen/nvim-coverage
-    --
-    --  Your project must generate coverage/lcov.info for this to work.
-    --
-    --  On jest, make sure your packages.json file has this:
-    --  "tests": "jest --coverage"
-    --
-    --  If you use other framework or language, refer to nvim-coverage docs:
-    --  https://github.com/andythigpen/nvim-coverage/blob/main/doc/nvim-coverage.txt
-    {
-        "andythigpen/nvim-coverage",
-        cmd = {
-            "Coverage",
-            "CoverageLoad",
-            "CoverageLoadLcov",
-            "CoverageShow",
-            "CoverageHide",
-            "CoverageToggle",
-            "CoverageClear",
-            "CoverageSummary",
-        },
-        dependencies = { "nvim-lua/plenary.nvim" },
-        opts = {
-            summary = {
-                min_coverage = 80.0, -- passes if higher than
-            },
-        },
-        config = function(_, opts) require("coverage").setup(opts) end,
     },
 
     -- LANGUAGE IMPROVEMENTS ----------------------------------------------------

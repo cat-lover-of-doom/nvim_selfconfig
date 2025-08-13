@@ -392,8 +392,6 @@ return {
                 { path = "gitsigns.nvim",               mods = { "gitsigns" } },
                 { path = "vim-fugitive",                mods = { "fugitive" } }, -- has vimscript
                 { path = "aerial.nvim",                 mods = { "aerial", "telescope", "lualine", "resession" } },
-                { path = "litee.nvim",                  mods = { "litee" } },
-                { path = "litee-calltree.nvim",         mods = { "litee" } },
                 { path = "dooku.nvim",                  mods = { "dooku" } },
                 { path = "markdown-preview.nvim",       mods = { "mkdp" } }, -- has vimscript
                 { path = "markmap.nvim",                mods = { "markmap" } },
@@ -409,17 +407,9 @@ return {
                 { path = "mason-nvim-dap.nvim",         mods = { "mason-nvim-dap" } },
 
                 { path = "one-small-step-for-vimkind",  mods = { "osv" } },
-                { path = "neotest-dart",                mods = { "neotest-dart" } },
-                { path = "neotest-dotnet",              mods = { "neotest-dotnet" } },
-                { path = "neotest-elixir",              mods = { "neotest-elixir" } },
                 { path = "neotest-golang",              mods = { "neotest-golang" } },
-                { path = "neotest-java",                mods = { "neotest-java" } },
                 { path = "neotest-jest",                mods = { "neotest-jest" } },
-                { path = "neotest-phpunit",             mods = { "neotest-phpunit" } },
                 { path = "neotest-python",              mods = { "neotest-python" } },
-                { path = "neotest-rust",                mods = { "neotest-rust" } },
-                { path = "neotest-zig",                 mods = { "neotest-zig" } },
-                { path = "nvim-coverage.nvim",          mods = { "coverage" } },
                 { path = "gutentags_plus",              mods = { "gutentags_plus" } }, -- has vimscript
                 { path = "vim-gutentags",               mods = { "vim-gutentags" } }, -- has vimscript
 
