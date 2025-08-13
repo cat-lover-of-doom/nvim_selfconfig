@@ -24,7 +24,6 @@
 
 local utils = require("base.utils")
 local is_windows = vim.fn.has('win32') == 1         -- true if on windows
-local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 return {
 
@@ -172,7 +171,7 @@ return {
                     "<cmd>Telescope oldfiles<CR>"),
                 dashboard.button("s",
                     get_icon("GreeterNetrw") .. "  Netrw",
-                    ":Ex<CR>"),
+                    "<cmd>Ex<CR>"),
                 dashboard.button("c",
                     get_icon("GreeterSessions") .. "  Sessions",
                     "<cmd>SessionManager! load_session<CR>"
@@ -227,12 +226,10 @@ return {
         "rcarriga/nvim-notify",
         event = "User BaseDefered",
         opts = function()
-            local fps
-            if is_android then fps = 30 else fps = 244 end
 
             return {
                 timeout = 2500,
-                fps = fps,
+                fps = 60,
                 max_height = function() return math.floor(vim.o.lines * 0.75) end,
                 max_width = function() return math.floor(vim.o.columns * 0.75) end,
                 on_open = function(win)
@@ -592,7 +589,7 @@ return {
     {
         "echasnovski/mini.animate",
         event = "User BaseFile",
-        enabled = not is_android,
+        enabled = true,
         opts = function()
             -- don't use animate when scrolling with the mouse
             local mouse_scrolled = false
