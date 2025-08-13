@@ -321,7 +321,6 @@ return {
         -- in 'mods', write the word you use to require the module.
         -- in 'words' write words that trigger loading a lazydev path (optionally).
         { path = "lazy.nvim", mods = { "lazy" } },
-        { path = "yazi.nvim", mods = { "yazi" } },
         { path = "project.nvim", mods = { "project_nvim", "telescope" } },
         { path = "trim.nvim", mods = { "trim" } },
         { path = "stickybuf.nvim", mods = { "stickybuf" } },

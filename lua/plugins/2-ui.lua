@@ -138,33 +138,23 @@ return {
             --   [[ \/_/\/_/\/__/    \/_/\/_/\/_/\/_/]],
             -- }
 
-            if is_android then
-                dashboard.section.header.val = {
-                    [[         __                ]],
-                    [[ __  __ /\_\    ___ ___    ]],
-                    [[/\ \/\ \\/\ \ /' __` __`\  ]],
-                    [[\ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-                    [[ \ \___/  \ \_\ \_\ \_\ \_\]],
-                    [[  \/__/    \/_/\/_/\/_/\/_/]],
-                }
-            else
-                dashboard.section.header.val = {
-                    [[888b      88                                                           88]],
-                    [[8888b     88                                                           88]],
-                    [[88 `8b    88                                                           88]],
-                    [[88  `8b   88   ,adPPYba,   8b,dPPYba,  88,dPYba,,adPYba,   ,adPPYYba,  88]],
-                    [[88   `8b  88  a8"     "8a  88P'   "Y8  88P'   "88"    "8a  ""     `Y8  88]],
-                    [[88    `8b 88  8b       d8  88          88      88      88  ,adPPPPP88  88]],
-                    [[88     `8888  "8a,   ,a8"  88          88      88      88  88,    ,88  88]],
-                    [[88      `888   `"YbbdP"'   88          88      88      88  `"8bbdP"Y8  88]],
-                    [[                                    __                ]],
-                    [[                      ___   __  __ /\_\    ___ ___    ]],
-                    [[                    /' _ `\/\ \/\ \\/\ \ /' __` __`\  ]],
-                    [[                    /\ \/\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-                    [[                    \ \_\ \_\ \___/  \ \_\ \_\ \_\ \_\]],
-                    [[                     \/_/\/_/\/__/    \/_/\/_/\/_/\/_/]],
-                }
-            end
+            dashboard.section.header.val = {
+                [[888b      88                                                           88]],
+                [[8888b     88                                                           88]],
+                [[88 `8b    88                                                           88]],
+                [[88  `8b   88   ,adPPYba,   8b,dPPYba,  88,dPYba,,adPYba,   ,adPPYYba,  88]],
+                [[88   `8b  88  a8"     "8a  88P'   "Y8  88P'   "88"    "8a  ""     `Y8  88]],
+                [[88    `8b 88  8b       d8  88          88      88      88  ,adPPPPP88  88]],
+                [[88     `8888  "8a,   ,a8"  88          88      88      88  88,    ,88  88]],
+                [[88      `888   `"YbbdP"'   88          88      88      88  `"8bbdP"Y8  88]],
+                [[                                                    ]],
+                [[                       .------.------.------.------.]],
+                [[                       |C.--. |L.--. |O.--. |D.--. |]],
+                [[                       | :/\: | : .: | :/\: | :. : |]],
+                [[                       | :\/: | :. : | :\/: | : .: |]],
+                [[                       | '--'C| '--'L| '--'O| '--'D|]],
+                [[                       `------`------`------`------']],
+            }
 
 
             local get_icon = require("base.utils").get_icon
@@ -172,26 +162,23 @@ return {
             dashboard.section.header.opts.hl = "DashboardHeader"
             vim.cmd("highlight DashboardHeader guifg=#F7778F")
 
-            -- If yazi is not installed, don't show the button.
-            local is_yazi_installed = vim.fn.executable("ya") == 1
-            local yazi_button = dashboard.button("r", get_icon("GreeterYazi") .. " Yazi", "<cmd>Yazi<CR>")
-            if not is_yazi_installed then yazi_button = nil end
-
             -- Buttons
             dashboard.section.buttons.val = {
                 dashboard.button("n",
-                    get_icon("GreeterNew") .. " New",
+                    get_icon("GreeterNew") .. "  New",
                     "<cmd>ene<CR>"),
-                dashboard.button("e",
-                    get_icon("GreeterRecent") .. " Recent  ",
+                dashboard.button("r",
+                    get_icon("GreeterRecent") .. "  Recent  ",
                     "<cmd>Telescope oldfiles<CR>"),
-                yazi_button,
                 dashboard.button("s",
-                    get_icon("GreeterSessions") .. " Sessions",
+                    get_icon("GreeterNetrw") .. "  Netrw",
+                    ":Ex<CR>"),
+                dashboard.button("c",
+                    get_icon("GreeterSessions") .. "  Sessions",
                     "<cmd>SessionManager! load_session<CR>"
                 ),
                 dashboard.button("p",
-                    get_icon("GreeterProjects") .. " Projects",
+                    get_icon("GreeterProjects") .. "  Projects",
                     "<cmd>Telescope projects<CR>"),
                 dashboard.button("", ""),
                 dashboard.button("q", "   Quit", "<cmd>exit<CR>"),
@@ -361,7 +348,6 @@ return {
                                     "Outline",
                                     "aerial",
                                     "rnvimr",
-                                    "yazi"
                                 },
                             }, args.buf)
                         return is_disabled
@@ -500,11 +486,11 @@ return {
         "folke/noice.nvim",
         event = "User BaseDefered",
         opts = function()
-            local enable_conceal = false    -- Hide command text if true
+            local enable_conceal = false            -- Hide command text if true
             return {
                 presets = { bottom_search = true }, -- The kind of popup used for /
                 cmdline = {
-                    view = "cmdline",       -- The kind of popup used for :
+                    view = "cmdline",               -- The kind of popup used for :
                     format = {
                         cmdline = { conceal = enable_conceal },
                         search_down = { conceal = enable_conceal },
@@ -585,8 +571,8 @@ return {
         opts = {
             handlers = {
                 gitsigns = true, -- gitsigns integration (display hunks)
-                ale = true, -- lsp integration (display errors/warnings)
-                search = false, -- hlslens integration (display search result)
+                ale = true,      -- lsp integration (display errors/warnings)
+                search = false,  -- hlslens integration (display search result)
             },
             excluded_filetypes = {
                 "cmp_docs",

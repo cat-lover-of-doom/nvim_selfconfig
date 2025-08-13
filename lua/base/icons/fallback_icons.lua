@@ -103,7 +103,7 @@ return {
     -- alpha
     GreeterNew = "  ",
     GreeterRecent = "  ",
-    GreeterYazi = "  ",
+    GreeterNetrw = "  ",
     GreeterSessions = "  ",
     GreeterProjects = "  ",
     GreeterPlug = "|",
