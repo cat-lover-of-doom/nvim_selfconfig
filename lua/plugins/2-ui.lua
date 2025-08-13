@@ -113,7 +113,7 @@ return {
                     "<cmd>Telescope oldfiles<CR>"),
                 dashboard.button("s",
                     get_icon("GreeterOil") .. "  Oil",
-                    "<cmd>Oil<CR>"),
+                    "<cmd>Oil<CR><CMD>Neotree action=show<CR>"),
                 dashboard.button("c",
                     get_icon("GreeterSessions") .. "  Sessions",
                     "<cmd>SessionManager! load_session<CR>"
