@@ -31,7 +31,6 @@
 --      -> toggle_ui_notifications
 --      -> toggle_url_effect
 --      -> toggle_wrap
---      -> toggle_zen_mode
 
 
 local M = {}
@@ -309,19 +308,6 @@ end
 function M.toggle_wrap()
     vim.wo.wrap = not vim.wo.wrap -- local to window
     utils.notify(string.format("wrap %s", bool2str(vim.wo.wrap)))
-end
-
---- Toggle zen mode
---- @param bufnr? number the buffer to toggle `zen mode` on.
-function M.toggle_zen_mode(bufnr)
-    bufnr = bufnr or 0
-    if not vim.b[bufnr].zen_mode then
-        vim.b[bufnr].zen_mode = true
-    else
-        vim.b[bufnr].zen_mode = false
-    end
-    utils.notify(string.format("zen mode %s", bool2str(vim.b[bufnr].zen_mode)))
-    vim.cmd "ZenMode"
 end
 
 return M

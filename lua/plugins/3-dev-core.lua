@@ -337,7 +337,6 @@ return {
                 { path = "nvim-ufo",                    mods = { "ufo" } },
                 { path = "promise-async",               mods = { "promise-async" } },
                 { path = "nvim-neoclip.lua",            mods = { "neoclip", "telescope" } },
-                { path = "zen-mode.nvim",               mods = { "zen-mode" } },
                 { path = "vim-suda",                    mods = { "suda" } },              -- has vimscript
                 { path = "vim-matchup",                 mods = { "matchup", "match-up", "treesitter-matchup" } }, -- has vimscript
                 { path = "hop.nvim",                    mods = { "hop", "hop-treesitter", "hop-yank" } },

@@ -69,6 +69,7 @@ local maps = require("base.utils").get_mappings_template()
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = {"o", desc = "Insert a blank line"}
 maps.n["<leader>s"] = { "<CMD>Oil<CR><CMD>Neotree action=show<CR>", desc = "File browser"}
+maps.n["<leader>°"] = { "<CMD>UnlockNT<CR><C-h><M-C-S-F10><C-l>", desc = "File browser"}
 maps.n["<leader>z"] = { "<CMD>UndotreeFocus<CR>", desc = "Undo Tree"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
@@ -372,12 +373,6 @@ maps.n["<leader>b|"] = {
     end,
     desc = "Vertical split buffer from tabline",
 }
-
--- zen mode
-if is_available("zen-mode.nvim") then
-    maps.n["<leader>uz"] =
-    { function() ui.toggle_zen_mode() end, desc = "Zen mode" }
-end
 
 -- ui toggles [ui] ---------------------------------------------------------
 maps.n["<leader>u"] = icons.u
