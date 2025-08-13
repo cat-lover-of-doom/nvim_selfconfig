@@ -57,7 +57,7 @@ autocmd({ "VimEnter" }, {
             -- In order to avoid visual glitches.
             utils.trigger_event("User BaseDefered", true)
             utils.trigger_event("BufEnter", true) -- also, initialize tabline_buffers.
-        else                                -- Wait some ms before triggering the event.
+        else                                      -- Wait some ms before triggering the event.
             vim.defer_fn(function()
                 utils.trigger_event("User BaseDefered")
             end, 70)
@@ -248,13 +248,13 @@ autocmd("BufWritePre", {
 cmd("TestNodejs", function()
     -- You can generate code coverage by adding this to your project's packages.json
     -- "tests": "jest --coverage"
-    vim.cmd(":ProjectRoot")               -- cd the project root (requires project.nvim)
+    vim.cmd(":ProjectRoot")                 -- cd the project root (requires project.nvim)
     vim.cmd(":TermExec cmd='npm run test'") -- convention to run tests on nodejs
 end, { desc = "Run all unit tests for the current nodejs project" })
 
 -- Customize this command to work as you like
 cmd("TestNodejsE2e", function()
-    vim.cmd(":ProjectRoot")              -- cd the project root (requires project.nvim)
+    vim.cmd(":ProjectRoot")                -- cd the project root (requires project.nvim)
     vim.cmd(":TermExec cmd='npm run e2e'") -- Conventional way to call e2e in nodejs (requires ToggleTerm)
 end, { desc = "Run e2e tests for the current nodejs project" })
 
@@ -282,3 +282,15 @@ end, { desc = "Write all changed buffers" })
 cmd("CloseNotifications", function()
     require("notify").dismiss({ pending = true, silent = true })
 end, { desc = "Dismiss all notifications" })
+
+-- Prevent me from abusing the tree
+autocmd({ "User", "BufEnter" }, {
+    desc = "Neotree sheenanigans",
+    callback = function(args)
+        local is_filetype_neotree = vim.api.nvim_get_option_value(
+            "filetype", { buf = 0 }) == "neo-tree"
+        if (args.event == "BufEnter" and is_filetype_neotree) then
+            require("smart-splits").move_cursor_right()
+        end
+    end,
+})
