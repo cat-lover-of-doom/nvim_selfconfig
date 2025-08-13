@@ -13,7 +13,6 @@
 --       -> neotree file browser   [neotree]
 --       -> nvim-ufo               [folding mod]
 --       -> nvim-neoclip           [nvim clipboard]
---       -> zen-mode.nvim          [distraction free mode]
 --       -> suda.vim               [write as sudo]
 --       -> vim-matchup            [Improved % motion]
 --       -> hop.nvim               [go to word visually]
@@ -497,6 +496,7 @@ return {
                 window = {
                     width = 30,
                     mappings = {
+                        ["z"] = "expand_all_nodes",
                         ["<space>"] = false,
                         ["<S-CR>"] = "system_open",
                         ["[b"] = "prev_source",
@@ -581,13 +581,6 @@ return {
         requires = 'nvim-telescope/telescope.nvim',
         event = "User BaseFile",
         opts = {}
-    },
-
-    --  zen-mode.nvim [distraction free mode]
-    --  https://github.com/folke/zen-mode.nvim
-    {
-        "folke/zen-mode.nvim",
-        cmd = "ZenMode",
     },
 
     --  suda.nvim [write as sudo]

@@ -337,7 +337,6 @@ return {
                 { path = "nvim-ufo",                    mods = { "ufo" } },
                 { path = "promise-async",               mods = { "promise-async" } },
                 { path = "nvim-neoclip.lua",            mods = { "neoclip", "telescope" } },
-                { path = "zen-mode.nvim",               mods = { "zen-mode" } },
                 { path = "vim-suda",                    mods = { "suda" } },              -- has vimscript
                 { path = "vim-matchup",                 mods = { "matchup", "match-up", "treesitter-matchup" } }, -- has vimscript
                 { path = "hop.nvim",                    mods = { "hop", "hop-treesitter", "hop-yank" } },
@@ -392,11 +391,7 @@ return {
                 { path = "gitsigns.nvim",               mods = { "gitsigns" } },
                 { path = "vim-fugitive",                mods = { "fugitive" } }, -- has vimscript
                 { path = "aerial.nvim",                 mods = { "aerial", "telescope", "lualine", "resession" } },
-                { path = "dooku.nvim",                  mods = { "dooku" } },
-                { path = "markdown-preview.nvim",       mods = { "mkdp" } }, -- has vimscript
-                { path = "markmap.nvim",                mods = { "markmap" } },
                 { path = "neural",                      mods = { "neural" } },
-                { path = "copilot",                     mods = { "copilot" } },
                 { path = "guess-indent.nvim",           mods = { "guess-indent" } },
                 { path = "overseer.nvim",               mods = { "overseer", "lualine", "neotest", "resession", "cmp_overseer" } },
                 { path = "nvim-dap",                    mods = { "dap" } },

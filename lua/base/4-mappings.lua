@@ -69,6 +69,7 @@ local maps = require("base.utils").get_mappings_template()
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = {"o", desc = "Insert a blank line"}
 maps.n["<leader>s"] = { "<CMD>Oil<CR><CMD>Neotree action=show<CR>", desc = "File browser"}
+maps.n["<leader>°"] = { "<CMD>UnlockNT<CR><C-h><M-C-S-F10><C-l>", desc = "File browser"}
 maps.n["<leader>z"] = { "<CMD>UndotreeFocus<CR>", desc = "Undo Tree"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
@@ -372,12 +373,6 @@ maps.n["<leader>b|"] = {
     end,
     desc = "Vertical split buffer from tabline",
 }
-
--- zen mode
-if is_available("zen-mode.nvim") then
-    maps.n["<leader>uz"] =
-    { function() ui.toggle_zen_mode() end, desc = "Zen mode" }
-end
 
 -- ui toggles [ui] ---------------------------------------------------------
 maps.n["<leader>u"] = icons.u
@@ -1028,37 +1023,6 @@ if is_available("nvim-ufo") then
         function() require("ufo").openFoldsExceptKinds({ 'region' }) end,
         desc = "Fold region"
     }
-end
-
--- code docmentation [docs] -------------------------------------------------
-
-if is_available("markdown-preview.nvim") or is_available("markmap.nvim") or is_available("dooku.nvim") then
-    maps.n["<leader>D"] = icons.dc
-
-    -- Markdown preview
-    if is_available("markdown-preview.nvim") then
-        maps.n["<leader>Dp"] = {
-            function() vim.cmd("silent! MarkdownPreview") end,
-            desc = "Markdown preview",
-        }
-    end
-
-    -- Markdown Mindmap
-    if is_available("markmap.nvim") then
-        maps.n["<leader>Dm"] = {
-            function()
-                vim.cmd("MarkmapOpen")
-            end,
-            desc = "Markmap",
-        }
-    end
-
-    if is_available("dooku.nvim") then
-        maps.n["<leader>Dd"] = {
-            function() vim.cmd(":DookuGenerate") end,
-            desc = "Open documentation",
-        }
-    end
 end
 
 -- hop.nvim ----------------------------------------------------------------
