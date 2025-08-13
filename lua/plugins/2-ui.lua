@@ -576,7 +576,7 @@ return {
         "tzachar/highlight-undo.nvim",
         event = "User BaseDefered",
         opts = {
-            duration = 150,
+            duration = 1000,
             hlgroup = "IncSearch",
         },
         config = function(_, opts)
