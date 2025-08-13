@@ -70,6 +70,7 @@ local maps = require("base.utils").get_mappings_template()
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = {"o", desc = "Insert a blank line"}
 maps.n["<leader>s"] = { "<CMD>Oil<CR><CMD>Neotree action=show<CR>", desc = "File browser"}
+maps.n["<leader>z"] = { "<CMD>UndotreeFocus<CR>", desc = "Undo Tree"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {

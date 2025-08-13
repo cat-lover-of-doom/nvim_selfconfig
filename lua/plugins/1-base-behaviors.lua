@@ -94,6 +94,10 @@ return {
         config = true,                              -- default settings
         submodules = false,                         -- not needed, submodules are required only for tests
     },
+    {
+        'mbbill/undotree',
+        lazy=false,
+    },
 
     -- project.nvim [project search + auto cd]
     -- https://github.com/ahmedkhalf/project.nvim
