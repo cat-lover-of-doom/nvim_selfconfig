@@ -48,7 +48,7 @@ function M.run_cmd(cmd, show_error)
         vim.api.nvim_echo({ {
             ("Error running command %s\nError message:\n%s"):format(
                 table.concat(cmd, " "), -- Convert the cmd back to string.
-                result          -- Show the error result
+                result                  -- Show the error result
             ) } }, true, { err = true }
         )
     end
