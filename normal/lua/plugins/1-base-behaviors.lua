@@ -5,24 +5,18 @@
 --       -> project.nvim           [project search + auto cd]
 --       -> trim.nvim              [auto trim spaces]
 --       -> stickybuf.nvim         [lock special buffers]
---       -> mini.bufremove         [smart bufdelete]
 --       -> smart-splits           [move and resize buffers]
---       -> toggleterm.nvim        [term]
 --       -> session-manager        [session]
 --       -> spectre.nvim           [search and replace in project]
 --       -> neotree file browser   [neotree]
 --       -> nvim-ufo               [folding mod]
 --       -> nvim-neoclip           [nvim clipboard]
---       -> zen-mode.nvim          [distraction free mode]
---       -> suda.vim               [write as sudo]
 --       -> vim-matchup            [Improved % motion]
 --       -> hop.nvim               [go to word visually]
 --       -> nvim-autopairs         [auto close brackets]
 --       -> nvim-ts-autotag        [auto close html tags]
 --       -> lsp_signature.nvim     [auto params help]
 --       -> nvim-lightbulb         [lightbulb for code actions]
---       -> hot-reload.nvim        [config reload]
---       -> distroupdate.nvim      [distro update]
 
 return {
     {
@@ -156,14 +150,6 @@ return {
         config = function() require("stickybuf").setup() end
     },
 
-    -- mini.bufremove [smart bufdelete]
-    -- https://github.com/echasnovski/mini.bufremove
-    -- Defines what tab to go on :bufdelete
-    {
-        "echasnovski/mini.bufremove",
-        event = "User BaseFile"
-    },
-
     --  smart-splits [move and resize buffers]
     --  https://github.com/mrjones2014/smart-splits.nvim
     {
@@ -172,35 +158,6 @@ return {
         opts = {
             ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
             ignored_buftypes = { "nofile" },
-        },
-    },
-
-    -- Toggle floating terminal on <F7> [term]
-    -- https://github.com/akinsho/toggleterm.nvim
-    -- neovim bug → https://github.com/neovim/neovim/issues/21106
-    -- workarounds → https://github.com/akinsho/toggleterm.nvim/wiki/Mouse-support
-    {
-        "akinsho/toggleterm.nvim",
-        cmd = { "ToggleTerm", "TermExec" },
-        opts = {
-            highlights = {
-                Normal = { link = "Normal" },
-                NormalNC = { link = "NormalNC" },
-                NormalFloat = { link = "Normal" },
-                FloatBorder = { link = "FloatBorder" },
-                StatusLine = { link = "StatusLine" },
-                StatusLineNC = { link = "StatusLineNC" },
-                WinBar = { link = "WinBar" },
-                WinBarNC = { link = "WinBarNC" },
-            },
-            size = 10,
-            open_mapping = [[<F7>]],
-            shading_factor = 2,
-            direction = "float",
-            float_opts = {
-                border = "rounded",
-                highlights = { border = "Normal", background = "Normal" },
-            },
         },
     },
 
@@ -579,20 +536,6 @@ return {
         opts = {}
     },
 
-    --  zen-mode.nvim [distraction free mode]
-    --  https://github.com/folke/zen-mode.nvim
-    {
-        "folke/zen-mode.nvim",
-        cmd = "ZenMode",
-    },
-
-    --  suda.nvim [write as sudo]
-    --  https://github.com/lambdalisue/suda.vim
-    {
-        "lambdalisue/vim-suda",
-        cmd = { "SudaRead", "SudaWrite" },
-    },
-
     --  vim-matchup [improved % motion]
     --  https://github.com/andymass/vim-matchup
     {
@@ -717,46 +660,6 @@ return {
             }
         },
         config = function(_, opts) require("nvim-lightbulb").setup(opts) end
-    },
-
-    -- distroupdate.nvim [distro update]
-    -- https://github.com/zeioth/distroupdate.nvim
-    {
-        "zeioth/hot-reload.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        event = "User BaseFile",
-        opts = function()
-            local utils = require("base.utils")
-            local config_dir = utils.os_path(vim.fn.stdpath "config" .. "/lua/base/")
-            return {
-                notify = true,
-                reload_files = {
-                    config_dir .. "1-options.lua",
-                    config_dir .. "4-mappings.lua"
-                },
-                reload_callback = function()
-                    vim.cmd(":silent! colorscheme " .. vim.g.default_colorscheme) -- nvim     colorscheme reload command
-                    vim.cmd(":silent! doautocmd ColorScheme")                     -- heirline colorscheme reload event
-                end
-            }
-        end
-    },
-
-    -- distroupdate.nvim [distro update]
-    -- https://github.com/zeioth/distroupdate.nvim
-    {
-        "zeioth/distroupdate.nvim",
-        event = "User BaseFile",
-        cmd = {
-            "DistroFreezePluginVersions",
-            "DistroReadChangelog",
-            "DistroReadVersion",
-            "DistroUpdate",
-            "DistroUpdateRevert"
-        },
-        opts = {
-            channel = "stable" -- stable/nightly
-        }
     },
 
 } -- end of return

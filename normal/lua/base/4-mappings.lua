@@ -55,11 +55,11 @@
 --   -------------------------------------------------------------------
 
 local M = {}
-local utils = require("base.utils")
+local utils = require("utils")
 local get_icon = utils.get_icon
 local is_available = utils.is_available
-local ui = require("base.utils.ui")
-local maps = require("base.utils").get_mappings_template()
+local ui = require("utils.ui")
+local maps = require("utils").get_mappings_template()
 
 -- -------------------------------------------------------------------------
 --
@@ -1124,7 +1124,7 @@ function M.lsp_mappings(client, bufnr)
         return false
     end
 
-    local lsp_mappings = require("base.utils").get_mappings_template()
+    local lsp_mappings = require("utils").get_mappings_template()
 
     -- Diagnostics
     lsp_mappings.n["<leader>ld"] =
@@ -1188,8 +1188,8 @@ function M.lsp_mappings(client, bufnr)
     }
 
     -- Formatting (keymapping)
-    local formatting = require("base.utils.lsp").formatting
-    local format_opts = require("base.utils.lsp").format_opts
+    local formatting = require("utils.lsp").formatting
+    local format_opts = require("utils.lsp").format_opts
     lsp_mappings.n["<leader>lf"] = {
         function()
             vim.lsp.buf.format(format_opts)
@@ -1249,11 +1249,11 @@ function M.lsp_mappings(client, bufnr)
 
         -- Key mappings for toggling autoformat (buffer/global)
         lsp_mappings.n["<leader>uf"] = {
-            function() require("base.utils.ui").toggle_buffer_autoformat() end,
+            function() require("utils.ui").toggle_buffer_autoformat() end,
             desc = "Toggle buffer autoformat",
         }
         lsp_mappings.n["<leader>uF"] = {
-            function() require("base.utils.ui").toggle_autoformat() end,
+            function() require("utils.ui").toggle_autoformat() end,
             desc = "Toggle global autoformat",
         }
     end
@@ -1315,7 +1315,7 @@ function M.lsp_mappings(client, bufnr)
     }
 
     -- Goto help
-    local lsp_hover_config = require("base.utils.lsp").lsp_hover_config
+    local lsp_hover_config = require("utils.lsp").lsp_hover_config
     lsp_mappings.n["gh"] = {
         function()
             vim.lsp.buf.hover(lsp_hover_config)
@@ -1356,7 +1356,7 @@ function M.lsp_mappings(client, bufnr)
     if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
     if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) end
     lsp_mappings.n["<leader>uH"] = {
-        function() require("base.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
+        function() require("utils.ui").toggle_buffer_inlay_hints(bufnr) end,
         desc = "LSP inlay hints (buffer)",
     }
 
@@ -1364,7 +1364,7 @@ function M.lsp_mappings(client, bufnr)
     if vim.g.semantic_tokens_enabled then
         vim.b[bufnr].semantic_tokens_enabled = true
         lsp_mappings.n["<leader>uY"] = {
-            function() require("base.utils.ui").toggle_buffer_semantic_tokens(bufnr) end,
+            function() require("utils.ui").toggle_buffer_semantic_tokens(bufnr) end,
             desc = "LSP semantic highlight (buffer)",
         }
     else

@@ -29,23 +29,24 @@ end
 local function load_colorscheme(colorscheme)
     if vim.g.default_colorscheme then
         if not pcall(vim.cmd.colorscheme, colorscheme) then
-            require("base.utils").notify(
+            require("utils").notify(
                 "Error setting up colorscheme: " .. colorscheme,
                 vim.log.levels.ERROR
             )
         end
     end
 end
-load_sources_async({ "mappings" })
 load_sources({
     "options",
     "lazy-config",
-    "plugin_config.lspconfig",
+    "autocmd",
+    "utils",
+    -- "plugin_config.lspconfig",
     "plugin_config.catpuccin",
     "plugin_config.treesitter",
     "scripts.block_repeats",
     "scripts.testmaker",
     "scripts.b",
 })
-
+load_sources_async({ "mappings" })
 load_colorscheme(vim.g.default_colorscheme)
