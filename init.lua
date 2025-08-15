@@ -1,8 +1,50 @@
-require("lua.options")
-require("lua.plugins")
-require("lua.mappings")
-require("lua.plugconf.lspconfig")
-require("lua.plugconf.catpuccin")
-require("lua.scripts.block_repeats")
-require("lua.scripts.testmaker")
-require("lua.scripts.b")
+-- ---------------------------------------
+-- This is the entry point of the config.
+-- ---------------------------------------
+--
+local function load_source(source)
+    local status_ok, error = pcall(require, source)
+    if not status_ok then
+        vim.api.nvim_echo(
+            { { "Failed to load " .. source .. "\n\n" .. error } }, true, { err = true }
+        )
+    end
+end
+
+local function load_sources(source_files)
+    vim.loader.enable()
+    for _, source in ipairs(source_files) do
+        load_source(source)
+    end
+end
+
+local function load_sources_async(source_files)
+    for _, source in ipairs(source_files) do
+        vim.defer_fn(function()
+            load_source(source)
+        end, 50)
+    end
+end
+
+local function load_colorscheme(colorscheme)
+    if vim.g.default_colorscheme then
+        if not pcall(vim.cmd.colorscheme, colorscheme) then
+            require("base.utils").notify(
+                "Error setting up colorscheme: " .. colorscheme,
+                vim.log.levels.ERROR
+            )
+        end
+    end
+end
+load_sources({
+    "lua.options",
+    "lua.plugins",
+    "lua.plugconf.lspconfig",
+    "lua.plugconf.catpuccin",
+    "lua.scripts.block_repeats",
+    "lua.scripts.testmaker",
+    "lua.scripts.b",
+})
+load_sources_async({ "lua.mappings" })
+
+load_colorscheme(vim.g.default_colorscheme)
