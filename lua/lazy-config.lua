@@ -54,7 +54,10 @@ local function after_installing_plugins_load(plugins)
     })
 end
 
-
+--- This function loads the /lua/plugins/*.lua file which must return a spec
+--- see: https://lazy.folke.io/usage/structuring for more info
+--- it also loads the /lua/lazy_snapshot.lua file first, to get the versions straight
+--- the spec is basically the table containing all the plugins you want to load
 --- load `<config_dir>/lua/lazy_snapshot.lua` and return it as table.
 --- @return table spec A table you can pass to the `spec` option of lazy.
 local function get_lazy_spec()
@@ -94,8 +97,6 @@ local function setup_lazy(lazy_dir)
                 },
             },
         },
-        -- Enable luarocks if installed.
-        rocks = { enabled = vim.fn.executable("luarocks") == 1 },
         -- We don't use this, so create it in a disposable place.
         lockfile = vim.fn.stdpath("cache") .. "/lazy-lock.json",
     })
@@ -111,79 +112,4 @@ if is_first_startup then
     vim.notify("Please wait while plugins are installed...")
 end
 
--- PLUGINS
-vim.opt.rtp:prepend(lazy_dir)
-require("lazy").setup({
-    {
-        'windwp/nvim-autopairs',
-        event = "InsertEnter",
-        config = true
-    },
-    {
-        "preservim/vimux"
-    },
-    {
-        "christoomey/vim-tmux-navigator",
-        cmd = {
-            "TmuxNavigateLeft",
-            "TmuxNavigateDown",
-            "TmuxNavigateUp",
-            "TmuxNavigateRight",
-            "TmuxNavigatePrevious",
-        },
-        keys = {
-            { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-            { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-            { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-            { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-        },
-        lazy = false,
-    },
-    "mbbill/undotree",
-    {
-        'nvim-telescope/telescope.nvim',
-        tag = '0.1.4',
-        dependencies = { 'nvim-lua/plenary.nvim' }
-    },
-    {
-        "catppuccin/nvim", name = "catppuccin", priority = 1000
-    },
-    {
-        "nvim-treesitter/nvim-treesitter",
-        lazy = false,
-        config = function()
-            vim.api.nvim_create_autocmd({ "VimEnter" }, { command = "TSEnable highlight" })
-            highlight = { enable = true }
-        end,
-    },
-    "williamboman/mason-lspconfig.nvim",
-    {
-        "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup()
-            require("mason-lspconfig").setup {
-                ensure_installed = {
-                    "clangd",
-                    "gopls",
-                    "pylsp",
-                    "lua_ls",
-                    "cssls",
-                    "eslint",
-                    "html",
-                },
-            }
-        end,
-    },
-    "neovim/nvim-lspconfig",
-    "hrsh7th/nvim-cmp",
-    "hrsh7th/cmp-nvim-lsp",
-    {
-        "L3MON4D3/LuaSnip",
-        dependencies = {
-            'saadparwaiz1/cmp_luasnip',
-            "rafamadriz/friendly-snippets",
-        }
-    },
-    "tpope/vim-commentary",
-})
+setup_lazy(lazy_dir)

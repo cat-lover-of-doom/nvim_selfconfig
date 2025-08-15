@@ -39,9 +39,10 @@ end
 load_sources_async({ "mappings" })
 load_sources({
     "options",
-    "plugins",
-    "plugconf.lspconfig",
-    "plugconf.catpuccin",
+    "lazy-config",
+    "plugin_config.lspconfig",
+    "plugin_config.catpuccin",
+    "plugin_config.treesitter",
     "scripts.block_repeats",
     "scripts.testmaker",
     "scripts.b",
