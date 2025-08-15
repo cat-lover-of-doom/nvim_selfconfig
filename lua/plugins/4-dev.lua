@@ -518,7 +518,6 @@ return {
             "rcarriga/cmp-dap",
             "jay-babu/mason-nvim-dap.nvim",
             "jbyuki/one-small-step-for-vimkind",
-            "nvim-java/nvim-java",
         },
     },
 
@@ -587,31 +586,17 @@ return {
         "nvim-neotest/neotest",
         cmd = { "Neotest" },
         dependencies = {
-            "sidlatau/neotest-dart",
-            "Issafalcon/neotest-dotnet",
-            "jfpedroza/neotest-elixir",
             "fredrikaverpil/neotest-golang",
-            "rcasia/neotest-java",
             "nvim-neotest/neotest-jest",
-            "olimorris/neotest-phpunit",
             "nvim-neotest/neotest-python",
-            "rouge8/neotest-rust",
-            "lawrence-laz/neotest-zig",
         },
         opts = function()
             return {
                 -- your neotest config here
                 adapters = {
-                    require("neotest-dart"),
-                    require("neotest-dotnet"),
-                    require("neotest-elixir"),
                     require("neotest-golang"),
-                    require("neotest-java"),
                     require("neotest-jest"),
-                    require("neotest-phpunit"),
                     require("neotest-python"),
-                    require("neotest-rust"),
-                    require("neotest-zig"),
                 },
             }
         end,
