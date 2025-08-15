@@ -75,11 +75,3 @@ vim.diagnostic.config({
 })
 -- c header
 -- vim.g.c_syntax_for_h = 1
-
-require("globconfig.plugins")
-require("globconfig.mappings")
-require("globconfig.plugconf.lspconfig")
-require("globconfig.plugconf.catpuccin")
-require("globconfig.scripts.block_repeats")
-require("globconfig.scripts.testmaker")
-require("globconfig.scripts.b")
