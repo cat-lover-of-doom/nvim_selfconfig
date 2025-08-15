@@ -36,6 +36,7 @@ local function load_colorscheme(colorscheme)
         end
     end
 end
+load_sources_async({ "lua.mappings" })
 load_sources({
     "lua.options",
     "lua.plugins",
@@ -45,6 +46,5 @@ load_sources({
     "lua.scripts.testmaker",
     "lua.scripts.b",
 })
-load_sources_async({ "lua.mappings" })
 
 load_colorscheme(vim.g.default_colorscheme)
