@@ -1,6 +1,136 @@
+-- 1 - Core behaviors
+-- Plugins that add new behaviors.
+--    Sections:
+--       -> toggleterm.nvim        [term]
+--       -> oil.nvim               [file browser]
+--       -> oil-lsp-diagnostics    [lsp support for oil]
+--       -> oil-git                [git support for oil]
+--       -> gx-nvim                [allows to open links in browser]
+--       -> project.nvim           [project search + auto cd]
+--       -> trim.nvim              [auto trim spaces]
+--       -> stickybuf.nvim         [lock special buffers]
+--       -> smart-splits           [move and resize buffers]
+--       -> session-manager        [session]
+--       -> spectre.nvim           [search and replace in project]
+--       -> neotree file browser   [neotree]
+--       -> nvim-ufo               [folding mod]
+--       -> nvim-neoclip           [nvim clipboard]
+--       -> vim-matchup            [Improved % motion]
+--       -> hop.nvim               [go to word visually]
+--       -> nvim-autopairs         [auto close brackets]
+--       -> nvim-ts-autotag        [auto close html tags]
+--       -> lsp_signature.nvim     [auto params help]
+--       -> nvim-lightbulb         [lightbulb for code actions]
+--       -> undotree               [undotree for quick version managment]
+
+
+-- 2 - User interface
+-- Plugins that make the user interface better.
+--    Sections:
+--       -> tokyonight                  [theme]
+--       -> astrotheme                  [theme]
+--       -> catppuccin/nivm             [theme]
+--       -> morta                       [theme]
+--       -> eldritch                    [theme]
+--       -> alpha-nvim                  [greeter]
+--       -> nvim-notify                 [notifications]
+--       -> mini.indentscope            [guides]
+--       -> heirline-components.nvim    [ui components]
+--       -> heirline                    [ui components]
+--       -> telescope                   [search]
+--       -> telescope-fzf-native.nvim   [search backend]
+--       -> dressing.nvim               [better ui elements]
+--       -> noice.nvim                  [better cmd/search line]
+--       -> nvim-web-devicons           [icons | ui]
+--       -> lspkind.nvim                [icons | lsp]
+--       -> nvim-scrollbar              [scrollbar]
+--       -> mini.animate                [animations]
+--       -> highlight-undo              [highlights]
+--       -> which-key                   [on-screen keybinding]
+
+
+-- 3 - Dev core
+-- Plugins that are just there.
+--    Sections:
+--       ## TREE SITTER
+--       -> nvim-treesitter                [syntax highlight]
+--       -> render-markdown.nvim           [normal mode markdown]
+--       -> nvim-highlight-colors          [hex colors]
+
+--       ## LSP
+--       -> nvim-lspconfig                 [lsp configs]
+--       -> mason-lspconfig                [auto start lsp]
+--       -> mason.nvim                     [lsp package manager]
+--       -> SchemaStore.nvim               [mason extra schemas]
+--       -> none-ls-autoload.nvim          [mason package loader]
+--       -> none-ls                        [lsp code formatting]
+--       -> garbage-day                    [lsp garbage collector]
+--       -> lazydev                        [lua lsp for nvim plugins]
+
+--       ## AUTO COMPLETION
+--       -> nvim-cmp                       [auto completion engine]
+--       -> cmp-nvim-buffer                [auto completion buffer]
+--       -> cmp-nvim-path                  [auto completion path]
+--       -> cmp-nvim-lsp                   [auto completion lsp]
+--       -> cmp-luasnip                    [auto completion snippets]
+
+
+-- 4 - Dev
+-- Plugins you actively use for coding.
+--    Sections:
+--       ## SNIPPETS
+--       -> luasnip                        [snippet engine]
+--       -> friendly-snippets              [snippet templates]
+
+--       ## GIT
+--       -> gitsigns.nvim                  [git hunks]
+--       -> fugitive.vim                   [git commands]
+
+--       ## ANALYZER
+--       -> aerial.nvim                    [symbols tree]
+
+--       ## CODE DOCUMENTATION
+--       -> markdown-preview.nvim          [markdown previewer]
+
+--       ## DEBUGGER
+--       -> nvim-dap                       [debugger]
+
+--       ## TESTING
+--       -> neotest.nvim                   [unit testing]
+--       -> nvim-coverage                  [code coverage]
+
+--       ## LANGUAGE IMPROVEMENTS
+--       -> guttentags_plus                [auto generate C/C++ tags]
+
 local utils = require("utils")
 local utils_lsp = require("utils.lsp")
 return {
+-- 1 - Core behaviors
+-- Plugins that add new behaviors.
+    {
+        "akinsho/toggleterm.nvim",
+        cmd = { "ToggleTerm", "TermExec" },
+        opts = {
+            highlights = {
+                Normal = { link = "Normal" },
+                NormalNC = { link = "NormalNC" },
+                NormalFloat = { link = "Normal" },
+                FloatBorder = { link = "FloatBorder" },
+                StatusLine = { link = "StatusLine" },
+                StatusLineNC = { link = "StatusLineNC" },
+                WinBar = { link = "WinBar" },
+                WinBarNC = { link = "WinBarNC" },
+            },
+            size = 10,
+            open_mapping = [[<F7>]],
+            shading_factor = 2,
+            direction = "float",
+            float_opts = {
+                border = "rounded",
+                highlights = { border = "Normal", background = "Normal" },
+            },
+        },
+    },
     {
         'stevearc/oil.nvim',
         ---@module 'oil'
@@ -641,8 +771,13 @@ return {
         },
         config = function(_, opts) require("nvim-lightbulb").setup(opts) end
     },
+    {
+            "mbbill/undotree",
+            event = "BufReadPost";
+    },
 
-    --- 222222222222222222222222
+    -- 2 - User interface
+    -- Plugins that make the user interface better.
     --  tokyonight [theme]
     --  https://github.com/folke/tokyonight.nvim
     {
@@ -1255,7 +1390,8 @@ return {
             require("utils").which_key_register()
         end,
     },
-    -- 333333333333333333333333333333333
+    -- 3 - Dev core
+    -- Plugins that are just there.
     --
     --  TREE SITTER ---------------------------------------------------------
     --  [syntax highlight]
@@ -1818,7 +1954,8 @@ return {
         end,
     },
 
-    -- 444444444444444444444
+    -- 4 - Dev
+    -- Plugins you actively use for coding.
 
     --  SNIPPETS ----------------------------------------------------------------
     --  Vim Snippets engine  [snippet engine] + [snippet templates]
@@ -1988,79 +2125,9 @@ return {
         end
     },
 
-    -- Litee calltree [calltree]
-    -- https://github.com/ldelossa/litee.nvim
-    -- https://github.com/ldelossa/litee-calltree.nvim
-    -- press ? inside the panel to show help.
-    {
-        'ldelossa/litee.nvim',
-        event = "User BaseFile",
-        opts = {
-            notify = { enabled = false },
-            tree = {
-                icon_set = "default" -- "nerd", "codicons", "default", "simple"
-            },
-            panel = {
-                orientation = "bottom",
-                panel_size = 10,
-            },
-        },
-        config = function(_, opts)
-            require('litee.lib').setup(opts)
-        end
-    },
-    {
-        'ldelossa/litee-calltree.nvim',
-        dependencies = 'ldelossa/litee.nvim',
-        event = "User BaseFile",
-        opts = {
-            on_open = "panel", -- or popout
-            map_resize_keys = false,
-            keymaps = {
-                expand = "<CR>",
-                collapse = "c",
-                collapse_all = "C",
-                jump = "<C-CR>"
-            },
-        },
-        config = function(_, opts)
-            require('litee.calltree').setup(opts)
-
-            -- Highlight only while on calltree
-            vim.api.nvim_create_autocmd({ "WinEnter" }, {
-                desc = "Clear highlights when leaving calltree + UX improvements.",
-                callback = function()
-                    vim.defer_fn(function()
-                        if vim.bo.filetype == "calltree" then
-                            vim.wo.colorcolumn = "0"
-                            vim.wo.foldcolumn = "0"
-                            vim.cmd("silent! PinBuffer") -- stickybuf.nvim
-                            vim.cmd(
-                                "silent! hi LTSymbolJump ctermfg=015 ctermbg=110 cterm=italic,bold,underline guifg=#464646 guibg=#87afd7 gui=italic,bold")
-                            vim.cmd(
-                                "silent! hi LTSymbolJumpRefs ctermfg=015 ctermbg=110 cterm=italic,bold,underline guifg=#464646 guibg=#87afd7 gui=italic,bold")
-                        else
-                            vim.cmd("silent! highlight clear LTSymbolJump")
-                            vim.cmd("silent! highlight clear LTSymbolJumpRefs")
-                        end
-                    end, 100)
-                end
-            })
-        end
-    },
-
     --  CODE DOCUMENTATION ------------------------------------------------------
     --  dooku.nvim [html doc generator]
     --  https://github.com/zeioth/dooku.nvim
-    {
-        "zeioth/dooku.nvim",
-        cmd = {
-            "DookuGenerate",
-            "DookuOpen",
-            "DookuAutoSetup"
-        },
-        opts = {},
-    },
 
     --  [markdown previewer]
     --  https://github.com/iamcco/markdown-preview.nvim
@@ -2085,16 +2152,6 @@ return {
         end,
         ft = { "markdown", "markdown.mdx" },
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    },
-
-    --  [markdown markmap]
-    --  https://github.com/zeioth/markmap.nvim
-    --  Important: Make sure you have yarn in your PATH before running markmap.
-    {
-        "zeioth/markmap.nvim",
-        build = "yarn global add markmap-cli",
-        cmd = { "MarkmapOpen", "MarkmapSave", "MarkmapWatch", "MarkmapWatchStop" },
-        config = function(_, opts) require("markmap").setup(opts) end,
     },
 
     --  DEBUGGER ----------------------------------------------------------------
@@ -2421,7 +2478,6 @@ return {
             "rcarriga/cmp-dap",
             "jay-babu/mason-nvim-dap.nvim",
             "jbyuki/one-small-step-for-vimkind",
-            "nvim-java/nvim-java",
         },
     },
 
@@ -2505,16 +2561,9 @@ return {
             return {
                 -- your neotest config here
                 adapters = {
-                    require("neotest-dart"),
-                    require("neotest-dotnet"),
-                    require("neotest-elixir"),
                     require("neotest-golang"),
-                    require("neotest-java"),
                     require("neotest-jest"),
-                    require("neotest-phpunit"),
                     require("neotest-python"),
-                    require("neotest-rust"),
-                    require("neotest-zig"),
                 },
             }
         end,
@@ -2591,31 +2640,5 @@ return {
             })
         end,
     },
-    {
-        "akinsho/toggleterm.nvim",
-        cmd = { "ToggleTerm", "TermExec" },
-        opts = {
-            highlights = {
-                Normal = { link = "Normal" },
-                NormalNC = { link = "NormalNC" },
-                NormalFloat = { link = "Normal" },
-                FloatBorder = { link = "FloatBorder" },
-                StatusLine = { link = "StatusLine" },
-                StatusLineNC = { link = "StatusLineNC" },
-                WinBar = { link = "WinBar" },
-                WinBarNC = { link = "WinBarNC" },
-            },
-            size = 10,
-            open_mapping = [[<F7>]],
-            shading_factor = 2,
-            direction = "float",
-            float_opts = {
-                border = "rounded",
-                highlights = { border = "Normal", background = "Normal" },
-            },
-        },
-    },
-
-    --- 999999999999999999999999999
-    "mbbill/undotree",
 }
+

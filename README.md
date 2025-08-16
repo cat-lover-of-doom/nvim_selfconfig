@@ -1,6 +1,5 @@
 # TODO
 - fix custom scripts
-- make the plugins file pretty
 
 - remove useless mappings
 - remove useless packages

@@ -307,3 +307,20 @@ vim.api.nvim_create_user_command(
         -- end,
     }
 )
+
+-- not an autocmd but kinda no??
+vim.api.nvim_create_user_command(
+    'W',           -- :Name of the command
+    function(opts) -- callback (Lua)
+        -- vim.cmd("w")
+        vim.cmd('write')
+    end,
+    {
+        nargs = '?',                     -- 0 or 1 arg
+        bang = true,                     -- allow !
+        desc = 'I have lazy fingers :(', -- :help :Greet
+        -- complete = function(_, _, _)              -- custom completion
+        --   return { 'Alice', 'Bob', 'Carol' }
+        -- end,
+    }
+)

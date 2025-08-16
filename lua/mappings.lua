@@ -73,7 +73,6 @@ maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser"}
 maps.n["<leader>z"] = { "<CMD>UndotreeToggle<CR>", desc = "Undotree"}
 maps.n[" "] = { "", desc = "So the cursor doesnt move"}
 maps.n["<leader>x"] = { desc = "Build command"}
--- maps.n[":W"] = { vim.cmd("write"), desc = "Conveniently save" }
 --- TODO rewirte scripts with toggleterm
 maps.n["<leader>xs"] = { "<CMD>lua WriteCommand()<CR>", desc = "Set Build command"}
 maps.n["<leader>xx"] = { "<CMD>lua ExecCommand()<CR>", desc = "Execute Build command"}
