@@ -670,7 +670,9 @@ return {
         },
     },
     {
-        "catppuccin/nvim", name = "catppuccin", priority = 1000
+        "catppuccin/nvim", name = "catppuccin", priority = 1000,
+        config = function()
+        end
     },
     --  morta [theme]
     --  https://github.com/ssstba/morta.nvim
@@ -1258,7 +1260,20 @@ return {
         },
         build = ":TSUpdate",
         opts = {
-            auto_install = false, -- Currently bugged. Use [:TSInstall all] and [:TSUpdate all]
+            auto_install = true, -- Currently bugged. Use [:TSInstall all] and [:TSUpdate all]
+            ensure_installed = {
+                "c",
+                "lua",
+                "vim",
+                "vimdoc",
+                "query",
+                "markdown",
+                "python",
+                "go",
+                "html",
+                "css",
+                "javascript",
+            },
 
             highlight = {
                 enable = true,
@@ -1407,6 +1422,7 @@ return {
             require("mason-lspconfig").setup(opts)
             utils_lsp.apply_default_lsp_settings() -- Apply our default lsp settings.
             -- if shit hits the fan needed for the keymaps
+            utils.trigger_event("FileType")
             utils_lsp.setup("lua_ls")
             utils_lsp.setup("clangd")
             utils_lsp.setup("gopls")
@@ -1788,7 +1804,7 @@ return {
     --  https://github.com/rafamadriz/friendly-snippets
     {
         "L3MON4D3/LuaSnip",
-        build = not is_windows and "make install_jsregexp" or nil,
+        build = "make install_jsregexp",
         dependencies = {
             "rafamadriz/friendly-snippets",
             "zeioth/NormalSnippets",
@@ -2134,7 +2150,7 @@ return {
                 executable = {
                     command = vim.fn.stdpath('data') .. '/mason/bin/codelldb',
                     args = { "--port", "${port}" },
-                    detached = function() if is_windows then return false else return true end end,
+                    detached = true,
                 }
             }
             dap.configurations.c = {
