@@ -23,48 +23,48 @@
 
 local autocmd = vim.api.nvim_create_autocmd
 local cmd = vim.api.nvim_create_user_command
--- local utils = require("utils")
+local utils = require("utils")
 -- local is_available = utils.is_available
 
 -- ## EXTRA LOGIC -----------------------------------------------------------
 -- 1. Events to load plugins faster → 'BaseFile'/'BaseGitFile'/'BaseDefered':
 --    this is pretty much the same thing as the event 'BufEnter',
 --    but without increasing the startup time displayed in the greeter.
--- autocmd({ "BufReadPost", "BufNewFile", "BufWritePost" }, {
---     desc = "Nvim user events for file detection (BaseFile and BaseGitFile)",
---     callback = function(args)
---         local empty_buffer = vim.fn.resolve(vim.fn.expand "%") == ""
---         local greeter = vim.api.nvim_get_option_value("filetype", { buf = args.buf }) == "alpha"
---         local git_repo = vim.fn.executable("git") == 1 and utils.run_cmd(
---             { "git", "-C", vim.fn.fnamemodify(vim.fn.resolve(vim.fn.expand "%"), ":p:h"), "rev-parse" }, false)
---
---         -- For any file exept empty buffer, or the greeter (alpha)
---         if not (empty_buffer or greeter) then
---             utils.trigger_event("User BaseFile")
---
---             -- Is the buffer part of a git repo?
---             if git_repo then
---                 utils.trigger_event("User BaseGitFile")
---             end
---         end
---     end,
--- })
+autocmd({ "BufReadPost", "BufNewFile", "BufWritePost" }, {
+    desc = "Nvim user events for file detection (BaseFile and BaseGitFile)",
+    callback = function(args)
+        local empty_buffer = vim.fn.resolve(vim.fn.expand "%") == ""
+        local greeter = vim.api.nvim_get_option_value("filetype", { buf = args.buf }) == "alpha"
+        local git_repo = vim.fn.executable("git") == 1 and utils.run_cmd(
+            { "git", "-C", vim.fn.fnamemodify(vim.fn.resolve(vim.fn.expand "%"), ":p:h"), "rev-parse" }, false)
 
--- autocmd({ "VimEnter" }, {
---     desc = "Nvim user event that trigger a few ms after nvim starts",
---     callback = function()
---         -- If nvim is opened passing a filename, trigger the event inmediatelly.
---         if #vim.fn.argv() >= 1 then
---             -- In order to avoid visual glitches.
---             utils.trigger_event("User BaseDefered", true)
---             utils.trigger_event("BufEnter", true) -- also, initialize tabline_buffers.
---         else                                -- Wait some ms before triggering the event.
---             vim.defer_fn(function()
---                 utils.trigger_event("User BaseDefered")
---             end, 70)
---         end
---     end,
--- })
+        -- For any file exept empty buffer, or the greeter (alpha)
+        if not (empty_buffer or greeter) then
+            utils.trigger_event("User BaseFile")
+
+            -- Is the buffer part of a git repo?
+            if git_repo then
+                utils.trigger_event("User BaseGitFile")
+            end
+        end
+    end,
+})
+
+autocmd({ "VimEnter" }, {
+    desc = "Nvim user event that trigger a few ms after nvim starts",
+    callback = function()
+        -- If nvim is opened passing a filename, trigger the event inmediatelly.
+        if #vim.fn.argv() >= 1 then
+            -- In order to avoid visual glitches.
+            utils.trigger_event("User BaseDefered", true)
+            utils.trigger_event("BufEnter", true) -- also, initialize tabline_buffers.
+        else                                -- Wait some ms before triggering the event.
+            vim.defer_fn(function()
+                utils.trigger_event("User BaseDefered")
+            end, 70)
+        end
+    end,
+})
 
 -- 2. Save/restore window layout when possible.
 autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
@@ -262,3 +262,48 @@ end, { desc = "Write all changed buffers" })
 cmd("CloseNotifications", function()
     require("notify").dismiss({ pending = true, silent = true })
 end, { desc = "Dismiss all notifications" })
+
+-- ## Neotree --------------------------------------------------------------
+--
+-- 11. Open Neotree when opening Oil
+autocmd("BufEnter", {
+  desc = "Open Neotree when entering Oil buffer",
+  callback = function(args)
+    if vim.bo[args.buf].filetype == "oil" then
+            vim.cmd("Neotree action=show")
+    end
+  end,
+})
+
+-- 13. Handle Locking and unlocking neovim
+Neotree_is_locked = false
+autocmd({ "BufEnter" }, {
+    desc = "Prevent user from entering neotree when its locked",
+    callback = function(args)
+        local is_filetype_neotree = vim.api.nvim_get_option_value(
+            "filetype", { buf = 0 }) == "neo-tree"
+        if (args.event == "BufEnter" and is_filetype_neotree) then
+            if Neotree_is_locked then
+                require("smart-splits").move_cursor_right()
+            else
+                Neotree_is_locked = true
+            end
+        end
+    end,
+})
+
+-- 14. user command to manually unlock neotree
+vim.api.nvim_create_user_command(
+    'UnlockNT', -- :Name of the command
+    function(opts)         -- callback (Lua)
+        Neotree_is_locked = false
+    end,
+    {
+        nargs = '?',                    -- 0 or 1 arg
+        bang = true,                    -- allow !
+        desc = 'i must control myself', -- :help :Greet
+        -- complete = function(_, _, _)              -- custom completion
+        --   return { 'Alice', 'Bob', 'Carol' }
+        -- end,
+    }
+)

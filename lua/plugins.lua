@@ -889,7 +889,7 @@ return {
     {
         "rebelot/heirline.nvim",
         dependencies = { "zeioth/heirline-components.nvim" },
-        event = "BufreadPre",
+        event = "User BaseDefered",
         opts = function()
             local lib = require("heirline-components.all")
             return {
@@ -1215,7 +1215,7 @@ return {
     --  https://github.com/folke/which-key.nvim
     {
         "folke/which-key.nvim",
-        event = "VimEnter",
+        event = "User BaseDefered",
 
         opts_extend = { "disable.ft", "disable.bt" },
         opts = {
@@ -1400,7 +1400,9 @@ return {
                 "html",
             }
         },
-        event = "BufReadPre",
+        -- event = "BufReadPre",
+        -- depends on automcds.lua
+        event = "User BaseDefered",
         config = function(_, opts)
             require("mason-lspconfig").setup(opts)
             utils_lsp.apply_default_lsp_settings() -- Apply our default lsp settings.
