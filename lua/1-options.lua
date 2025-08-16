@@ -31,7 +31,7 @@ vim.opt.pumheight = 10                                           -- Height of th
 vim.opt.relativenumber = true                                    -- Show relative numberline.
 vim.opt.shiftwidth = 4                                           -- Number of space inserted for indentation.
 vim.opt.showmode = false                                         -- Disable showing modes in command line.
-vim.opt.showtabline = 0                                          -- always display tabline.
+vim.opt.showtabline = 2                                          -- always display tabline.
 vim.opt.signcolumn = "yes"                                       -- Always show the sign column.
 vim.opt.smartcase = true                                         -- Case sensitivie searching.
 vim.opt.smartindent = false                                      -- Smarter autoindentation.
@@ -66,7 +66,7 @@ vim.g.big_file = { size = 1024 * 5000, lines = 50000 } -- For files bigger than 
 
 -- The next globals are toggleable with <space + l + u>
 vim.g.autoformat_enabled = false       -- Enable auto formatting at start.
-vim.g.autopairs_enabled = false        -- Enable autopairs at start.
+vim.g.autopairs_enabled = true        -- Enable autopairs at start.
 vim.g.cmp_enabled = true               -- Enable completion at start.
 vim.g.codeactions_enabled = true       -- Enable displaying 💡 where code actions can be used.
 vim.g.codelens_enabled = true          -- Enable automatic codelens refreshing for lsp that support it.
@@ -78,3 +78,9 @@ vim.g.lsp_signature_enabled = true     -- Enable automatically showing lsp help 
 vim.g.notifications_enabled = true     -- Enable notifications.
 vim.g.semantic_tokens_enabled = true   -- Enable lsp semantic tokens at start.
 vim.g.url_effect_enabled = true        -- Highlight URLs with an underline effect.
+
+--vimux TODO: remove this if not vimux
+vim.g.netrw_list_hide='\\(^\\|\\s\\s\\)\\zs\\.\\S\\+'
+vim.g.VimuxOrientation= "v"
+vim.g.VimuxHeight = "10"
+vim.g.VimuxCloseOnExit= 1

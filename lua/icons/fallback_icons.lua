@@ -37,6 +37,7 @@ return {
     -- Heirline components - Winbar components
     NeoTree = "[TREE]",
     Aerial = "[AERIAL]",
+    ZenMode = "[ZEN]",
     BufWrite = "[WRITE]",
     BufWriteAll = "[WRITE_ALL]",
     Ellipsis = "...",

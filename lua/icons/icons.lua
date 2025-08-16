@@ -52,6 +52,7 @@ return {
     CompilerRedo = "",
     NeoTree = "",
     Aerial = "",
+    ZenMode = "󰰶",
     BufWrite = "",
     BufWriteAll = "",
     Ellipsis = "…",

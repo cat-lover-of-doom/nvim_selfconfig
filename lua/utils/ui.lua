@@ -31,10 +31,11 @@
 --      -> toggle_ui_notifications
 --      -> toggle_url_effect
 --      -> toggle_wrap
+--      -> toggle_zen_mode
 
 
 local M = {}
-local utils = require("base.utils")
+local utils = require("utils")
 local function bool2str(bool) return bool and "on" or "off" end
 
 --- Change the number display modes
@@ -207,7 +208,7 @@ end
 --- Toggle diagnostics
 function M.toggle_diagnostics()
     vim.g.diagnostics_mode = (vim.g.diagnostics_mode - 1) % 4
-    vim.diagnostic.config(require("base.utils.lsp").diagnostics[vim.g.diagnostics_mode])
+    vim.diagnostic.config(require("utils.lsp").diagnostics[vim.g.diagnostics_mode])
     if vim.g.diagnostics_mode == 0 then
         utils.notify "diagnostics off"
     elseif vim.g.diagnostics_mode == 1 then
@@ -300,7 +301,7 @@ end
 --- Toggle URL/URI syntax highlighting rules
 function M.toggle_url_effect()
     vim.g.url_effect_enabled = not vim.g.url_effect_enabled
-    require("base.utils").set_url_effect()
+    require("utils").set_url_effect()
     utils.notify(string.format("URL effect %s", bool2str(vim.g.url_effect_enabled)))
 end
 
@@ -308,6 +309,19 @@ end
 function M.toggle_wrap()
     vim.wo.wrap = not vim.wo.wrap -- local to window
     utils.notify(string.format("wrap %s", bool2str(vim.wo.wrap)))
+end
+
+--- Toggle zen mode
+--- @param bufnr? number the buffer to toggle `zen mode` on.
+function M.toggle_zen_mode(bufnr)
+    bufnr = bufnr or 0
+    if not vim.b[bufnr].zen_mode then
+        vim.b[bufnr].zen_mode = true
+    else
+        vim.b[bufnr].zen_mode = false
+    end
+    utils.notify(string.format("zen mode %s", bool2str(vim.b[bufnr].zen_mode)))
+    vim.cmd "ZenMode"
 end
 
 return M

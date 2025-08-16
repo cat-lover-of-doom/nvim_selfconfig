@@ -1,8 +1,7 @@
--- HELLO, welcome to NormalNvim!
 -- ---------------------------------------
--- This is the entry point of your config.
+-- This is the entry point of the config.
 -- ---------------------------------------
-
+--
 local function load_source(source)
     local status_ok, error = pcall(require, source)
     if not status_ok then
@@ -30,19 +29,18 @@ end
 local function load_colorscheme(colorscheme)
     if vim.g.default_colorscheme then
         if not pcall(vim.cmd.colorscheme, colorscheme) then
-            require("base.utils").notify(
+            require("utils").notify(
                 "Error setting up colorscheme: " .. colorscheme,
                 vim.log.levels.ERROR
             )
         end
     end
 end
-
--- Call the functions defined above.
 load_sources({
-    "base.1-options",
-    "base.2-lazy",
-    "base.3-autocmds", -- critical stuff, don't change the execution order.
+    "1-options",
+    "utils",
+    "3-autocmd",
+    "utils.4-lazy-config", -- <-- loads plugins in plugins.lua
 })
+load_sources_async({ "5-mappings" })
 load_colorscheme(vim.g.default_colorscheme)
-load_sources_async({ "base.4-mappings" })

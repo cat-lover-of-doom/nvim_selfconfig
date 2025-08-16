@@ -25,6 +25,7 @@
 --       -> session manager
 --       -> smart-splits.nvim
 --       -> aerial.nvim
+--       -> litee-calltree.nvim
 --       -> telescope.nvim                     [find]
 --       -> toggleterm.nvim
 --       -> dap.nvim                           [debugger]
@@ -54,11 +55,11 @@
 --   -------------------------------------------------------------------
 
 local M = {}
-local utils = require("base.utils")
+local utils = require("utils")
 local get_icon = utils.get_icon
 local is_available = utils.is_available
-local ui = require("base.utils.ui")
-local maps = require("base.utils").get_mappings_template()
+local ui = require("utils.ui")
+local maps = utils.get_mappings_template()
 
 -- -------------------------------------------------------------------------
 --
@@ -68,9 +69,10 @@ local maps = require("base.utils").get_mappings_template()
 
 -- MY OWN SHIT -------------------------------------------------------------
 maps.n["+"] = {"o", desc = "Insert a blank line"}
-maps.n["<leader>s"] = { "<CMD>Oil<CR><CMD>Neotree action=show<CR>", desc = "File browser"}
-maps.n["<leader>°"] = { "<CMD>UnlockNT<CR><C-h><M-C-S-F10><C-l>", desc = "File browser"}
-maps.n["<leader>z"] = { "<CMD>UndotreeFocus<CR>", desc = "Undo Tree"}
+maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser"}
+maps.n["<leader>z"] = { "<CMD>UndotreeToggle<CR>", desc = "Undotree"}
+maps.n[" "] = { "", desc = "So the cursor doesnt move"}
+
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
@@ -90,10 +92,6 @@ local icons = {
 }
 
 -- standard Operations -----------------------------------------------------
-maps.n["j"] =
-{ "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor down" }
-maps.n["k"] =
-{ "v:count == 0 ? 'gk' : 'k'", expr = true, desc = "Move cursor up" }
 maps.n["gx"] =
 { utils.open_with_program, desc = "Open the file under cursor with a program" }
 maps.n["0"] =
@@ -374,6 +372,12 @@ maps.n["<leader>b|"] = {
     desc = "Vertical split buffer from tabline",
 }
 
+-- zen mode
+if is_available("zen-mode.nvim") then
+    maps.n["<leader>uz"] =
+    { function() ui.toggle_zen_mode() end, desc = "Zen mode" }
+end
+
 -- ui toggles [ui] ---------------------------------------------------------
 maps.n["<leader>u"] = icons.u
 if is_available("nvim-autopairs") then
@@ -536,24 +540,6 @@ if is_available("vim-fugitive") then
     maps.n["<leader>gP"] = {
         function() vim.cmd(":GBrowse") end,
         desc = "Open in github ",
-    }
-end
--- git client
-if vim.fn.executable "gitui" == 1 then -- if gitui exists, show it
-    maps.n["<leader>gg"] = {
-        function()
-            local git_dir = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
-            if git_dir ~= "" then
-                if vim.fn.executable "keychain" == 1 then
-                    vim.cmd('TermExec cmd="eval `keychain --eval ~/.ssh/github.key` && gitui && exit"')
-                else
-                    vim.cmd("TermExec cmd='gitui && exit'")
-                end
-            else
-                utils.notify("Not a git repository", vim.log.levels.WARN)
-            end
-        end,
-        desc = "ToggleTerm gitui",
     }
 end
 
@@ -831,20 +817,24 @@ if is_available("telescope.nvim") then
 end
 
 
--- toggleterm.nvim ----------------------------------------------------------
-if is_available("toggleterm.nvim") then
+-- vimux.nvim ----------------------------------------------------------
     maps.n["<leader>t"] = icons.t
     maps.n["<leader>tt"] =
-    { "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm float" }
-    maps.n["<leader>th"] = {
-        "<cmd>ToggleTerm size=10 direction=horizontal<cr>",
-        desc = "Toggleterm horizontal split",
+    { "<CMD>VimuxTogglePane<CR>", desc = "toggle terminal" }
+    maps.n["<leader>tp"] = {
+        "<cmd>VimuxPromptCommand<cr>",
+        desc = "prompt for command",
     }
-    maps.n["<leader>tv"] = {
-        "<cmd>ToggleTerm size=80 direction=vertical<cr>",
-        desc = "Toggleterm vertical split",
+    maps.n["<leader>t;"] = {
+        "<cmd>VimuxRunLastCommand<cr>",
+        desc = "run last command",
     }
-end
+    maps.n["<leader>tc"] = {
+        "<cmd>VimuxCloseRunner<cr>",
+        desc = "close terminal",
+    }
+    maps.n["<leader>ts"] = { "<CMD>lua WriteCommand()<CR>", desc = "setup build command"}
+    maps.n["<leader>tr"] = { "<CMD>lua ExecCommand()<CR>", desc = "run build command"}
 
 -- extra - improved terminal navigation
 maps.t["<C-h>"] =
@@ -987,6 +977,30 @@ if is_available("neotest") then
     }
 end
 
+-- Extra - nvim-coverage
+--         Your project must generate coverage/lcov.info for this to work.
+--
+--         On jest, make sure your packages.json file has this:
+--         "test": "jest --coverage"
+--
+--         If you use other framework or language, refer to nvim-coverage docs:
+--         https://github.com/andythigpen/nvim-coverage/blob/main/doc/nvim-coverage.txt
+if is_available("nvim-coverage") then
+    maps.n["<leader>Tc"] = {
+        function()
+            require("coverage").load(false)
+            require("coverage").summary()
+        end,
+        desc = "Coverage",
+    }
+    maps.n["<leader>TC"] = {
+        function()
+            ui.toggle_coverage_signs()
+        end,
+        desc = "Coverage signs (toggle)",
+    }
+end
+
 -- Extra - nodejs testing commands
 maps.n["<leader>Ta"] = {
     function() vim.cmd("TestNodejs") end,
@@ -1023,6 +1037,37 @@ if is_available("nvim-ufo") then
         function() require("ufo").openFoldsExceptKinds({ 'region' }) end,
         desc = "Fold region"
     }
+end
+
+-- code docmentation [docs] -------------------------------------------------
+
+if is_available("markdown-preview.nvim") or is_available("markmap.nvim") or is_available("dooku.nvim") then
+    maps.n["<leader>D"] = icons.dc
+
+    -- Markdown preview
+    if is_available("markdown-preview.nvim") then
+        maps.n["<leader>Dp"] = {
+            function() vim.cmd("silent! MarkdownPreview") end,
+            desc = "Markdown preview",
+        }
+    end
+
+    -- Markdown Mindmap
+    if is_available("markmap.nvim") then
+        maps.n["<leader>Dm"] = {
+            function()
+                vim.cmd("MarkmapOpen")
+            end,
+            desc = "Markmap",
+        }
+    end
+
+    if is_available("dooku.nvim") then
+        maps.n["<leader>Dd"] = {
+            function() vim.cmd(":DookuGenerate") end,
+            desc = "Open documentation",
+        }
+    end
 end
 
 -- hop.nvim ----------------------------------------------------------------
@@ -1064,7 +1109,7 @@ function M.lsp_mappings(client, bufnr)
         return false
     end
 
-    local lsp_mappings = require("base.utils").get_mappings_template()
+    local lsp_mappings = require("utils").get_mappings_template()
 
     -- Diagnostics
     lsp_mappings.n["<leader>ld"] =
@@ -1128,8 +1173,8 @@ function M.lsp_mappings(client, bufnr)
     }
 
     -- Formatting (keymapping)
-    local formatting = require("base.utils.lsp").formatting
-    local format_opts = require("base.utils.lsp").format_opts
+    local formatting = require("utils.lsp").formatting
+    local format_opts = require("utils.lsp").format_opts
     lsp_mappings.n["<leader>lf"] = {
         function()
             vim.lsp.buf.format(format_opts)
@@ -1189,11 +1234,11 @@ function M.lsp_mappings(client, bufnr)
 
         -- Key mappings for toggling autoformat (buffer/global)
         lsp_mappings.n["<leader>uf"] = {
-            function() require("base.utils.ui").toggle_buffer_autoformat() end,
+            function() require("utils.ui").toggle_buffer_autoformat() end,
             desc = "Toggle buffer autoformat",
         }
         lsp_mappings.n["<leader>uF"] = {
-            function() require("base.utils.ui").toggle_autoformat() end,
+            function() require("utils.ui").toggle_autoformat() end,
             desc = "Toggle global autoformat",
         }
     end
@@ -1255,7 +1300,7 @@ function M.lsp_mappings(client, bufnr)
     }
 
     -- Goto help
-    local lsp_hover_config = require("base.utils.lsp").lsp_hover_config
+    local lsp_hover_config = require("utils.lsp").lsp_hover_config
     lsp_mappings.n["gh"] = {
         function()
             vim.lsp.buf.hover(lsp_hover_config)
@@ -1296,7 +1341,7 @@ function M.lsp_mappings(client, bufnr)
     if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
     if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) end
     lsp_mappings.n["<leader>uH"] = {
-        function() require("base.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
+        function() require("utils.ui").toggle_buffer_inlay_hints(bufnr) end,
         desc = "LSP inlay hints (buffer)",
     }
 
@@ -1304,7 +1349,7 @@ function M.lsp_mappings(client, bufnr)
     if vim.g.semantic_tokens_enabled then
         vim.b[bufnr].semantic_tokens_enabled = true
         lsp_mappings.n["<leader>uY"] = {
-            function() require("base.utils.ui").toggle_buffer_semantic_tokens(bufnr) end,
+            function() require("utils.ui").toggle_buffer_semantic_tokens(bufnr) end,
             desc = "LSP semantic highlight (buffer)",
         }
     else

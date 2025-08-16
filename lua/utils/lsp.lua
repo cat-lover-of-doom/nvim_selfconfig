@@ -15,7 +15,7 @@
 --      -> M.setup                       → It passes the user lsp settings to lspconfig.
 
 local M = {}
-local utils = require "base.utils"
+local utils = require "utils"
 local stored_handlers = {}
 
 --- Apply default settings for diagnostics, formatting, and lsp capabilities.
@@ -108,7 +108,7 @@ end
 --- @param client string The client where the lsp mappings will load.
 --- @param bufnr string The bufnr where the lsp mappings will load.
 function M.apply_user_lsp_mappings(client, bufnr)
-    local lsp_mappings = require("base.4-mappings").lsp_mappings(client, bufnr)
+    local lsp_mappings = require("5-mappings").lsp_mappings(client, bufnr)
     if not vim.tbl_isempty(lsp_mappings.v) then
         lsp_mappings.v["<leader>l"] = { desc = utils.get_icon("ActiveLSP", 1, true) .. "LSP" }
     end
