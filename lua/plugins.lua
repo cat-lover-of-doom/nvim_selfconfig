@@ -287,7 +287,6 @@ return {
         cmd = "Neotree",
         opts = function()
             vim.g.neo_tree_remove_legacy_commands = true
-            local utils = require("utils")
             local get_icon = utils.get_icon
             return {
                 auto_clean_after_session_restore = true,
@@ -447,7 +446,6 @@ return {
                     follow_current_file = {
                         enabled = true,
                     },
-                    hijack_netrw_behavior = "open_current",
                     use_libuv_file_watcher = true,
                 },
                 event_handlers = {
@@ -789,7 +787,7 @@ return {
                 callback = function()
                     local footer_icon = require("utils").get_icon("GreeterPlug")
                     local stats = require("lazy").stats()
-                    stats.real_cputime = not is_windows
+                    stats.real_cputime = true
                     local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
                     opts.section.footer.val = {
                         " ",
