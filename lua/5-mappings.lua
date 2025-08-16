@@ -59,7 +59,7 @@ local utils = require("utils")
 local get_icon = utils.get_icon
 local is_available = utils.is_available
 local ui = require("utils.ui")
-local maps = require("utils").get_mappings_template()
+local maps = utils.get_mappings_template()
 
 -- -------------------------------------------------------------------------
 --
@@ -72,10 +72,6 @@ maps.n["+"] = {"o", desc = "Insert a blank line"}
 maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser"}
 maps.n["<leader>z"] = { "<CMD>UndotreeToggle<CR>", desc = "Undotree"}
 maps.n[" "] = { "", desc = "So the cursor doesnt move"}
-maps.n["<leader>x"] = { desc = "Build command"}
---- TODO rewirte scripts with toggleterm
-maps.n["<leader>xs"] = { "<CMD>lua WriteCommand()<CR>", desc = "Set Build command"}
-maps.n["<leader>xx"] = { "<CMD>lua ExecCommand()<CR>", desc = "Execute Build command"}
 
 
 -- icons displayed on which-key.nvim ---------------------------------------
@@ -96,10 +92,6 @@ local icons = {
 }
 
 -- standard Operations -----------------------------------------------------
-maps.n["j"] =
-{ "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor down" }
-maps.n["k"] =
-{ "v:count == 0 ? 'gk' : 'k'", expr = true, desc = "Move cursor up" }
 maps.n["gx"] =
 { utils.open_with_program, desc = "Open the file under cursor with a program" }
 maps.n["0"] =
@@ -550,24 +542,6 @@ if is_available("vim-fugitive") then
         desc = "Open in github ",
     }
 end
--- git client
-if vim.fn.executable "gitui" == 1 then -- if gitui exists, show it
-    maps.n["<leader>gg"] = {
-        function()
-            local git_dir = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
-            if git_dir ~= "" then
-                if vim.fn.executable "keychain" == 1 then
-                    vim.cmd('TermExec cmd="eval `keychain --eval ~/.ssh/github.key` && gitui && exit"')
-                else
-                    vim.cmd("TermExec cmd='gitui && exit'")
-                end
-            else
-                utils.notify("Not a git repository", vim.log.levels.WARN)
-            end
-        end,
-        desc = "ToggleTerm gitui",
-    }
-end
 
 -- neotree
 if is_available("neo-tree.nvim") then
@@ -843,20 +817,24 @@ if is_available("telescope.nvim") then
 end
 
 
--- toggleterm.nvim ----------------------------------------------------------
-if is_available("toggleterm.nvim") then
+-- vimux.nvim ----------------------------------------------------------
     maps.n["<leader>t"] = icons.t
     maps.n["<leader>tt"] =
-    { "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm float" }
-    maps.n["<leader>th"] = {
-        "<cmd>ToggleTerm size=10 direction=horizontal<cr>",
-        desc = "Toggleterm horizontal split",
+    { "<CMD>VimuxTogglePane<CR>", desc = "toggle terminal" }
+    maps.n["<leader>tp"] = {
+        "<cmd>VimuxPromptCommand<cr>",
+        desc = "prompt for command",
     }
-    maps.n["<leader>tv"] = {
-        "<cmd>ToggleTerm size=80 direction=vertical<cr>",
-        desc = "Toggleterm vertical split",
+    maps.n["<leader>t;"] = {
+        "<cmd>VimuxRunLastCommand<cr>",
+        desc = "run last command",
     }
-end
+    maps.n["<leader>tc"] = {
+        "<cmd>VimuxCloseRunner<cr>",
+        desc = "close terminal",
+    }
+    maps.n["<leader>ts"] = { "<CMD>lua WriteCommand()<CR>", desc = "setup build command"}
+    maps.n["<leader>tr"] = { "<CMD>lua ExecCommand()<CR>", desc = "run build command"}
 
 -- extra - improved terminal navigation
 maps.t["<C-h>"] =

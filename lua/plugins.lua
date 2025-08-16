@@ -1,7 +1,7 @@
 -- 1 - Core behaviors
 -- Plugins that add new behaviors.
 --    Sections:
---       -> toggleterm.nvim        [term]
+--       -> vimux.nvim        [term]
 --       -> oil.nvim               [file browser]
 --       -> oil-lsp-diagnostics    [lsp support for oil]
 --       -> oil-git                [git support for oil]
@@ -44,7 +44,6 @@
 --       -> nvim-web-devicons           [icons | ui]
 --       -> lspkind.nvim                [icons | lsp]
 --       -> nvim-scrollbar              [scrollbar]
---       -> mini.animate                [animations]
 --       -> highlight-undo              [highlights]
 --       -> which-key                   [on-screen keybinding]
 
@@ -105,33 +104,29 @@
 local utils = require("utils")
 local utils_lsp = require("utils.lsp")
 return {
--- 1 - Core behaviors
--- Plugins that add new behaviors.
+    -- 1 - Core behaviors
+    -- Plugins that add new behaviors.
     {
-        "akinsho/toggleterm.nvim",
-        cmd = { "ToggleTerm", "TermExec" },
-        opts = {
-            highlights = {
-                Normal = { link = "Normal" },
-                NormalNC = { link = "NormalNC" },
-                NormalFloat = { link = "Normal" },
-                FloatBorder = { link = "FloatBorder" },
-                StatusLine = { link = "StatusLine" },
-                StatusLineNC = { link = "StatusLineNC" },
-                WinBar = { link = "WinBar" },
-                WinBarNC = { link = "WinBarNC" },
-            },
-            size = 10,
-            open_mapping = [[<F7>]],
-            shading_factor = 2,
-            direction = "float",
-            float_opts = {
-                border = "rounded",
-                highlights = { border = "Normal", background = "Normal" },
-            },
+        "christoomey/vim-tmux-navigator",
+        dependencies = {"preservim/vimux"},
+        cmd = {
+            "TmuxNavigateLeft",
+            "TmuxNavigateDown",
+            "TmuxNavigateUp",
+            "TmuxNavigateRight",
+            "TmuxNavigatePrevious",
         },
+        keys = {
+            { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+            { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+            { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+            { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+        },
+        lazy = false,
     },
     {
+
         'stevearc/oil.nvim',
         ---@module 'oil'
         opts = {},
@@ -474,7 +469,7 @@ return {
                 -- A command is a function that we can assign to a mapping (below)
                 commands = {
                     system_open = function(state)
-                        require("utils").open_with_program(state.tree:get_node():get_id())
+                        require("utils.init").open_with_program(state.tree:get_node():get_id())
                     end,
                     parent_or_close = function(state)
                         local node = state.tree:get_node()
@@ -766,14 +761,14 @@ return {
             sign = { enabled = false },
             virtual_text = {
                 enabled = true,
-                text = require("utils").get_icon("Lightbulb")
+                text = require("utils.init").get_icon("Lightbulb")
             }
         },
         config = function(_, opts) require("nvim-lightbulb").setup(opts) end
     },
     {
-            "mbbill/undotree",
-            event = "BufReadPost";
+        "mbbill/undotree",
+        event = "BufReadPost",
     },
 
     -- 2 - User interface
@@ -807,13 +802,13 @@ return {
         name = "catppuccin",
         priority = 1000,
         opts = {
-            flavour = "auto", -- latte, frappe, macchiato, mocha
+            flavour = "auto",              -- latte, frappe, macchiato, mocha
             transparent_background = true, -- disables setting the background color.
             float = {
                 transparent = true,        -- enable transparent floating windows
             },
-            styles = {                      -- Handles the styles of general hi groups (see `:h highlight-args`):
-                comments = { "italic" },    -- Change the style of comments
+            styles = {                     -- Handles the styles of general hi groups (see `:h highlight-args`):
+                comments = { "italic" },   -- Change the style of comments
                 conditionals = { "italic" },
                 loops = {},
                 functions = {},
@@ -1005,7 +1000,6 @@ return {
                         "neogitstatus",
                         "notify",
                         "startify",
-                        "toggleterm",
                         "Trouble",
                         "calltree",
                         "coverage"
@@ -1300,51 +1294,6 @@ return {
         },
     },
 
-    --  mini.animate [animations]
-    --  https://github.com/echasnovski/mini.animate
-    --  HINT: if one of your personal keymappings fail due to mini.animate, try to
-    --        disable it during the keybinding using vim.g.minianimate_disable = true
-    {
-        "echasnovski/mini.animate",
-        event = "User BaseFile",
-        enabled = true,
-        opts = function()
-            -- don't use animate when scrolling with the mouse
-            local mouse_scrolled = false
-            for _, scroll in ipairs { "Up", "Down" } do
-                local key = "<ScrollWheel" .. scroll .. ">"
-                vim.keymap.set({ "", "i" }, key, function()
-                    mouse_scrolled = true
-                    return key
-                end, { expr = true })
-            end
-
-            local animate = require("mini.animate")
-            return {
-                open = { enable = false }, -- true causes issues on nvim-spectre
-                resize = {
-                    timing = animate.gen_timing.linear { duration = 33, unit = "total" },
-                },
-                scroll = {
-                    timing = animate.gen_timing.linear { duration = 50, unit = "total" },
-                    subscroll = animate.gen_subscroll.equal {
-                        predicate = function(total_scroll)
-                            if mouse_scrolled then
-                                mouse_scrolled = false
-                                return false
-                            end
-                            return total_scroll > 1
-                        end,
-                    },
-                },
-                cursor = {
-                    enable = false, -- We don't want cursor ghosting
-                    timing = animate.gen_timing.linear { duration = 26, unit = "total" },
-                },
-            }
-        end,
-    },
-
     --  highlight-undo
     --  https://github.com/tzachar/highlight-undo.nvim
     --  This plugin only flases on undo/redo.
@@ -1573,9 +1522,10 @@ return {
                 "html",
             }
         },
-        -- event = "BufReadPre",
+        event = "BufReadPre",
         -- depends on automcds.lua
-        event = "User BaseDefered",
+        -- sometimes doesnt apply mappings
+        -- event = "User BaseDefered",
         config = function(_, opts)
             require("mason-lspconfig").setup(opts)
             utils_lsp.apply_default_lsp_settings() -- Apply our default lsp settings.
@@ -1723,7 +1673,6 @@ return {
                 { path = "stickybuf.nvim",              mods = { "stickybuf" } },
                 { path = "mini.bufremove",              mods = { "mini.bufremove" } },
                 { path = "smart-splits.nvim",           mods = { "smart-splits" } },
-                { path = "toggleterm.nvim",             mods = { "toggleterm" } },
                 { path = "neovim-session-manager.nvim", mods = { "session_manager" } },
                 { path = "nvim-spectre",                mods = { "spectre" } },
                 { path = "neo-tree.nvim",               mods = { "neo-tree" } },
@@ -1752,7 +1701,6 @@ return {
                 { path = "nvim-web-devicons",           mods = { "nvim-web-devicons" } },
                 { path = "lspkind.nvim",                mods = { "lspkind" } },
                 { path = "nvim-scrollbar",              mods = { "scrollbar" } },
-                { path = "mini.animate",                mods = { "mini.animate" } },
                 { path = "highlight-undo.nvim",         mods = { "highlight-undo" } },
                 { path = "which-key.nvim",              mods = { "which-key" } },
 
@@ -2641,4 +2589,3 @@ return {
         end,
     },
 }
-

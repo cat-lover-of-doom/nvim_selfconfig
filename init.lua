@@ -37,13 +37,10 @@ local function load_colorscheme(colorscheme)
     end
 end
 load_sources({
-    "options",
-    "lazy-config",
-    "autocmd",
+    "1-options",
     "utils",
-    "scripts.block_repeats",
-    "scripts.testmaker",
-    "scripts.b",
+    "3-autocmd",
+    "utils.4-lazy-config", -- <-- loads plugins in plugins.lua
 })
-load_sources_async({ "mappings" })
+load_sources_async({ "5-mappings" })
 load_colorscheme(vim.g.default_colorscheme)
