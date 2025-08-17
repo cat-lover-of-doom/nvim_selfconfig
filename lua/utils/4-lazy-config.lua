@@ -72,5 +72,5 @@ require("lazy").setup({
             },
         },
     },
-    spec = { { import = "plugins" } },
+    spec = { { import = "4-plugins" } },
 })
