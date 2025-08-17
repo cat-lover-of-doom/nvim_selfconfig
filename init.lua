@@ -40,7 +40,7 @@ load_sources({
     "1-options",
     "utils",
     "3-autocmd",
-    "utils.4-lazy-config", -- <-- loads plugins in plugins.lua
+    "4-lazy-config", -- <-- loads plugins in plugins.lua
 })
 load_sources_async({ "5-mappings" })
 load_colorscheme(vim.g.default_colorscheme)
