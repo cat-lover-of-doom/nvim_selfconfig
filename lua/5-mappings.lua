@@ -229,10 +229,6 @@ maps.n["<C-a>"] = { -- to move to the previous position press ctrl + oo
 }
 
 -- buffers/tabs [buffers ]--------------------------------------------------
-maps.n["<leader>c"] = { -- Close window and buffer at the same time.
-    function() require("heirline-components.buffer").wipe() end,
-    desc = "Wipe buffer",
-}
 maps.n["<leader>C"] = { -- Close buffer keeping the window.
     function() require("heirline-components.buffer").close() end,
     desc = "Close buffer",
@@ -481,21 +477,21 @@ end
 
 -- session manager ---------------------------------------------------------
 if is_available("neovim-session-manager") then
-    maps.n["<leader>S"] = icons.S
-    maps.n["<leader>Sl"] = {
-        "<cmd>SessionManager! load_last_session<cr>",
+    maps.n["<leader>c"] = icons.S
+    maps.n["<leader>cl"] = {
+        "<cmd>cessionManager! load_last_session<cr>",
         desc = "Load last session",
     }
-    maps.n["<leader>Ss"] = {
-        "<cmd>SessionManager! save_current_session<cr>",
+    maps.n["<leader>cs"] = {
+        "<cmd>cessionManager! save_current_session<cr>",
         desc = "Save this session",
     }
-    maps.n["<leader>Sd"] =
-    { "<cmd>SessionManager! delete_session<cr>", desc = "Delete session" }
-    maps.n["<leader>Sf"] =
-    { "<cmd>SessionManager! load_session<cr>", desc = "Search sessions" }
-    maps.n["<leader>S."] = {
-        "<cmd>SessionManager! load_current_dir_session<cr>",
+    maps.n["<leader>cd"] =
+    { "<cmd>cessionManager! delete_session<cr>", desc = "Delete session" }
+    maps.n["<leader>cf"] =
+    { "<cmd>cessionManager! load_session<cr>", desc = "Search sessions" }
+    maps.n["<leader>c."] = {
+        "<cmd>cessionManager! load_current_dir_session<cr>",
         desc = "Load current directory session",
     }
 end

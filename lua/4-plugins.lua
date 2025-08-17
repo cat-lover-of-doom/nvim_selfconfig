@@ -108,7 +108,7 @@ return {
     -- Plugins that add new behaviors.
     {
         "christoomey/vim-tmux-navigator",
-        dependencies = {"preservim/vimux"},
+        dependencies = { "preservim/vimux" },
         cmd = {
             "TmuxNavigateLeft",
             "TmuxNavigateDown",
@@ -1501,6 +1501,7 @@ return {
         dependencies = { "neovim/nvim-lspconfig" },
         opts = {
             automatic_installation = true,
+            automatic_enable = false,
             ensure_installed = {
                 "clangd",
                 "gopls",
