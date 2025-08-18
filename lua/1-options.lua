@@ -79,8 +79,5 @@ vim.g.notifications_enabled = true     -- Enable notifications.
 vim.g.semantic_tokens_enabled = true   -- Enable lsp semantic tokens at start.
 vim.g.url_effect_enabled = true        -- Highlight URLs with an underline effect.
 
---vimux
-vim.g.netrw_list_hide='\\(^\\|\\s\\s\\)\\zs\\.\\S\\+'
-vim.g.VimuxOrientation= "v"
-vim.g.VimuxHeight = "10"
+-- Vimux ------------------------------------
 vim.g.VimuxCloseOnExit= 1

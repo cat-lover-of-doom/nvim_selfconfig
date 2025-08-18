@@ -253,7 +253,7 @@ return {
     -- By default it support neovim/aerial and others.
     {
         "stevearc/stickybuf.nvim",
-        event = "User efered",
+        event = "User BaseDefered",
         config = function() require("stickybuf").setup() end
     },
 
@@ -261,7 +261,7 @@ return {
     --  https://github.com/mrjones2014/smart-splits.nvim
     {
         "mrjones2014/smart-splits.nvim",
-        event = "User ile",
+        event = "User BaseFile",
         opts = {
             ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" },
             ignored_buftypes = { "nofile" },
@@ -272,7 +272,7 @@ return {
     -- https://github.com/Shatur/neovim-session-manager
     {
         "Shatur/neovim-session-manager",
-        event = "User efered",
+        event = "User BaseDefered",
         cmd = "SessionManager",
         opts = function()
             local config = require('session_manager.config')
@@ -580,7 +580,7 @@ return {
     --  https://github.com/kevinhwang91/promise-async
     {
         "kevinhwang91/nvim-ufo",
-        event = { "User ile" },
+        event = { "User BaseFile" },
         dependencies = { "kevinhwang91/promise-async" },
         opts = {
             preview = {
@@ -626,7 +626,7 @@ return {
     {
         "AckslD/nvim-neoclip.lua",
         requires = 'nvim-telescope/telescope.nvim',
-        event = "User ile",
+        event = "User BaseFile",
         opts = {}
     },
 
@@ -634,7 +634,7 @@ return {
     --  https://github.com/andymass/vim-matchup
     {
         "andymass/vim-matchup",
-        event = "User ile",
+        event = "User BaseFile",
         config = function()
             vim.g.matchup_matchparen_deferred = 1   -- work async
             vim.g.matchup_matchparen_offscreen = {} -- disable status bar icon
@@ -704,7 +704,7 @@ return {
     -- https://github.com/ray-x/lsp_signature.nvim
     {
         "ray-x/lsp_signature.nvim",
-        event = "User ile",
+        event = "User BaseFile",
         opts = function()
             -- Apply globals from 1-options.lua
             local is_enabled = vim.g.lsp_signature_enabled
@@ -735,7 +735,7 @@ return {
     {
         'kosayoda/nvim-lightbulb',
         enabled = vim.g.codeactions_enabled,
-        event = "User ile",
+        event = "User BaseFile",
         opts = {
             action_kinds = { -- show only for relevant code actions.
                 "quickfix",
@@ -2565,6 +2565,7 @@ return {
             vim.g.gutentags_plus_nomap = 1
             vim.g.gutentags_resolve_symlinks = 1
             vim.g.gutentags_cache_dir = vim.fn.stdpath "cache" .. "/tags"
+            vim.fn.mkdir(vim.g.gutentags_cache_dir, 'p')
             vim.api.nvim_create_autocmd("FileType", {
                 desc = "Auto generate C/C++ tags",
                 callback = function()
