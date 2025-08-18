@@ -40,7 +40,7 @@ local function bool2str(bool) return bool and "on" or "off" end
 
 --- Change the number display modes
 function M.change_number()
-    local number = vim.wo.number               -- local to window
+    local number = vim.wo.number                 -- local to window
     local relativenumber = vim.wo.relativenumber -- local to window
     if not number and not relativenumber then
         vim.wo.number = true
@@ -62,9 +62,9 @@ function M.set_indent()
         if not indent or indent == 0 then return end
         vim.bo.expandtab = (indent > 0) -- local to buffer
         indent = math.abs(indent)
-        vim.bo.tabstop = indent     -- local to buffer
-        vim.bo.softtabstop = indent -- local to buffer
-        vim.bo.shiftwidth = indent  -- local to buffer
+        vim.bo.tabstop = indent         -- local to buffer
+        vim.bo.softtabstop = indent     -- local to buffer
+        vim.bo.shiftwidth = indent      -- local to buffer
         utils.notify(string.format("indent=%d %s", indent, vim.bo.expandtab and "expandtab" or "noexpandtab"))
     end
 end
@@ -233,8 +233,8 @@ end
 --- @param bufnr? number the buffer to toggle the `inlay_hints` on.
 function M.toggle_inlay_hints(bufnr)
     bufnr = bufnr or 0
-    vim.g.inlay_hints_enabled = not vim.g.inlay_hints_enabled                 -- flip global state
-    vim.b.inlay_hints_enabled = not vim.g.inlay_hints_enabled                 -- sync buffer state
+    vim.g.inlay_hints_enabled = not vim.g.inlay_hints_enabled                   -- flip global state
+    vim.b.inlay_hints_enabled = not vim.g.inlay_hints_enabled                   -- sync buffer state
     vim.lsp.buf.inlay_hint.enable(vim.g.inlay_hints_enabled, { bufnr = bufnr }) -- apply state
     utils.notify(string.format("Global inlay hints %s", bool2str(vim.g.inlay_hints_enabled)))
 end

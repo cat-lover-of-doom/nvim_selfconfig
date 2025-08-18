@@ -69,7 +69,7 @@ autocmd({ "VimEnter" }, {
             -- In order to avoid visual glitches.
             utils.trigger_event("User BaseDefered", true)
             utils.trigger_event("BufEnter", true) -- also, initialize tabline_buffers.
-        else                                -- Wait some ms before triggering the event.
+        else                                      -- Wait some ms before triggering the event.
             vim.defer_fn(function()
                 utils.trigger_event("User BaseDefered")
             end, 70)
@@ -295,12 +295,12 @@ vim.api.nvim_create_user_command(
 --
 -- 11. Open Neotree when opening Oil
 autocmd("BufEnter", {
-  desc = "Open Neotree when entering Oil buffer",
-  callback = function(args)
-    if vim.bo[args.buf].filetype == "oil" then
+    desc = "Open Neotree when entering Oil buffer",
+    callback = function(args)
+        if vim.bo[args.buf].filetype == "oil" then
             vim.cmd("Neotree action=show")
-    end
-  end,
+        end
+    end,
 })
 
 -- 12. Handle Locking and unlocking neovim
@@ -322,8 +322,8 @@ autocmd({ "BufEnter" }, {
 
 -- 13. user command to manually unlock neotree
 vim.api.nvim_create_user_command(
-    'UnlockNT', -- :Name of the command
-    function(opts)         -- callback (Lua)
+    'UnlockNT',    -- :Name of the command
+    function(opts) -- callback (Lua)
         Neotree_is_locked = false
     end,
     {
@@ -342,31 +342,34 @@ local command_file = vim.fn.stdpath('data') .. '/stored_command.txt'
 
 -- 14. Function to write a command to the file
 function WriteCommand()
-  local command = vim.fn.input('Enter command: ')
-  local file = io.open(command_file, 'w')
-  if file then
-    file:write(command)
-    file:close()
-  else
-    print('Error: Unable to write to file.')
-  end
+    local command = vim.fn.input('Enter command: ')
+    if command == "" then
+        return
+    end
+    local file = io.open(command_file, 'w')
+    if file then
+        file:write(command)
+        file:close()
+    else
+        print('Error: Unable to write to file.')
+    end
 end
 
 -- 15. Function to read and execute the command in Vimux
 function ExecCommand()
-  local file = io.open(command_file, 'r')
-  if file then
-    local command = file:read('*all')
-    file:close()
-    if command ~= '' then
-      -- Use Vimux to run the command in a tmux pane
-      vim.cmd('VimuxRunCommand(' .. vim.fn.json_encode(command) .. ')')
+    local file = io.open(command_file, 'r')
+    if file then
+        local command = file:read('*all')
+        file:close()
+        if command ~= '' then
+            -- Use Vimux to run the command in a tmux pane
+            vim.cmd('VimuxRunCommand(' .. vim.fn.json_encode(command) .. ')')
+        else
+            print('No command found in the file.')
+        end
     else
-      print('No command found in the file.')
+        print('Error: Unable to read from file.')
     end
-  else
-    print('Error: Unable to read from file.')
-  end
 end
 
 -- ## REGULATE HJKL KEYS --------------------------------------------------------------
@@ -404,7 +407,7 @@ vim.cmd [[
 -- 18. Function to handle counts
 local function handle_count(count, key)
     if count > 1 then
-    return key
+        return key
     end
     return handle_key(key)
 end

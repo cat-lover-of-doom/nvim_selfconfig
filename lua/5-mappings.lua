@@ -718,8 +718,18 @@ end
 
 -- vimux.nvim ----------------------------------------------------------
 maps.n["<leader>t"] = icons.t
-maps.n["<leader>tt"] =
-{ "<CMD>VimuxTogglePane<CR>", desc = "toggle terminal" }
+maps.n["<leader>tt"] = {
+    function()
+        if vim.g.VimuxRunnerIndex == nil then
+            -- no runner, start one
+            vim.cmd("VimuxOpenRunner")
+        else
+            -- runner exists, toggle it
+            vim.cmd("VimuxTogglePane")
+        end
+    end,
+    desc = "toggle terminal (start if not running)"
+}
 maps.n["<leader>tp"] = {
     "<cmd>VimuxPromptCommand<cr>",
     desc = "prompt for command",
@@ -728,12 +738,18 @@ maps.n["<leader>t;"] = {
     "<cmd>VimuxRunLastCommand<cr>",
     desc = "run last command",
 }
-maps.n["<leader>tc"] = {
-    "<cmd>VimuxCloseRunner<cr>",
-    desc = "close terminal",
+maps.n["<leader>ts"] = {
+    "<CMD>lua WriteCommand()<CR>",
+    desc = "setup build command"
 }
-maps.n["<leader>ts"] = { "<CMD>lua WriteCommand()<CR>", desc = "setup build command" }
-maps.n["<leader>tr"] = { "<CMD>lua ExecCommand()<CR>", desc = "run build command" }
+maps.n["<leader>tr"] = {
+    "<CMD>lua ExecCommand()<CR>",
+    desc = "run build command"
+}
+maps.n["<leader>tm"] = {
+    "<CMD>VimuxRunCommand('make')<CR>",
+    desc = "run the make command"
+}
 
 -- extra - improved terminal navigation
 maps.t["<C-h>"] =
