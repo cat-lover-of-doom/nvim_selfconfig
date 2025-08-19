@@ -69,9 +69,11 @@ local maps = utils.get_mappings_template()
 
 -- MY OWN STUFF -------------------------------------------------------------
 maps.n["+"] = { "o", desc = "Insert a blank line" }
+maps.n["-"] = { "dd", desc = "Delete a line" }
 maps.n["<leader>s"] = { "<CMD>Oil<CR>", desc = "File browser" }
 maps.n["<leader>z"] = { "<CMD>UndotreeToggle<CR>", desc = "Undotree" }
 maps.n[" "] = { "", desc = "So the cursor doesnt move" }
+maps.n["<leader>o"] = {"<cmd>only<CR>", desc = "closes every pane but this one"}
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
