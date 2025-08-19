@@ -1,51 +1,54 @@
 -- 1 - Core behaviors
 -- Plugins that add new behaviors.
 --    Sections:
---       -> vimux.nvim        [term]
---       -> oil.nvim               [file browser]
---       -> oil-lsp-diagnostics    [lsp support for oil]
---       -> oil-git                [git support for oil]
---       -> gx-nvim                [allows to open links in browser]
---       -> project.nvim           [project search + auto cd]
---       -> trim.nvim              [auto trim spaces]
---       -> stickybuf.nvim         [lock special buffers]
---       -> smart-splits           [move and resize buffers]
---       -> session-manager        [session]
---       -> spectre.nvim           [search and replace in project]
---       -> neotree file browser   [neotree]
---       -> nvim-ufo               [folding mod]
---       -> nvim-neoclip           [nvim clipboard]
---       -> vim-matchup            [Improved % motion]
---       -> hop.nvim               [go to word visually]
---       -> nvim-autopairs         [auto close brackets]
---       -> nvim-ts-autotag        [auto close html tags]
---       -> lsp_signature.nvim     [auto params help]
---       -> nvim-lightbulb         [lightbulb for code actions]
---       -> undotree               [undotree for quick version managment]
+--       ## OIL
+--       -> oil.nvim                       [file browser]
+--       -> oil-lsp-diagnostics            [lsp support for oil]
+--       -> oil-git                        [git support for oil]
+
+--       -> iron.nvim                      [jupyter alternative]
+--       -> vimux.nvim                     [term]
+--       -> gx-nvim                        [allows to open links in browser]
+--       -> project.nvim                   [project search + auto cd]
+--       -> trim.nvim                      [auto trim spaces]
+--       -> stickybuf.nvim                 [lock special buffers]
+--       -> smart-splits                   [move and resize buffers]
+--       -> session-manager                [session]
+--       -> spectre.nvim                   [search and replace in project]
+--       -> neotree file browser           [neotree]
+--       -> nvim-ufo                       [folding mod]
+--       -> nvim-neoclip                   [nvim clipboard]
+--       -> vim-matchup                    [Improved % motion]
+--       -> hop.nvim                       [go to word visually]
+--       -> nvim-autopairs                 [auto close brackets]
+--       -> nvim-ts-autotag                [auto close html tags]
+--       -> lsp_signature.nvim             [auto params help]
+--       -> nvim-lightbulb                 [lightbulb for code actions]
+--       -> undotree                       [undotree for quick version managment]
 
 
 -- 2 - User interface
 -- Plugins that make the user interface better.
 --    Sections:
---       -> tokyonight                  [theme]
---       -> astrotheme                  [theme]
---       -> catppuccin/nivm             [theme]
---       -> morta                       [theme]
---       -> eldritch                    [theme]
---       -> alpha-nvim                  [greeter]
---       -> nvim-notify                 [notifications]
---       -> mini.indentscope            [guides]
---       -> heirline-components.nvim    [ui components]
---       -> heirline                    [ui components]
---       -> telescope                   [search]
---       -> telescope-fzf-native.nvim   [search backend]
---       -> dressing.nvim               [better ui elements]
---       -> noice.nvim                  [better cmd/search line]
---       -> nvim-web-devicons           [icons | ui]
---       -> lspkind.nvim                [icons | lsp]
---       -> nvim-scrollbar              [scrollbar]
---       -> highlight-undo              [highlights]
---       -> which-key                   [on-screen keybinding]
+--       -> tokyonight                     [theme]
+--       -> astrotheme                     [theme]
+--       -> catppuccin/nivm                [theme]
+--       -> morta                          [theme]
+--       -> eldritch                       [theme]
+--       -> alpha-nvim                     [greeter]
+--       -> nvim-notify                    [notifications]
+--       -> mini.indentscope               [guides]
+--       -> heirline-components.nvim       [ui components]
+--       -> heirline                       [ui components]
+--       -> telescope                      [search]
+--       -> telescope-fzf-native.nvim      [search backend]
+--       -> dressing.nvim                  [better ui elements]
+--       -> noice.nvim                     [better cmd/search line]
+--       -> nvim-web-devicons              [icons | ui]
+--       -> lspkind.nvim                   [icons | lsp]
+--       -> nvim-scrollbar                 [scrollbar]
+--       -> highlight-undo                 [highlights]
+--       -> which-key                      [on-screen keybinding]
 
 
 -- 3 - Dev core
@@ -98,6 +101,7 @@
 --       -> neotest.nvim                   [unit testing]
 --       -> nvim-coverage                  [code coverage]
 
+
 --       ## LANGUAGE IMPROVEMENTS
 --       -> guttentags_plus                [auto generate C/C++ tags]
 
@@ -107,26 +111,6 @@ return {
     -- 1 - Core behaviors
     -- Plugins that add new behaviors.
     {
-        "christoomey/vim-tmux-navigator",
-        dependencies = { "preservim/vimux" },
-        cmd = {
-            "TmuxNavigateLeft",
-            "TmuxNavigateDown",
-            "TmuxNavigateUp",
-            "TmuxNavigateRight",
-            "TmuxNavigatePrevious",
-        },
-        keys = {
-            { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-            { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-            { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-            { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-        },
-        lazy = false,
-    },
-    {
-
         'stevearc/oil.nvim',
         ---@module 'oil'
         opts = {},
@@ -171,6 +155,54 @@ return {
                 use_default_keymaps = false,
             })
         end
+    },
+    {
+        'Vigemus/iron.nvim',
+        event = "User BaseFile",
+        config = function()
+            require("iron.core").setup {
+                config = {
+                    scratch_repl = true,
+                    repl_definition = {
+                        sh = {
+                            command = { "zsh" }
+                        },
+                        python = {
+                            command = { "python3" }, -- or { "ipython", "--no-autoindent" }
+                            format = require("iron.fts.common").bracketed_paste_python,
+                            block_dividers = { "# %%", "#%%" },
+                        }
+                    },
+                    repl_filetype = function(bufnr, ft)
+                        return ft
+                    end,
+                    repl_open_cmd = require("iron.view").split.vertical("40%"),
+                },
+                highlight = {
+                    italic = true
+                },
+                ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+            }
+        end
+    },
+    {
+        "christoomey/vim-tmux-navigator",
+        dependencies = { "preservim/vimux" },
+        cmd = {
+            "TmuxNavigateLeft",
+            "TmuxNavigateDown",
+            "TmuxNavigateUp",
+            "TmuxNavigateRight",
+            "TmuxNavigatePrevious",
+        },
+        keys = {
+            { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+            { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+            { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+            { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+            { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+        },
+        lazy = false,
     },
     {
         "JezerM/oil-lsp-diagnostics.nvim",

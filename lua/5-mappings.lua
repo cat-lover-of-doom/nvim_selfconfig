@@ -89,6 +89,30 @@ local icons = {
     s = { desc = get_icon("Spectre", true) .. " Spectre" }
 }
 
+-- iron --------------------------------------------------------------------
+local iron = require("iron.core")
+maps.n["<leader>r"] = { desc = get_icon("Iron", true) .. " Iron" }
+maps.n["<leader>rr"] = { "<cmd>IronRepl<CR>", desc = "Toggle REPL" }
+
+maps.n["<leader>rl"] = { function() iron.send_line() end,
+    desc = "Send line to REPL",
+}
+maps.n["<leader>rp"] = { function() iron.send_paragraph() end,
+    desc = "Send paragraph to REPL",
+}
+maps.n["<leader>rb"] = { function() iron.send_code_block() end,
+    desc = "Send code block",
+}
+maps.v["<leader>rs"] = { function() iron.visual_send() end,
+    desc = "Send selection to REPL",
+}
+maps.n["<leader>r<CR>"]   = { function() iron.cr() end,
+    desc = "Send <CR> to REPL",
+}
+maps.n["<leader>r<Space>"]= { function() iron.interrupt() end,
+    desc = "Interrupt REPL",
+}
+
 -- standard Operations -----------------------------------------------------
 maps.n["gx"] =
 { utils.open_with_program, desc = "Open the file under cursor with a program" }
