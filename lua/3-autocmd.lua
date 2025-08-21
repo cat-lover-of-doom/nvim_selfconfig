@@ -31,6 +31,7 @@
 --       -> 16. Function to check and update key usage
 --       -> 17. Reset the key counts on entering insert mode, using other keys, or using counts
 --       -> 18. Function to handle counts
+--       -> 19. Funtion to set tab width to 2 in c files
 
 local autocmd = vim.api.nvim_create_autocmd
 local cmd = vim.api.nvim_create_user_command
@@ -420,3 +421,21 @@ vim.api.nvim_set_keymap('n', 'l', 'v:lua.handle_count(v:count1, "l")', { noremap
 _G.handle_count = handle_count
 _G.reset_counts = reset_counts
 _G.handle_key = handle_key
+
+
+-- 19. Function to set tab width to 2 in c files
+local function set_tab_width()
+    local filetype = vim.bo.filetype
+    if filetype == 'c' then
+        vim.bo.tabstop = 2
+        vim.bo.shiftwidth = 2
+    else
+        vim.bo.tabstop = 4
+        vim.bo.shiftwidth = 4
+    end
+end
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = set_tab_width,
+})
