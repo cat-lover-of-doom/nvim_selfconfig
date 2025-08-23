@@ -304,38 +304,20 @@ autocmd("BufEnter", {
     end,
 })
 
--- 12. Handle Locking and unlocking neovim
-Neotree_is_locked = false
-autocmd({ "BufEnter" }, {
-    desc = "Prevent user from entering neotree when its locked",
-    callback = function(args)
-        local is_filetype_neotree = vim.api.nvim_get_option_value(
-            "filetype", { buf = 0 }) == "neo-tree"
-        if (args.event == "BufEnter" and is_filetype_neotree) then
-            if Neotree_is_locked then
-                require("smart-splits").move_cursor_right()
-            else
-                Neotree_is_locked = true
-            end
-        end
-    end,
+-- 12. Close Neo-tree when entering a normal file buffer
+vim.api.nvim_create_autocmd("BufEnter", {
+  desc = "Close Neotree when entering a regular file",
+  callback = function(args)
+    local ft = vim.bo[args.buf].filetype
+    if ft ~= "neo-tree" and ft ~= "oil" and ft ~= "" then
+      -- only close if it's actually open
+      if require("neo-tree.sources.manager").get_state("filesystem") then
+        vim.cmd("Neotree close")
+      end
+    end
+  end,
 })
 
--- 13. user command to manually unlock neotree
-vim.api.nvim_create_user_command(
-    'UnlockNT',    -- :Name of the command
-    function(opts) -- callback (Lua)
-        Neotree_is_locked = false
-    end,
-    {
-        nargs = '?',                    -- 0 or 1 arg
-        bang = true,                    -- allow !
-        desc = 'i must control myself', -- :help :Greet
-        -- complete = function(_, _, _)              -- custom completion
-        --   return { 'Alice', 'Bob', 'Carol' }
-        -- end,
-    }
-)
 
 -- ## BUILD COMMANDS --------------------------------------------------------------
 -- Define the file where the command will be stored

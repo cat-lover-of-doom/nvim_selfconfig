@@ -743,6 +743,18 @@ end
 
 -- vimux.nvim ----------------------------------------------------------
 maps.n["<leader>t"] = icons.t
+maps.n["<leader>to"] = {
+    function()
+        if vim.g.VimuxOrientation == "v" then
+            vim.g.VimuxOrientation = "h"
+            vim.g.VimuxHeight = "40%"
+        else
+            vim.g.VimuxOrientation = "v"
+            vim.g.VimuxHeight = "20%"
+        end
+    end,
+    desc = "change vimux orientation"
+}
 maps.n["<leader>tt"] = {
     function()
         if vim.g.VimuxRunnerIndex == nil then

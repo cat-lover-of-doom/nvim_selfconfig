@@ -81,3 +81,5 @@ vim.g.url_effect_enabled = true        -- Highlight URLs with an underline effec
 
 -- Vimux ------------------------------------
 vim.g.VimuxCloseOnExit= 1
+vim.g.VimuxOrientation = "v"
+vim.g.VimuxHeight = "20%"
