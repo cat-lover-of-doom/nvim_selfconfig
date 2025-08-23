@@ -1304,6 +1304,7 @@ return {
             auto_install = true, -- Currently bugged. Use [:TSInstall all] and [:TSUpdate all]
             ensure_installed = {
                 "c",
+                "make",
                 "lua",
                 "vim",
                 "vimdoc",
@@ -1311,9 +1312,15 @@ return {
                 "markdown",
                 "python",
                 "go",
+                "gomod",
+                "gosum",
                 "html",
                 "css",
                 "javascript",
+                "json",
+                "sql",
+                "csv",
+                "tmux",
             },
 
             highlight = {
