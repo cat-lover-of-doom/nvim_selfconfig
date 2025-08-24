@@ -607,13 +607,13 @@ if is_available("telescope.nvim") then
         function() require("telescope.builtin").commands() end,
         desc = "Find commands",
     }
-    maps.n["<leader>ff"] = {
+    maps.n["<leader>fF"] = {
         function()
             require("telescope.builtin").find_files { hidden = true, no_ignore = true }
         end,
         desc = "Find all files",
     }
-    maps.n["<leader>fF"] = {
+    maps.n["<leader>ff"] = {
         function() require("telescope.builtin").find_files() end,
         desc = "Find files (no hidden)",
     }
