@@ -269,13 +269,13 @@ maps.n["<leader>ba"] = {
     function() vim.cmd("wa") end,
     desc = "Write all changed buffers",
 }
-maps.n["}b"] = {
+maps.n["]b"] = {
     function()
         require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
     end,
     desc = "Next buffer",
 }
-maps.n["{b"] = {
+maps.n["[b"] = {
     function()
         require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
     end,
@@ -451,9 +451,9 @@ end
 maps.n["<leader>g"] = icons.g
 if is_available("gitsigns.nvim") then
     maps.n["<leader>g"] = icons.g
-    maps.n["}g"] =
+    maps.n["]g"] =
     { function() require("gitsigns").nav_hunk('next') end, desc = "Next Git hunk" }
-    maps.n["{g"] = {
+    maps.n["[g"] = {
         function() require("gitsigns").nav_hunk('prev') end,
         desc = "Previous Git hunk",
     }
@@ -1034,11 +1034,11 @@ function M.lsp_mappings(client, bufnr)
     -- Diagnostics
     lsp_mappings.n["<leader>ld"] =
     { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" }
-    lsp_mappings.n["{d"] = {
+    lsp_mappings.n["[d"] = {
         function() vim.diagnostic.jump({ count = -1 }) end,
         desc = "Previous diagnostic",
     }
-    lsp_mappings.n["}d"] = {
+    lsp_mappings.n["]d"] = {
         function() vim.diagnostic.jump({ count = 1 }) end,
         desc = "Next diagnostic",
     }

@@ -15,7 +15,7 @@ vim.opt.copyindent = true                                        -- Copy the pre
 vim.opt.cursorline = true                                        -- Highlight the text line of the cursor.
 vim.opt.expandtab = true                                         -- Enable the use of space in tab.
 vim.opt.fileencoding = "utf-8"                                   -- File content encoding for the buffer.
-vim.opt.fillchars = { eob = " " }                                -- Disable `~` on nonexistent lines.
+-- vim.opt.fillchars = { eob = " " }                                -- Disable `~` on nonexistent lines.
 vim.opt.foldenable = true                                        -- Enable fold for nvim-ufo.
 vim.opt.foldlevel = 99                                           -- set highest foldlevel for nvim-ufo.
 vim.opt.foldlevelstart = 99                                      -- Start with all code unfolded.
@@ -31,7 +31,7 @@ vim.opt.pumheight = 10                                           -- Height of th
 vim.opt.relativenumber = true                                    -- Show relative numberline.
 vim.opt.shiftwidth = 4                                           -- Number of space inserted for indentation.
 vim.opt.showmode = false                                         -- Disable showing modes in command line.
-vim.opt.showtabline = 2                                          -- always display tabline.
+-- vim.opt.showtabline = 2                                          -- always display tabline.
 vim.opt.signcolumn = "yes"                                       -- Always show the sign column.
 vim.opt.smartcase = true                                         -- Case sensitivie searching.
 vim.opt.smartindent = false                                      -- Smarter autoindentation.
