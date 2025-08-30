@@ -1321,6 +1321,7 @@ return {
                 "sql",
                 "csv",
                 "tmux",
+                "bash",
             },
 
             highlight = {
@@ -1462,6 +1463,7 @@ return {
                 "cssls",
                 "eslint",
                 "html",
+                "bashls",
             }
         },
         event = "BufReadPre",
@@ -1480,6 +1482,7 @@ return {
             utils_lsp.setup("eslint")
             utils_lsp.setup("html")
             utils_lsp.setup("cssls")
+            utils_lsp.setup("bashls")
         end,
     },
 
