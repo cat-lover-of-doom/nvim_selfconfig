@@ -1,0 +1,21 @@
+local o = vim.opt
+o.number = true
+o.relativenumber = true
+o.termguicolors = true
+o.signcolumn = "yes"
+o.expandtab = true
+o.shiftwidth = 2
+o.tabstop = 2
+o.smartindent = true
+o.mouse = "a"
+o.undofile = true
+o.ignorecase = true
+o.smartcase = true
+o.updatetime = 300
+o.wrap = false
+o.expandtab = true
+o.termguicolors = true
+o.scrolloff = 1000
+-- o.signcolumn = "yes"
+-- minimal, no fancy globals/autocmd frameworks
+vim.g.VimuxCloseOnExit = 1
