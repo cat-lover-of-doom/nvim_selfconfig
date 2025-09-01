@@ -11,20 +11,10 @@ vim.keymap.set({"n", "x"}, "X", '"_X', { silent = true })
 vim.keymap.set("x", "p", "P", { silent = true })
 vim.keymap.set("x", "P", "p", { silent = true })
 
--- Yank to system clipboard
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
-vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
-
--- Paste from system clipboard
-vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste after from clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste before from clipboard" })
-
-
 -- QoL: navigation/selection
 vim.keymap.set("n", "0", "^", { silent = true })
 vim.keymap.set("n", "gg", "gg0", { silent = true })
 vim.keymap.set("n", "G", "G$", { silent = true })
-vim.keymap.set("n", "<C-a>", "gg0vG$", { silent = true, desc = "Select all" })
 
 -- QoL: indent keep selection
 vim.keymap.set("x", "<Tab>", ">gv", { silent = true })
@@ -36,14 +26,24 @@ vim.keymap.set("x", "<", "<gv", { silent = true })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { silent = true })
 
 -- Window movement/resizing (fallbacks)
-vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
+-- vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
+-- vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
+-- vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
+-- vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
+-- Buffer navigation
+vim.keymap.set("n", "<A-Down>", ":bn<CR>", {silent = true, desc = "Next Buffer"})
+vim.keymap.set("n", "<A-Up>", ":bp<CR>", {silent = true, desc = "Next Buffer"})
+
 vim.keymap.set("n", "<C-Up>", "<cmd>resize -2<CR>", { silent = true })
 vim.keymap.set("n", "<C-Down>", "<cmd>resize +2<CR>", { silent = true })
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { silent = true })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { silent = true })
+
+vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>",  { silent = true })
+vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { silent = true })
+vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { silent = true })
+vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { silent = true })
+vim.keymap.set("n", "<C-\\>", "<cmd>TmuxNavigatePrevious<CR>", { silent = true })
 
 -- Quick close for help/quickfix/man
 vim.api.nvim_create_autocmd("FileType", {
@@ -60,31 +60,6 @@ vim.keymap.set("n", "<leader>s", "<CMD>Oil<CR>", { silent = true, desc = "File b
 
 -- Undotree
 vim.keymap.set("n", "<leader>z", "<cmd>UndotreeToggle<CR>", { silent = true, desc = "Undotree" })
-
--- Vimux (no custom helpers; use built-ins)
-vim.keymap.set("n", "<leader>tt",
-  function()
-    if vim.g.VimuxRunnerIndex == nil then
-      vim.cmd("VimuxOpenRunner")
-    else
-      vim.cmd("VimuxTogglePane")
-    end
-  end,
-  { silent = true, desc = "Vimux toggle" })
-vim.keymap.set("n", "<leader>tp", "<cmd>VimuxPromptCommand<CR>", { silent = true, desc = "Vimux prompt" })
-vim.keymap.set("n", "<leader>t;", "<cmd>VimuxRunLastCommand<CR>", { silent = true, desc = "Vimux last" })
--- TODO consider using the VIM :make command
-vim.keymap.set("n", "<leader>tm", "<cmd>VimuxRunCommand make<CR>", { silent = true, desc = "Vimux make" })
-vim.keymap.set("n", "<leader>ts", "<cmd>lua VimuxWriteCommand()<CR>", { silent = true, desc = "Vimux make" })
-vim.keymap.set("n", "<leader>tr", "<cmd>lua VimuxExecCommand()<CR>", { silent = true, desc = "Vimux make" })
--- Orientation/height are global options; if you still want a toggle, keep this simple variant:
-vim.keymap.set("n", "<leader>to", function()
-  if vim.g.VimuxOrientation == "v" then
-    vim.g.VimuxOrientation = "h"; vim.g.VimuxHeight = "40%"
-  else
-    vim.g.VimuxOrientation = "v"; vim.g.VimuxHeight = "20%"
-  end
-end, { silent = true, desc = "Vimux toggle orientation" })
 
 -- mini.pick nvim 
 vim.keymap.set("n", "<leader>ff", function() require("mini.pick").builtin.files() end, { silent = true, desc = "Find files" })
@@ -114,6 +89,3 @@ vim.keymap.set("v", "<leader>gs", function() gs.stage_hunk({ vim.fn.line("."), v
 vim.keymap.set("v", "<leader>gr", function() gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end,
   { desc = "Reset selection" })
 
--- Buffer navigation
-vim.keymap.set("n", "<A-Down>", ":bn<CR>", {silent = true, desc = "Next Buffer"})
-vim.keymap.set("n", "<A-Up>", ":bp<CR>", {silent = true, desc = "Next Buffer"})

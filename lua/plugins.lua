@@ -229,15 +229,12 @@ return {
   -- Vimux
   ---------------------------------------------------------------------------
   {
-    "preservim/vimux",
-    lazy = false,
-  },
-  {
   "christoomey/vim-tmux-navigator",
   lazy = false,     -- ensure it’s always on
-  -- uses default keys: <C-h> <C-j> <C-k> <C-l> <C-\>
+  init = function()
+    vim.g.tmux_navigator_no_mappings = 1
+  end,
   },
-
   {
     "folke/which-key.nvim",
     event = "VeryLazy",

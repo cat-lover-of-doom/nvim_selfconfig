@@ -16,6 +16,4 @@ o.wrap = false
 o.expandtab = true
 o.termguicolors = true
 o.scrolloff = 1000
--- o.signcolumn = "yes"
--- minimal, no fancy globals/autocmd frameworks
-vim.g.VimuxCloseOnExit = 1
+o.clipboard = "unnamedplus"
