@@ -114,3 +114,6 @@ vim.keymap.set("v", "<leader>gs", function() gs.stage_hunk({ vim.fn.line("."), v
 vim.keymap.set("v", "<leader>gr", function() gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end,
   { desc = "Reset selection" })
 
+-- Buffer navigation
+vim.keymap.set("n", "<A-Down>", ":bn<CR>", {silent = true, desc = "Next Buffer"})
+vim.keymap.set("n", "<A-Up>", ":bp<CR>", {silent = true, desc = "Next Buffer"})
