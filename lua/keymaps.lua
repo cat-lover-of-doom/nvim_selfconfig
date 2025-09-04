@@ -1,6 +1,9 @@
 -- Leader
 vim.g.mapleader = " "
 
+-- In terminal mode: make <Esc> go back to normal mode
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
 -- QoL: do not yank on change/delete
 vim.keymap.set({ "n", "x" }, "s", '"_s', { silent = true })
 vim.keymap.set({ "n", "x" }, "S", '"_S', { silent = true })
@@ -52,13 +55,21 @@ if vim.fn.exists(":TmuxNavigateLeft") == 2 then
   vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { silent = true })
   vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { silent = true })
   vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { silent = true })
-  vim.keymap.set("n", "<C-\\>", "<cmd>TmuxNavigatePrevious<CR>", { silent = true })
+  vim.keymap.set("t", "<C-h>", "<cmd>TmuxNavigateLeft<CR>",  { silent = true })
+  vim.keymap.set("t", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { silent = true })
+  vim.keymap.set("t", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { silent = true })
+  vim.keymap.set("t", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { silent = true })
 else
   vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
   vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
   vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
   vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
+  vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-w>h]])
+  vim.keymap.set("t", "<C-j>", [[<C-\><C-n><C-w>j]])
+  vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-w>k]])
+  vim.keymap.set("t", "<C-l>", [[<C-\><C-n><C-w>l]])
 end
+
 
 -- Buffer navigation
 vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Next Buffer" })
@@ -72,17 +83,25 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- term
+vim.keymap.set("n", "<leader>tt", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd("J")
+  vim.api.nvim_win_set_height(0, 10)
+end)
+
 -- -------------------------------------------------------------------
 -- File explorers
 -- -------------------------------------------------------------------
 -- <leader>s => Yazi (fallback: netrw :Explore)
 vim.keymap.set("n", "<leader>s", function()
-  if has("Oil") then
+  if has("oil") then
     vim.cmd("Oil")
   else
     vim.cmd("Explore")
   end
-end, { silent = true, desc = "File explorer (Yazi | fallback: netrw)" })
+end, { silent = true, desc = "File explorer" })
 
 -- -------------------------------------------------------------------
 -- Telescope core mappings with fallbacks
@@ -140,3 +159,4 @@ do
     end, { desc = "Reset selection" })
   end
 end
+

@@ -1,6 +1,6 @@
 # TODO
 - have fun!
-- setup vim terminal
 - make splits
-- run on save
+- make
 - e, norm, :., source %, make
+- cdo
