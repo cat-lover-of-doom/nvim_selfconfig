@@ -21,6 +21,10 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       default_file_explorer = true,
+      -- works if you have a trash utility installed 
+      skip_confirm_for_simple_edits = true,
+      delete_to_trah = true,
+      -- more options 
       view_options = { show_hidden = true },
       use_default_keymaps = false,
       keymaps = { ["q"] = "actions.close",
@@ -251,13 +255,27 @@ return {
       })
     end,
   },
-
   {
-    "echasnovski/mini.pick",
-    version = false,
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = "Telescope",
+    event = "BufReadPre",
     config = function()
-      local pick = require("mini.pick")
-      pick.setup()
+      local t = require("telescope")
+      t.setup({
+        defaults = {
+          mappings = {
+            i = {
+              ["<C-j>"] = require("telescope.actions").move_selection_next,
+              ["<C-k>"] = require("telescope.actions").move_selection_previous,
+              ["<C-s>"] = require("telescope.actions").close,
+            },
+          },
+        },
+        pickers = {
+          find_files = { hidden = true },
+        },
+      })
     end,
   },
 
