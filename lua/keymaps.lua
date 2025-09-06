@@ -1,162 +1,109 @@
 -- Leader
 vim.g.mapleader = " "
 
--- In terminal mode: make <Esc> go back to normal mode
-vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
-
--- QoL: do not yank on change/delete
-vim.keymap.set({ "n", "x" }, "s", '"_s', { silent = true })
-vim.keymap.set({ "n", "x" }, "S", '"_S', { silent = true })
-vim.keymap.set({"n", "x"}, "x", '"_x', { silent = true })
-vim.keymap.set({"n", "x"}, "X", '"_X', { silent = true })
-
--- QoL: visual paste swap
-vim.keymap.set("x", "p", "P", { silent = true })
-vim.keymap.set("x", "P", "p", { silent = true })
-
--- QoL: navigation/selection
-vim.keymap.set("n", "0", "^", { silent = true })
-vim.keymap.set("n", "gg", "gg0", { silent = true })
-vim.keymap.set("n", "G", "G$", { silent = true })
-
--- QoL: indent keep selection
-vim.keymap.set("x", "<Tab>", ">gv", { silent = true })
-vim.keymap.set("x", "<S-Tab>", "<gv", { silent = true })
-vim.keymap.set("x", ">", ">gv", { silent = true })
-vim.keymap.set("x", "<", "<gv", { silent = true })
-
--- Clear search with Esc
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { silent = true })
-
--- -------------------------------------------------------------------
--- Smart helpers for fallbacks (Telescope/Yazi may not be installed)
--- -------------------------------------------------------------------
--- [ADDED]
-local function has(mod)
-  local ok = pcall(require, mod)
-  return ok
+-- ── Floating terminal utilities (provided by autocmd.lua) ────────────────────
+-- Safe require: if the module isn't there, the mappings no-op gracefully.
+local term_ok, term = pcall(require, "autocmd")
+if term_ok then
+  vim.keymap.set("n", "<leader>tt", term.toggle,        { desc = "Terminal: toggle floating" })
+  vim.keymap.set("n", "<leader>ts", term.store,         { desc = "Terminal: store command" })
+  vim.keymap.set("n", "<leader>tr", term.run_stored,    { desc = "Terminal: run stored" })
+  vim.keymap.set("n", "<leader>t|", term.send_to_tmux,  { desc = "Terminal: send stored to tmux" })
+  vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]],          { desc = "Terminal: exit insert" })
 end
 
--- Grep fallback: prompt and run :vimgrep then open quickfix
--- [ADDED]
-local function naive_live_grep()
-  local input = vim.fn.input("Grep > ")
-  if input == nil or input == "" then return end
-  vim.cmd("silent vimgrep /" .. input .. "/gj **/*")
-  vim.cmd("copen")
+-- ── Window navigation (tmux-aware; falls back to Vim splits) ─────────────────
+local function map_nav(lhs, rhs, label)
+  vim.keymap.set("n", lhs, rhs, { silent = true, desc = label })
+  vim.keymap.set("t", lhs, [[<C-\><C-n>]] .. rhs, { silent = true, desc = label })
 end
-
--- -------------------------------------------------------------------
--- Window/Buffer movement (fallbacks if tmux-navigator missing)
--- -------------------------------------------------------------------
--- [CHANGED] use tmux navigator if present; else use Vim window moves
 if vim.fn.exists(":TmuxNavigateLeft") == 2 then
-  vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>",  { silent = true })
-  vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { silent = true })
-  vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { silent = true })
-  vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { silent = true })
-  vim.keymap.set("t", "<C-h>", "<cmd>TmuxNavigateLeft<CR>",  { silent = true })
-  vim.keymap.set("t", "<C-j>", "<cmd>TmuxNavigateDown<CR>",  { silent = true })
-  vim.keymap.set("t", "<C-k>", "<cmd>TmuxNavigateUp<CR>",    { silent = true })
-  vim.keymap.set("t", "<C-l>", "<cmd>TmuxNavigateRight<CR>", { silent = true })
+  map_nav("<C-h>", "<cmd>TmuxNavigateLeft<CR>",  "Window: left")
+  map_nav("<C-j>", "<cmd>TmuxNavigateDown<CR>",  "Window: down")
+  map_nav("<C-k>", "<cmd>TmuxNavigateUp<CR>",    "Window: up")
+  map_nav("<C-l>", "<cmd>TmuxNavigateRight<CR>", "Window: right")
 else
-  vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
-  vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
-  vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
-  vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
-  vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-w>h]])
-  vim.keymap.set("t", "<C-j>", [[<C-\><C-n><C-w>j]])
-  vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-w>k]])
-  vim.keymap.set("t", "<C-l>", [[<C-\><C-n><C-w>l]])
+  map_nav("<C-h>", "<C-w>h", "Window: left")
+  map_nav("<C-j>", "<C-w>j", "Window: down")
+  map_nav("<C-k>", "<C-w>k", "Window: up")
+  map_nav("<C-l>", "<C-w>l", "Window: right")
 end
 
+-- ── Buffers ──────────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Buffer: next" })
+vim.keymap.set("n", "<A-Up>",   ":bp<CR>", { silent = true, desc = "Buffer: previous" })
 
--- Buffer navigation
-vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Next Buffer" })
-vim.keymap.set("n", "<A-Up>",   ":bp<CR>", { silent = true, desc = "Prev Buffer" })
+-- ── Editing QoL ──────────────────────────────────────────────────────────────
+vim.keymap.set({ "n","x" }, "s",   '"_s',    { desc = "Edit: subst (blackhole)" })
+vim.keymap.set({ "n","x" }, "S",   '"_S',    { desc = "Edit: S (blackhole)" })
+vim.keymap.set({ "n","x" }, "x",   '"_x',    { desc = "Edit: x (blackhole)" })
+vim.keymap.set({ "n","x" }, "X",   '"_X',    { desc = "Edit: X (blackhole)" })
+vim.keymap.set("x", "p", "P",      { desc = "Edit: keep default reg" })
+vim.keymap.set("x", "P", "p",      { desc = "Edit: swap paste" })
+vim.keymap.set("n", "0", "^",      { desc = "Move: smart line start" })
+vim.keymap.set("n", "gg", "gg0",   { desc = "Move: file top" })
+vim.keymap.set("n", "G", "G$",     { desc = "Move: file bottom" })
+vim.keymap.set("x", "<Tab>", ">gv",{ desc = "Indent: right" })
+vim.keymap.set("x", "<S-Tab>", "<gv", { desc = "Indent: left" })
+vim.keymap.set("x", ">", ">gv",    { desc = "Indent: right" })
+vim.keymap.set("x", "<", "<gv",    { desc = "Indent: left" })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear highlights" })
 
--- Quick close for help/quickfix/man
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "help", "qf", "man" },
+-- ── Files (Oil → fallback to netrw) ─────────────────────────────────────────
+local function has(mod) return pcall(require, mod) end
+vim.keymap.set("n", "<leader>s", function()
+  if has("oil") then vim.cmd("Oil") else vim.cmd("Explore") end
+end, { desc = "Files: explorer" })
+
+-- ── Search (Telescope with sane fallbacks) ───────────────────────────────────
+local function naive_live_grep()
+  local q = vim.fn.input("Grep > "); if q == "" then return end
+  vim.cmd("silent vimgrep /" .. q .. "/gj **/*"); vim.cmd("copen")
+end
+vim.keymap.set("n", "<leader>ff", function()
+  if has("telescope.builtin") then require("telescope.builtin").find_files() else vim.cmd("Explore") end
+end, { desc = "Search: files" })
+vim.keymap.set("n", "<leader>fg", function()
+  if has("telescope.builtin") then require("telescope.builtin").live_grep() else naive_live_grep() end
+end, { desc = "Search: live grep" })
+vim.keymap.set("n", "<leader>fb", function()
+  if has("telescope.builtin") then require("telescope.builtin").buffers() else vim.cmd("ls") end
+end, { desc = "Search: buffers" })
+
+-- ── GitSigns (only if available) ────────────────────────────────────────────
+local ok_gs, gs = pcall(require, "gitsigns")
+if ok_gs then
+  vim.keymap.set("n", "]c", gs.next_hunk, { desc = "Git: next hunk" })
+  vim.keymap.set("n", "[c", gs.prev_hunk, { desc = "Git: prev hunk" })
+  vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Git: preview hunk" })
+  vim.keymap.set("n", "<leader>gr", gs.reset_hunk,   { desc = "Git: reset hunk" })
+  vim.keymap.set("n", "<leader>gs", gs.stage_hunk,   { desc = "Git: stage hunk" })
+  vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Git: undo stage" })
+  vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Git: toggle blame" })
+  vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Git: diff vs index" })
+end
+
+-- ── LSP buffer-local maps (set on attach) ────────────────────────────────────
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
   callback = function(ev)
-    vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = ev.buf, silent = true })
+    local o = { buffer = ev.buf, silent = true }
+    -- diagnostics
+    vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, o)   ---@desc Diagnostics: prev
+    vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count =  1 }) end, o)   ---@desc Diagnostics: next
+    vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, o)                     ---@desc LSP: line diagnostics
+    vim.keymap.set("n", "<leader>li", "<cmd>LspInfo<CR>", o)                             ---@desc LSP: info
+    -- actions
+    vim.keymap.set({ "n","v" }, "<leader>la", vim.lsp.buf.code_action, o)               ---@desc LSP: code action
+    vim.keymap.set({ "n","v" }, "<leader>lf", function() vim.lsp.buf.format({ async=false }) end, o) ---@desc LSP: format
+    vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, o)                             ---@desc LSP: rename
+    -- goto / help
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, o)                                 ---@desc LSP: definition
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, o)                                ---@desc LSP: declaration
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, o)                                 ---@desc LSP: references
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, o)                             ---@desc LSP: implementation
+    vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, o)                            ---@desc LSP: type def
+    vim.keymap.set("n", "gh", vim.lsp.buf.hover, o)                                      ---@desc LSP: hover
+    vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, o)                             ---@desc LSP: signature
   end,
 })
-
--- term
-vim.keymap.set("n", "<leader>tt", function()
-  vim.cmd.vnew()
-  vim.cmd.term()
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, 10)
-end)
-
--- -------------------------------------------------------------------
--- File explorers
--- -------------------------------------------------------------------
--- <leader>s => Yazi (fallback: netrw :Explore)
-vim.keymap.set("n", "<leader>s", function()
-  if has("oil") then
-    vim.cmd("Oil")
-  else
-    vim.cmd("Explore")
-  end
-end, { silent = true, desc = "File explorer" })
-
--- -------------------------------------------------------------------
--- Telescope core mappings with fallbacks
--- -------------------------------------------------------------------
--- [CHANGED]
-vim.keymap.set("n", "<leader>ff", function()
-  if has("telescope.builtin") then
-    require("telescope.builtin").find_files()
-  else
-    vim.cmd("Explore")  -- fallback
-  end
-end, { silent = true, desc = "Find files" })
-
--- [CHANGED]
-vim.keymap.set("n", "<leader>fg", function()
-  if has("telescope.builtin") then
-    require("telescope.builtin").live_grep()
-  else
-    naive_live_grep()
-  end
-end, { silent = true, desc = "Live grep" })
-
--- [CHANGED]
-vim.keymap.set("n", "<leader>fb", function()
-  if has("telescope.builtin") then
-    require("telescope.builtin").buffers()
-  else
-    vim.cmd("ls")  -- fallback
-  end
-end, { silent = true, desc = "Buffers" })
-
--- Undotree
-vim.keymap.set("n", "<leader>z", "<cmd>UndotreeToggle<CR>", { silent = true, desc = "Undotree" })
-
--- -------------------------------------------------------------------
--- GitSigns (safe if plugin missing)
--- -------------------------------------------------------------------
--- [CHANGED]
-do
-  local ok, gs = pcall(require, "gitsigns")
-  if ok then
-    vim.keymap.set("n", "]c", gs.next_hunk, { desc = "Next hunk" })
-    vim.keymap.set("n", "[c", gs.prev_hunk, { desc = "Prev hunk" })
-    vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
-    vim.keymap.set("n", "<leader>gr", gs.reset_hunk,   { desc = "Reset hunk" })
-    vim.keymap.set("n", "<leader>gs", gs.stage_hunk,   { desc = "Stage hunk" })
-    vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-    vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Toggle line blame" })
-    vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Diff against index" })
-    vim.keymap.set("v", "<leader>gs", function()
-      gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-    end, { desc = "Stage selection" })
-    vim.keymap.set("v", "<leader>gr", function()
-      gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-    end, { desc = "Reset selection" })
-  end
-end
-
