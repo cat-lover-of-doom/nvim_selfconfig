@@ -31,7 +31,7 @@ end
 
 -- ── Buffers ──────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Buffer: next" })
-vim.keymap.set("n", "<A-Up>",   ":bp<CR>", { silent = true, desc = "Buffer: previous" })
+vim.keymap.set("n", "<C-Up>",   ":bp<CR>", { silent = true, desc = "Buffer: previous" })
 
 -- ── Editing QoL ──────────────────────────────────────────────────────────────
 vim.keymap.set({ "n","x" }, "s",   '"_s',    { desc = "Edit: subst (blackhole)" })

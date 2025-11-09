@@ -43,12 +43,44 @@ function M.toggle()
   vim.keymap.set("n", "q",     M.toggle, { buffer = state.buf, nowait = true, silent = true, desc = "Close floating terminal" })
 end
 
+local function read_stored()
+  local f = io.open(cmdfile, "r")
+  if not f then return "" end
+  local c = (f:read("*a") or ""):gsub("^%s+", ""):gsub("%s+$", "")
+  f:close()
+  return c
+end
+
+local function write_stored(c)
+  local f = io.open(cmdfile, "w")
+  if not f then return false end
+  f:write(c)
+  f:close()
+  return true
+end
+
 function M.store()
-  local c = vim.fn.input("Command: ")
-  if c == "" then return end
-  local f = io.open(cmdfile, "w"); if not f then return end
-  f:write(c); f:close()
-  print("Stored:", c)
+  local prev = read_stored()
+  -- Pre-fill with existing command; user can edit in-place
+  local c = vim.fn.input("Command: ", prev)
+  if not c then return end
+  c = c:gsub("^%s+", ""):gsub("%s+$", "")
+
+  if c == "" then
+    if prev == "" then
+      print("Nothing to store.")
+    else
+      print("Unchanged.")
+    end
+    return
+  end
+  if c == prev then
+    print("Unchanged.")
+    return
+  end
+  if write_stored(c) then
+    print("Stored:", c)
+  end
 end
 
 function M.run_stored()
