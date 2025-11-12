@@ -240,22 +240,6 @@ return {
   end,
   },
   {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    config = function()
-      local wk = require("which-key")
-
-      wk.setup({
-        plugins = {
-          spelling = true,
-        },
-        win = {
-          border = "rounded", -- or "single" | "none"
-        },
-      })
-    end,
-  },
-  {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     cmd = "Telescope",
@@ -283,8 +267,8 @@ return {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },
     opts = {
-      numhl = true,
-      signcolumn = false,
+      numhl = false,
+      signcolumn = true,
     },
     config = function(_, opts)
       require("gitsigns").setup(opts)

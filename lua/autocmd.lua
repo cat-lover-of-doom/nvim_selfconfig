@@ -100,4 +100,17 @@ function M.send_to_tmux()
   vim.notify("Sent to tmux: " .. c)
 end
 
+-- Sets colors to line numbers Above, Current and Below  in this order
+function M.LineNumberColors()
+    vim.api.nvim_set_hl(0, 'LineNrAbove', { fg='#a6adc8', bold=false })
+    vim.api.nvim_set_hl(0, 'LineNr', { fg='#cdd6f4', bold=true })
+    vim.api.nvim_set_hl(0, 'LineNrBelow', { fg='#a6adc8', bold=false })
+end
+
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
+    callback = function()
+        M.LineNumberColors()
+    end,
+})
+
 return M
