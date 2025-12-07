@@ -8,26 +8,17 @@ if term_ok then
   vim.keymap.set("n", "<leader>tt", term.toggle,        { desc = "Terminal: toggle floating" })
   vim.keymap.set("n", "<leader>ts", term.store,         { desc = "Terminal: store command" })
   vim.keymap.set("n", "<leader>tr", term.run_stored,    { desc = "Terminal: run stored" })
-  vim.keymap.set("n", "<leader>t|", term.send_to_tmux,  { desc = "Terminal: send stored to tmux" })
   vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]],          { desc = "Terminal: exit insert" })
 end
 
--- ── Window navigation (tmux-aware; falls back to Vim splits) ─────────────────
 local function map_nav(lhs, rhs, label)
   vim.keymap.set("n", lhs, rhs, { silent = true, desc = label })
   vim.keymap.set("t", lhs, [[<C-\><C-n>]] .. rhs, { silent = true, desc = label })
 end
-if vim.fn.exists(":TmuxNavigateLeft") == 2 then
-  map_nav("<C-h>", "<cmd>TmuxNavigateLeft<CR>",  "Window: left")
-  map_nav("<C-j>", "<cmd>TmuxNavigateDown<CR>",  "Window: down")
-  map_nav("<C-k>", "<cmd>TmuxNavigateUp<CR>",    "Window: up")
-  map_nav("<C-l>", "<cmd>TmuxNavigateRight<CR>", "Window: right")
-else
-  map_nav("<C-h>", "<C-w>h", "Window: left")
-  map_nav("<C-j>", "<C-w>j", "Window: down")
-  map_nav("<C-k>", "<C-w>k", "Window: up")
-  map_nav("<C-l>", "<C-w>l", "Window: right")
-end
+map_nav("<C-h>", "<C-w>h", "Window: left")
+map_nav("<C-j>", "<C-w>j", "Window: down")
+map_nav("<C-k>", "<C-w>k", "Window: up")
+map_nav("<C-l>", "<C-w>l", "Window: right")
 
 -- ── Buffers ──────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Buffer: next" })
@@ -48,6 +39,7 @@ vim.keymap.set("x", "<S-Tab>", "<gv", { desc = "Indent: left" })
 vim.keymap.set("x", ">", ">gv",    { desc = "Indent: right" })
 vim.keymap.set("x", "<", "<gv",    { desc = "Indent: left" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear highlights" })
+vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggle"})
 
 -- ── Files (Oil → fallback to netrw) ─────────────────────────────────────────
 local function has(mod) return pcall(require, mod) end

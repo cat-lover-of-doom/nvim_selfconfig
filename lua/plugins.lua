@@ -208,7 +208,6 @@ return {
           "json",
           "sql",
           "csv",
-          "tmux",
           "bash",
         },
         highlight = { enable = true },
@@ -232,13 +231,6 @@ return {
   ---------------------------------------------------------------------------
   -- Vimux
   ---------------------------------------------------------------------------
-  {
-  "christoomey/vim-tmux-navigator",
-  lazy = false,     -- ensure it’s always on
-  init = function()
-    vim.g.tmux_navigator_no_mappings = 1
-  end,
-  },
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },

@@ -92,14 +92,6 @@ function M.run_stored()
   vim.api.nvim_chan_send(state.job, c .. "\n")
 end
 
-function M.send_to_tmux()
-  local f = io.open(cmdfile, "r"); if not f then return print("No stored command") end
-  local c = (f:read("*a") or ""):gsub("^%s+", ""):gsub("%s+$", ""); f:close()
-  if c == "" then return print("Stored command is empty") end
-  vim.fn.system({ "tmux", "new-window", c })
-  vim.notify("Sent to tmux: " .. c)
-end
-
 -- Sets colors to line numbers Above, Current and Below  in this order
 function M.LineNumberColors()
     vim.api.nvim_set_hl(0, 'LineNrAbove', { fg='#a6adc8', bold=false })
@@ -111,6 +103,31 @@ vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
     callback = function()
         M.LineNumberColors()
     end,
+})
+
+local grp = vim.api.nvim_create_augroup("remember_folds", { clear = true })
+
+local function is_text_buffer(buf)
+  return vim.api.nvim_buf_get_option(buf, "buftype") == ""
+     and vim.api.nvim_buf_get_option(buf, "filetype") ~= ""
+end
+
+vim.api.nvim_create_autocmd("BufWinLeave", {
+  group = grp,
+  callback = function(args)
+    if is_text_buffer(args.buf) then
+      vim.cmd("mkview")
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  group = grp,
+  callback = function(args)
+    if is_text_buffer(args.buf) then
+      vim.cmd("silent! loadview")
+    end
+  end,
 })
 
 return M
