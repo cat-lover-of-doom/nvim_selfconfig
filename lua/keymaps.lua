@@ -40,6 +40,7 @@ vim.keymap.set("x", ">", ">gv", { desc = "Indent: right" })
 vim.keymap.set("x", "<", "<gv", { desc = "Indent: left" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear highlights" })
 vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggle" })
+vim.keymap.set("n", "<leader>h", ":WhichKey<CR>", { desc = "Show help" })
 
 -- ── Files (Oil → fallback to netrw) ─────────────────────────────────────────
 local function has(mod) return pcall(require, mod) end

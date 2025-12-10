@@ -17,3 +17,4 @@ o.expandtab = true
 o.termguicolors = true
 o.scrolloff = 1000
 o.clipboard = "unnamedplus"
+
