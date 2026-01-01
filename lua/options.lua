@@ -17,4 +17,7 @@ o.expandtab = true
 o.termguicolors = true
 o.scrolloff = 1000
 o.clipboard = "unnamedplus"
+vim.opt.encoding = "utf-8"
+
+vim.opt.langmap = "ñ\\;,Ñ\\:,-/,_?,´`"
 

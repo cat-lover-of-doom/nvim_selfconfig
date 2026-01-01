@@ -42,6 +42,23 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear
 vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggle" })
 vim.keymap.set("n", "<leader>h", ":WhichKey<CR>", { desc = "Show help" })
 
+vim.keymap.set('n', '<leader>|', ":bp<CR>")
+for i = 1, 9 do
+  vim.keymap.set('n', '<leader>' .. i, function()
+    local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+    if bufs[i] then
+      vim.cmd('buffer ' .. bufs[i].bufnr)
+    end
+  end, { desc = 'Go to buffer ' .. i })
+end
+
+vim.keymap.set('n', '<leader>0', function()
+  local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+  if #bufs > 0 then
+    vim.cmd('buffer ' .. bufs[#bufs].bufnr)
+  end
+end, { desc = 'Go to last buffer' })
+
 -- ── Files (Oil → fallback to netrw) ─────────────────────────────────────────
 local function has(mod) return pcall(require, mod) end
 vim.keymap.set("n", "<leader>s", function()

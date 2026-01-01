@@ -135,6 +135,13 @@ return {
                             settings = { Lua = { diagnostics = { globals = { "vim" } } } },
                         })
                     end,
+                    ["cmakelang"] = function()
+                        lspconfig.lua_ls.setup({
+                            on_attach = on_attach,
+                            capabilities = caps,
+                            Pattern = { "CMakeLists.txt", "*.cmake" },
+                        })
+                    end,
                 },
             })
         end,
