@@ -18,8 +18,3 @@ o.termguicolors = true
 o.scrolloff = 1000
 o.clipboard = "unnamedplus"
 vim.opt.encoding = "utf-8"
-
-vim.opt.langmap = table.concat({
-  [[1234567890;!"#$%&/()=]],
-  [[!"#$%&/()=;1234567890]],
-}, ",")

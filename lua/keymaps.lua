@@ -42,6 +42,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear
 vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggle" })
 vim.keymap.set("n", "<leader>h", ":WhichKey<CR>", { desc = "Show help" })
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })     -- forward delete
+vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true })     -- forward delete
 
 vim.keymap.set('n', '<leader>|', ":bp<CR>")
 for i = 1, 9 do
