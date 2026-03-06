@@ -17,4 +17,5 @@ o.expandtab = true
 o.termguicolors = true
 o.scrolloff = 1000
 o.clipboard = "unnamedplus"
-vim.opt.encoding = "utf-8"
+o.encoding = "utf-8"
+o.shada:append("!")

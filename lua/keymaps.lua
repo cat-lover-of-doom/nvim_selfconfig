@@ -43,8 +43,10 @@ vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggl
 vim.keymap.set("n", "<leader>h", ":WhichKey<CR>", { desc = "Show help" })
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })     -- forward delete
 vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true })     -- forward delete
+vim.keymap.set("n", "|", "q", { noremap = true })
+vim.keymap.set("n", "q", "@", { noremap = true })
 
-vim.keymap.set('n', '<leader>|', ":bp<CR>")
+vim.keymap.set('n', '<leader><leader>', ":bp<CR>")
 for i = 1, 9 do
   vim.keymap.set('n', '<leader>' .. i, function()
     local bufs = vim.fn.getbufinfo({ buflisted = 1 })

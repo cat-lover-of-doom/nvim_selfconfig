@@ -23,3 +23,6 @@ ctrl-h control-u control-w cotrol-d
 control-j
 control-v
 ctrl-o
+
+whitespace
+autopairs
