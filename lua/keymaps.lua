@@ -46,7 +46,7 @@ vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true })     -- forward delete
 vim.keymap.set("n", "|", "q", { noremap = true })
 vim.keymap.set("n", "q", "@", { noremap = true })
 
-vim.keymap.set('n', '<leader><leader>', ":bp<CR>")
+vim.keymap.set('n', '<leader><leader>', "<C-^>")
 for i = 1, 9 do
   vim.keymap.set('n', '<leader>' .. i, function()
     local bufs = vim.fn.getbufinfo({ buflisted = 1 })
