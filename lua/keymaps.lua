@@ -75,8 +75,11 @@ local function naive_live_grep()
     vim.cmd("silent vimgrep /" .. q .. "/gj **/*"); vim.cmd("copen")
 end
 vim.keymap.set("n", "<leader>ff", function()
-    if has("telescope.builtin") then require("telescope.builtin").find_files() else vim.cmd("Explore") end
+    if has("telescope.builtin") then require("telescope.builtin").find_files({ hidden = false }) else vim.cmd("Explore") end
 end, { desc = "Search: files" })
+vim.keymap.set("n", "<leader>fF", function()
+    if has("telescope.builtin") then require("telescope.builtin").find_files({ hidden = true }) else vim.cmd("Explore") end
+end, { desc = "Search: files (hidden)" })
 vim.keymap.set("n", "<leader>fg", function()
     if has("telescope.builtin") then require("telescope.builtin").live_grep() else naive_live_grep() end
 end, { desc = "Search: live grep" })
