@@ -280,6 +280,7 @@ return {
         opts = {
             preset = "modern",
             triggers = {
+                { "<auto>", mode = "nixsotc" },
             },
             win = {
                 wo = {
