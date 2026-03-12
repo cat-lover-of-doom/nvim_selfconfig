@@ -106,9 +106,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(ev)
         local o = { buffer = ev.buf, silent = true }
         -- diagnostics
-        vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end,
+        vim.keymap.set("n", "<leader>lN", function() vim.diagnostic.jump({ count = -1 }) end,
             { buffer = ev.buf, silent = true, desc = "Prev diagnostic" })
-        vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end,
+        vim.keymap.set("n", "<leader>ln", function() vim.diagnostic.jump({ count = 1 }) end,
             { buffer = ev.buf, silent = true, desc = "Next diagnostic" })
         vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, { buffer = ev.buf, silent = true, desc = "Lsp expand error" })
         vim.keymap.set("n", "<leader>li", "<cmd>LspInfo<CR>", { buffer = ev.buf, silent = true, desc = "Lsp Info" })
