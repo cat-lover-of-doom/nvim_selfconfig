@@ -43,8 +43,6 @@ vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", { desc = "undotree toggl
 vim.keymap.set("n", "<leader>h", ":WhichKey<CR>", { desc = "Show help" })
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })     -- forward delete
 vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true })     -- forward delete
-vim.keymap.set("n", "|", "q", { noremap = true })
-vim.keymap.set("n", "q", "@", { noremap = true })
 
 vim.keymap.set('n', '<leader><leader>', "<C-^>")
 for i = 1, 9 do
@@ -100,6 +98,11 @@ if ok_gs then
     vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Git: diff vs index" })
 end
 
+-- ── Quickfix ─────────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>qo", "<cmd>copen<CR>",  { silent = true, desc = "Quickfix: open" })
+vim.keymap.set("n", "<leader>qn", "<cmd>cnext<CR>",  { silent = true, desc = "Quickfix: next" })
+vim.keymap.set("n", "<leader>qp", "<cmd>cprev<CR>",  { silent = true, desc = "Quickfix: prev" })
+
 -- ── LSP buffer-local maps (set on attach) ────────────────────────────────────
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
@@ -110,6 +113,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
             { buffer = ev.buf, silent = true, desc = "Prev diagnostic" })
         vim.keymap.set("n", "<leader>ln", function() vim.diagnostic.jump({ count = 1 }) end,
             { buffer = ev.buf, silent = true, desc = "Next diagnostic" })
+        vim.keymap.set("n", "<leader>le", function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR }) end,
+            { buffer = ev.buf, silent = true, desc = "Next error" })
         vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, { buffer = ev.buf, silent = true, desc = "Lsp expand error" })
         vim.keymap.set("n", "<leader>li", "<cmd>LspInfo<CR>", { buffer = ev.buf, silent = true, desc = "Lsp Info" })
         -- actions
