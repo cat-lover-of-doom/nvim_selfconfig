@@ -72,7 +72,7 @@ local function naive_live_grep()
     local q = vim.fn.input("Grep > "); if q == "" then return end
     vim.cmd("silent vimgrep /" .. q .. "/gj **/*"); vim.cmd("copen")
 end
-vim.keymap.set("n", "<leader>ff", function()
+vim.keymap.set("n", "<leader>fs", function()
     if has("telescope.builtin") then require("telescope.builtin").find_files({ hidden = false, file_ignore_patterns = { "%.o$" } }) else vim.cmd("Explore") end
 end, { desc = "Search: files" })
 vim.keymap.set("n", "<leader>fF", function()
@@ -97,6 +97,11 @@ if ok_gs then
     vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Git: toggle blame" })
     vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Git: diff vs index" })
 end
+
+-- ── Debug (DAP) ─────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Debug: toggle breakpoint" })
+vim.keymap.set("n", "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Condition: ")) end, { desc = "Debug: conditional breakpoint" })
+vim.keymap.set("n", "<leader>dd", function() require("dap").continue() end, { desc = "Debug: continue/start" })
 
 -- ── Quickfix ─────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<leader>qo", "<cmd>copen<CR>",  { silent = true, desc = "Quickfix: open" })

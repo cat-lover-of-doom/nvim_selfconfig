@@ -275,6 +275,37 @@ return {
             require("gitsigns").setup(opts)
         end,
     },
+    ---------------------------------------------------------------------------
+    -- DAP (Debug Adapter Protocol) for C/C++
+    ---------------------------------------------------------------------------
+    {
+        "mfussenegger/nvim-dap",
+        lazy = true,
+        dependencies = {
+            "jay-babu/mason-nvim-dap.nvim",
+            "williamboman/mason.nvim",
+            "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
+        },
+        config = function()
+            require("dap-setup")
+        end,
+    },
+
+    {
+        "jay-babu/mason-nvim-dap.nvim",
+        dependencies = { "williamboman/mason.nvim" },
+        opts = {
+            ensure_installed = { "codelldb" },
+            automatic_installation = true,
+        },
+    },
+
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+    },
+
     {
         "folke/which-key.nvim",
         event = "VeryLazy",
