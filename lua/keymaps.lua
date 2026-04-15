@@ -99,20 +99,31 @@ vim.keymap.set("n", "<leader>gS", function() require("telescope.builtin").git_st
 -- ── GitSigns (only if available) ────────────────────────────────────────────
 local ok_gs, gs = pcall(require, "gitsigns")
 if ok_gs then
-    vim.keymap.set("n", "]c", gs.next_hunk, { desc = "Git: next hunk" })
-    vim.keymap.set("n", "[c", gs.prev_hunk, { desc = "Git: prev hunk" })
+    vim.keymap.set("n", "<leader>gn", gs.next_hunk, { desc = "Git: next hunk" })
+    vim.keymap.set("n", "<leader>gN", gs.prev_hunk, { desc = "Git: prev hunk" })
     vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Git: preview hunk" })
     vim.keymap.set("n", "<leader>gr", gs.reset_hunk, { desc = "Git: reset hunk" })
     vim.keymap.set("n", "<leader>gs", gs.stage_hunk, { desc = "Git: stage hunk" })
     vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Git: undo stage" })
     vim.keymap.set("n", "<leader>gb", gs.toggle_current_line_blame, { desc = "Git: toggle blame" })
-    vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Git: diff vs index" })
 end
+
+-- ── Diffview ────────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>gD", "<cmd>DiffviewOpen<CR>", { desc = "Git: diffview open" })
+vim.keymap.set("n", "<leader>gf", "<cmd>DiffviewFileHistory %<CR>", { desc = "Git: file history" })
+vim.keymap.set("n", "<leader>gF", "<cmd>DiffviewFileHistory<CR>", { desc = "Git: branch history" })
+vim.keymap.set("n", "<leader>gq", "<cmd>DiffviewClose<CR>", { desc = "Git: diffview close" })
 
 -- ── Debug (DAP) — keymaps defined in plugins/dap.lua (<leader>d*) ──────────
 
 -- ── Quickfix ─────────────────────────────────────────────────────────────────
-vim.keymap.set("n", "<leader>qo", "<cmd>copen<CR>",  { silent = true, desc = "Quickfix: open" })
+vim.keymap.set("n", "<leader>qt", function()
+    local wins = vim.fn.getwininfo()
+    for _, w in ipairs(wins) do
+        if w.quickfix == 1 then vim.cmd("cclose"); return end
+    end
+    vim.cmd("copen")
+end, { silent = true, desc = "Quickfix: toggle" })
 vim.keymap.set("n", "<leader>qn", "<cmd>cnext<CR>",  { silent = true, desc = "Quickfix: next" })
 vim.keymap.set("n", "<leader>qp", "<cmd>cprev<CR>",  { silent = true, desc = "Quickfix: prev" })
 

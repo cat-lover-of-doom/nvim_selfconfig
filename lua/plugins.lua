@@ -104,6 +104,11 @@ return {
     -- Git
     ---------------------------------------------------------------------------
     {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+        opts = {},
+    },
+    {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPre", "BufNewFile" },
         opts = {
