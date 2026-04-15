@@ -68,7 +68,7 @@ dapui.setup({
 })
 
 -- Debug-mode keymaps: remap single keys during active session
-local debug_keys = { "n", "s", "r", "c", "b" }
+local debug_keys = { "n", "s", "r", "c", "b", "o", "t", "u", "e", "k", "j" }
 local saved_maps = {}
 
 local function set_debug_maps()
