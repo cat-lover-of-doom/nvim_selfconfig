@@ -91,21 +91,8 @@ local function tracked(fn)
     end
 end
 
-vim.keymap.set("n", "<leader>dc", tracked(function() dap.continue() end), { desc = "Debug: continue" })
-vim.keymap.set("n", "<leader>dn", tracked(function() dap.step_over() end), { desc = "Debug: step over" })
-vim.keymap.set("n", "<leader>di", tracked(function() dap.step_into() end), { desc = "Debug: step into" })
-vim.keymap.set("n", "<leader>do", tracked(function() dap.step_out() end), { desc = "Debug: step out" })
-vim.keymap.set("n", "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Debug: toggle breakpoint" })
-vim.keymap.set("n", "<leader>dB", function() dap.set_breakpoint(vim.fn.input("Condition: ")) end, { desc = "Debug: conditional breakpoint" })
-vim.keymap.set("n", "<leader>dt", function() dap.terminate() end, { desc = "Debug: terminate" })
-vim.keymap.set("n", "<leader>du", function() dapui.toggle() end, { desc = "Debug: toggle UI" })
-vim.keymap.set("n", "<leader>de", function() dapui.eval() end, { desc = "Debug: eval under cursor" })
-vim.keymap.set("v", "<leader>de", function() dapui.eval() end, { desc = "Debug: eval selection" })
-vim.keymap.set("n", "<leader>dk", tracked(function() dap.up() end), { desc = "Debug: frame up" })
-vim.keymap.set("n", "<leader>dj", tracked(function() dap.down() end), { desc = "Debug: frame down" })
-vim.keymap.set("n", "<leader>dR", function() dap.restart() end, { desc = "Debug: restart" })
-
-vim.keymap.set("n", "<leader>dr", function()
+-- Action table: { lhs_suffix, fn, desc, mode }
+local function relaunch_fn()
     if not last_program or last_program == "" then
         vim.notify("No executable cached — launch first", vim.log.levels.WARN)
         dap.continue()
@@ -128,12 +115,91 @@ vim.keymap.set("n", "<leader>dr", function()
     else
         relaunch()
     end
-end, { desc = "Debug: relaunch binary" })
+end
 
-vim.keymap.set("n", "<leader>dd", function()
-    if _last_dap_action then
-        _last_dap_action()
-    else
-        vim.notify("No debug action to repeat", vim.log.levels.WARN)
+local dap_actions = {
+    { "c", tracked(function() dap.continue() end),                              "Debug: continue",               "n" },
+    { "n", tracked(function() dap.step_over() end),                             "Debug: step over",              "n" },
+    { "i", tracked(function() dap.step_into() end),                             "Debug: step into",              "n" },
+    { "o", tracked(function() dap.step_out() end),                              "Debug: step out",               "n" },
+    { "b", function() dap.toggle_breakpoint() end,                              "Debug: toggle breakpoint",      "n" },
+    { "B", function() dap.set_breakpoint(vim.fn.input("Condition: ")) end,      "Debug: conditional breakpoint", "n" },
+    { "t", function() dap.terminate() end,                                      "Debug: terminate",              "n" },
+    { "u", function() dapui.toggle() end,                                       "Debug: toggle UI",              "n" },
+    { "e", function() dapui.eval() end,                                         "Debug: eval under cursor",      "n" },
+    { "e", function() dapui.eval() end,                                         "Debug: eval selection",         "v" },
+    { "k", tracked(function() dap.up() end),                                    "Debug: frame up",               "n" },
+    { "j", tracked(function() dap.down() end),                                  "Debug: frame down",             "n" },
+    { "R", function() dap.restart() end,                                        "Debug: restart",                "n" },
+    { "r", relaunch_fn,                                                         "Debug: relaunch binary",        "n" },
+    { "d", function()
+        if _last_dap_action then _last_dap_action() else vim.notify("No debug action to repeat", vim.log.levels.WARN) end
+    end, "Debug: repeat last action", "n" },
+}
+
+-- Always register <leader>d* keymaps
+for _, a in ipairs(dap_actions) do
+    vim.keymap.set(a[4], "<leader>d" .. a[1], a[2], { desc = a[3] })
+end
+
+-- ── Short-key toggle (single-letter keymaps while debugging) ────────────────
+local _short_keys_active = false
+local _saved_maps = {}
+
+local function set_short_keys()
+    if _short_keys_active then return end
+    _saved_maps = {}
+    for _, a in ipairs(dap_actions) do
+        -- Save any existing mapping on this key so we can restore it
+        local existing = vim.fn.maparg(a[1], a[4], false, true)
+        if existing and existing.lhs then
+            table.insert(_saved_maps, existing)
+        end
+        vim.keymap.set(a[4], a[1], a[2], { desc = a[3], nowait = true })
     end
-end, { desc = "Debug: repeat last action" })
+    _short_keys_active = true
+    vim.notify("DAP short keys ON", vim.log.levels.INFO)
+end
+
+local function del_short_keys()
+    if not _short_keys_active then return end
+    for _, a in ipairs(dap_actions) do
+        pcall(vim.keymap.del, a[4], a[1])
+    end
+    -- Restore any mappings that existed before
+    for _, m in ipairs(_saved_maps) do
+        local rhs = m.callback or m.rhs
+        if rhs then
+            vim.keymap.set(m.mode or "n", m.lhs, rhs, {
+                silent = m.silent == 1,
+                noremap = m.noremap == 1,
+                expr = m.expr == 1,
+                desc = m.desc,
+            })
+        end
+    end
+    _saved_maps = {}
+    _short_keys_active = false
+    vim.notify("DAP short keys OFF", vim.log.levels.INFO)
+end
+
+local function toggle_short_keys()
+    if _short_keys_active then
+        del_short_keys()
+    else
+        set_short_keys()
+    end
+end
+
+vim.keymap.set("n", "|", toggle_short_keys, { desc = "Debug: toggle short keymaps" })
+
+-- Auto-enable short keys when debugger starts, auto-disable when it stops
+dap.listeners.after.event_initialized["dap_short_keys"] = function()
+    set_short_keys()
+end
+dap.listeners.before.event_terminated["dap_short_keys"] = function()
+    del_short_keys()
+end
+dap.listeners.before.event_exited["dap_short_keys"] = function()
+    del_short_keys()
+end
