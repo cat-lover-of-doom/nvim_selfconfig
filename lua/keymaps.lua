@@ -72,7 +72,7 @@ local function naive_live_grep()
     local q = vim.fn.input("Grep > "); if q == "" then return end
     vim.cmd("silent vimgrep /" .. q .. "/gj **/*"); vim.cmd("copen")
 end
-vim.keymap.set("n", "<leader>fs", function()
+vim.keymap.set("n", "<leader>ff", function()
     if has("telescope.builtin") then require("telescope.builtin").find_files({ hidden = false, file_ignore_patterns = { "%.o$" } }) else vim.cmd("Explore") end
 end, { desc = "Search: files" })
 vim.keymap.set("n", "<leader>fF", function()
