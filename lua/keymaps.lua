@@ -72,7 +72,7 @@ local function naive_live_grep()
     local q = vim.fn.input("Grep > "); if q == "" then return end
     vim.cmd("silent vimgrep /" .. q .. "/gj **/*"); vim.cmd("copen")
 end
-vim.keymap.set("n", "<leader>ff", function()
+vim.keymap.set("n", "<leader>fj", function()
     if has("telescope.builtin") then require("telescope.builtin").find_files({ hidden = false, file_ignore_patterns = { "%.o$" } }) else vim.cmd("Explore") end
 end, { desc = "Search: files" })
 vim.keymap.set("n", "<leader>fF", function()
@@ -84,6 +84,17 @@ end, { desc = "Search: live grep" })
 vim.keymap.set("n", "<leader>fb", function()
     if has("telescope.builtin") then require("telescope.builtin").buffers() else vim.cmd("ls") end
 end, { desc = "Search: buffers" })
+vim.keymap.set("n", "<leader>fr", function() require("telescope.builtin").resume() end, { desc = "Search: resume last" })
+vim.keymap.set("n", "<leader>fw", function() require("telescope.builtin").grep_string() end, { desc = "Search: word under cursor" })
+vim.keymap.set("n", "<leader>f/", function() require("telescope.builtin").current_buffer_fuzzy_find() end, { desc = "Search: current buffer" })
+vim.keymap.set("n", "<leader>fo", function() require("telescope.builtin").oldfiles() end, { desc = "Search: recent files" })
+vim.keymap.set("n", "<leader>fk", function() require("telescope.builtin").keymaps() end, { desc = "Search: keymaps" })
+vim.keymap.set("n", "<leader>fh", function() require("telescope.builtin").help_tags() end, { desc = "Search: help tags" })
+vim.keymap.set("n", "<leader>fm", function() require("telescope.builtin").marks() end, { desc = "Search: marks" })
+vim.keymap.set("n", "<leader>f\"", function() require("telescope.builtin").registers() end, { desc = "Search: registers" })
+vim.keymap.set("n", "<leader>gc", function() require("telescope.builtin").git_commits() end, { desc = "Git: commits" })
+vim.keymap.set("n", "<leader>gC", function() require("telescope.builtin").git_bcommits() end, { desc = "Git: buffer commits" })
+vim.keymap.set("n", "<leader>gS", function() require("telescope.builtin").git_status() end, { desc = "Git: status" })
 
 -- ── GitSigns (only if available) ────────────────────────────────────────────
 local ok_gs, gs = pcall(require, "gitsigns")
@@ -98,10 +109,7 @@ if ok_gs then
     vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Git: diff vs index" })
 end
 
--- ── Debug (DAP) ─────────────────────────────────────────────────────────────
-vim.keymap.set("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Debug: toggle breakpoint" })
-vim.keymap.set("n", "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Condition: ")) end, { desc = "Debug: conditional breakpoint" })
-vim.keymap.set("n", "<leader>dd", function() require("dap").continue() end, { desc = "Debug: continue/start" })
+-- ── Debug (DAP) — keymaps defined in plugins/dap.lua (<leader>d*) ──────────
 
 -- ── Quickfix ─────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<leader>qo", "<cmd>copen<CR>",  { silent = true, desc = "Quickfix: open" })
@@ -127,13 +135,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set({ "n", "v" }, "<leader>lf", function() vim.lsp.buf.format({ async = false }) end,
             { buffer = ev.buf, silent = true, desc = "Lsp format" })
         vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { buffer = ev.buf, silent = true, desc = "Lsp rename" })
-        -- goto / help
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, silent = true, desc = "Go definition" })
+        -- goto / help (telescope with lsp fallback)
+        local tel = has("telescope.builtin") and require("telescope.builtin") or nil
+        vim.keymap.set("n", "gd", tel and function() tel.lsp_definitions() end or vim.lsp.buf.definition, { buffer = ev.buf, silent = true, desc = "Go definition" })
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = ev.buf, silent = true, desc = "Go declaration" })
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, silent = true, desc = "Show references" })
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = ev.buf, silent = true, desc = "Go implementation" })
-        vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = ev.buf, silent = true, desc = "Go type_definition" })
+        vim.keymap.set("n", "gr", tel and function() tel.lsp_references() end or vim.lsp.buf.references, { buffer = ev.buf, silent = true, desc = "Show references" })
+        vim.keymap.set("n", "gi", tel and function() tel.lsp_implementations() end or vim.lsp.buf.implementation, { buffer = ev.buf, silent = true, desc = "Go implementation" })
+        vim.keymap.set("n", "gT", tel and function() tel.lsp_type_definitions() end or vim.lsp.buf.type_definition, { buffer = ev.buf, silent = true, desc = "Go type definition" })
         vim.keymap.set("n", "gh", vim.lsp.buf.hover, { buffer = ev.buf, silent = true, desc = "Get hover info" })
         vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, { buffer = ev.buf, silent = true, desc = "Get signature_help" })
+        -- telescope lsp pickers (no fallback — these only make sense with telescope)
+        if tel then
+            vim.keymap.set("n", "<leader>ls", function() tel.lsp_document_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp document symbols" })
+            vim.keymap.set("n", "<leader>lS", function() tel.lsp_workspace_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp workspace symbols" })
+            vim.keymap.set("n", "<leader>lD", function() tel.diagnostics() end, { buffer = ev.buf, silent = true, desc = "Lsp diagnostics" })
+        end
     end,
 })

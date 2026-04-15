@@ -4,6 +4,6 @@ if not vim.uv.fs_stat(lazypath) then
                   "https://github.com/folke/lazy.nvim", lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({ { import = "plugins" } }, {
+require("lazy").setup(require("plugins"), {
   performance = { rtp = { disabled_plugins = { "gzip","zipPlugin","tarPlugin","tohtml" } } },
 })
