@@ -20,9 +20,6 @@ map_nav("<C-j>", "<C-w>j", "Window: down")
 map_nav("<C-k>", "<C-w>k", "Window: up")
 map_nav("<C-l>", "<C-w>l", "Window: right")
 
--- ── Buffers ──────────────────────────────────────────────────────────────────
-vim.keymap.set("n", "<A-Down>", ":bn<CR>", { silent = true, desc = "Buffer: next" })
-vim.keymap.set("n", "<C-Up>", ":bp<CR>", { silent = true, desc = "Buffer: previous" })
 
 -- ── Editing QoL ──────────────────────────────────────────────────────────────
 vim.keymap.set({ "n", "x" }, "s", '"_s', { desc = "Edit: subst (blackhole)" })
@@ -42,22 +39,10 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Search: clear
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })     -- forward delete
 vim.keymap.set("i", "<C-c>", "<Esc>", { noremap = true })     -- forward delete
 
-vim.keymap.set('n', '<leader><Tab>', "<C-^>", { desc = "Switch to previous buffer" })
-for i = 1, 9 do
-  vim.keymap.set('n', '<leader>' .. i, function()
-    local bufs = vim.fn.getbufinfo({ buflisted = 1 })
-    if bufs[i] then
-      vim.cmd('buffer ' .. bufs[i].bufnr)
-    end
-  end, { desc = 'Go to buffer ' .. i })
-end
-
-vim.keymap.set('n', '<leader>0', function()
-  local bufs = vim.fn.getbufinfo({ buflisted = 1 })
-  if #bufs > 0 then
-    vim.cmd('buffer ' .. bufs[#bufs].bufnr)
-  end
-end, { desc = 'Go to last buffer' })
+-- ── Buffers ──────────────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>n", ":bn<CR>", { silent = true, desc = "Buffer: next" })
+vim.keymap.set("n", "<leader>N", ":bp<CR>", { silent = true, desc = "Buffer: previous" })
+vim.keymap.set('n', "<leader><Tab>", "<C-^>", { desc = "Switch to previous buffer" })
 
 -- ── Quickfix ─────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<leader>qt", function()
@@ -68,7 +53,7 @@ vim.keymap.set("n", "<leader>qt", function()
     vim.cmd("copen")
 end, { silent = true, desc = "Quickfix: toggle" })
 vim.keymap.set("n", "<leader>qn", "<cmd>cnext<CR>",  { silent = true, desc = "Quickfix: next" })
-vim.keymap.set("n", "<leader>qp", "<cmd>cprev<CR>",  { silent = true, desc = "Quickfix: prev" })
+vim.keymap.set("n", "<leader>qN", "<cmd>cprev<CR>",  { silent = true, desc = "Quickfix: prev" })
 
 -- ── Build ───────────────────────────────────────────────────────────────────
 vim.keymap.set("n", "<leader>bm", "<cmd>make<CR>", { desc = "Build: make" })
