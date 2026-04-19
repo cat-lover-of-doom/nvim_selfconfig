@@ -49,11 +49,16 @@ return {
                     vim.keymap.set("n", "gT", tel and function() tel.lsp_type_definitions() end or vim.lsp.buf.type_definition, { buffer = ev.buf, silent = true, desc = "Go type definition" })
                     vim.keymap.set("n", "gh", vim.lsp.buf.hover, { buffer = ev.buf, silent = true, desc = "Get hover info" })
                     vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, { buffer = ev.buf, silent = true, desc = "Get signature_help" })
-                    -- telescope lsp pickers
-                    if tel then
-                        vim.keymap.set("n", "<leader>ls", function() tel.lsp_document_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp document symbols" })
-                        vim.keymap.set("n", "<leader>lS", function() tel.lsp_workspace_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp workspace symbols" })
-                        vim.keymap.set("n", "<leader>lD", function() tel.diagnostics() end, { buffer = ev.buf, silent = true, desc = "Lsp diagnostics" })
+                    -- Header/Source toggle (clangd)
+                    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                    if client and client.name == "clangd" then
+                        vim.keymap.set("n", "<leader>lh", function()
+                            vim.lsp.buf_request(0, "clangd/switchSourceHeader", { uri = vim.uri_from_bufnr(0) }, function(err, result)
+                                if not err and result then
+                                    vim.cmd("edit " .. vim.uri_to_fname(result))
+                                end
+                            end)
+                        end, { buffer = ev.buf, desc = "Alt: toggle header/source (clangd)" })
                     end
                 end,
             })

@@ -47,5 +47,15 @@ return {
         vim.keymap.set("n", "<leader>gc", function() builtin.git_commits() end, { desc = "Git: commits" })
         vim.keymap.set("n", "<leader>gC", function() builtin.git_bcommits() end, { desc = "Git: buffer commits" })
         vim.keymap.set("n", "<leader>gS", function() builtin.git_status() end, { desc = "Git: status" })
+
+        -- Telescope LSP pickers
+        vim.api.nvim_create_autocmd("LspAttach", {
+            group = vim.api.nvim_create_augroup("TelescopeLspPickers", { clear = true }),
+            callback = function(ev)
+                vim.keymap.set("n", "<leader>ls", function() builtin.lsp_document_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp document symbols" })
+                vim.keymap.set("n", "<leader>lS", function() builtin.lsp_workspace_symbols() end, { buffer = ev.buf, silent = true, desc = "Lsp workspace symbols" })
+                vim.keymap.set("n", "<leader>lD", function() builtin.diagnostics() end, { buffer = ev.buf, silent = true, desc = "Lsp diagnostics" })
+            end,
+        })
     end,
 }
